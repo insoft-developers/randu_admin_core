@@ -157,68 +157,49 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    const ComunTitle(title: 'Default', path: "Dashboards"),
+                    const ComunTitle(title: 'Dashboard', path: "Menu Utama"),
                     _buildcompo1(
-                        title: "Total Earnings",
-                        iconpath: "assets/dollar-circle33.svg",
+                        title: "Manajemen Produk",
+                        iconpath: "assets/box.svg",
                         price: "\$ 29,955",
                         pr: "9.55%",
                         maincolor: Colors.blueAccent,
                         secondicon: "assets/arrow-up-small.svg"),
                     _buildcompo1(
-                        title: "Customer",
-                        iconpath: "assets/users33.svg",
+                        title: "COGS Manufaktur",
+                        iconpath: "assets/truck.svg",
                         price: "\$ 19,235",
                         pr: "2.29%",
                         maincolor: Colors.pinkAccent,
                         secondicon: "assets/arrow-up-small.svg"),
                     _buildcompo1(
-                        title: "Orders",
-                        iconpath: "assets/box-check33.svg",
+                        title: "Pembelian & Produksi",
+                        iconpath: "assets/shopping-basket.svg",
                         price: "\$ 9,955",
                         pr: "3.23%",
                         maincolor: Colors.deepOrangeAccent,
                         secondicon: "assets/arrow-down-small.svg"),
                     _buildcompo1(
-                        title: "Available Balance",
-                        iconpath: "assets/wallet33.svg",
+                        title: "Penyesuaian",
+                        iconpath: "assets/sliders-horizontal-alt.svg",
                         price: "\$ 95,295",
                         pr: "5.33%",
                         maincolor: Colors.deepPurpleAccent,
                         secondicon: "assets/arrow-up-small.svg"),
                     _buildcompo1(
-                        title: "New Sales",
-                        iconpath: "assets/coins29.svg",
+                        title: "Biaya (Expenses)",
+                        iconpath: "assets/badge-discount.svg",
                         price: "\$ 1,365",
                         pr: "3.53%",
                         maincolor: const Color(0xff0CAF60),
                         secondicon: "assets/arrow-down-small.svg"),
                     _buildcompo1(
-                        title: "Income per lead",
-                        iconpath: "assets/user29.svg",
+                        title: "Pengaturan Aplikasi",
+                        iconpath: "assets/settings.svg",
                         price: "\$ 235",
                         pr: "1.77%",
                         maincolor: const Color(0xff0059E7),
                         secondicon: "assets/arrow-up-small.svg"),
-                    _buildcompo1(
-                        title: "New leads",
-                        iconpath: "assets/receipt-list29.svg",
-                        price: "\$ 955",
-                        pr: "7.43%",
-                        maincolor: const Color(0xffF7931A),
-                        secondicon: "assets/arrow-down-small.svg"),
-                    _buildcompo1(
-                        title: "Conversion rate",
-                        iconpath: "assets/ranking29.svg",
-                        price: "\$ 5,295",
-                        pr: "10.23%",
-                        maincolor: const Color(0xff267DFF),
-                        secondicon: "assets/arrow-up-small.svg"),
-                    _buildcompo2(),
-                    _buildcompo3(width: constraints.maxWidth),
-                    _buildcompo4(),
-                    _buildcompo5(count: 1),
-                    _buildcompo6formobile(),
                     const SizeBoxx(),
                     const ComunBottomBar(),
                   ],
@@ -229,13 +210,13 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    const ComunTitle(title: 'Default', path: "Dashboards"),
+                    const ComunTitle(title: 'Dashboard', path: "Menu Utama"),
                     Row(
                       children: [
                         Expanded(
                           child: _buildcompo1(
-                              title: "Total Earnings",
-                              iconpath: "assets/dollar-circle33.svg",
+                              title: "Manajemen Produk",
+                              iconpath: "assets/box.svg",
                               price: "\$ 29,955",
                               pr: "9.55%",
                               maincolor: Colors.blueAccent,
@@ -243,8 +224,8 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Customer",
-                              iconpath: "assets/users33.svg",
+                              title: "COGS Manufaktur",
+                              iconpath: "assets/truck.svg",
                               price: "\$ 19,235",
                               pr: "2.29%",
                               maincolor: Colors.pinkAccent,
@@ -256,8 +237,8 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                       children: [
                         Expanded(
                           child: _buildcompo1(
-                              title: "Orders",
-                              iconpath: "assets/box-check33.svg",
+                              title: "Pembelian & Produksi",
+                              iconpath: "assets/shopping-basket.svg",
                               price: "\$ 9,955",
                               pr: "3.23%",
                               maincolor: Colors.deepOrangeAccent,
@@ -265,8 +246,8 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Available Balance",
-                              iconpath: "assets/wallet33.svg",
+                              title: "Penyesuaian",
+                              iconpath: "assets/sliders-horizontal-alt.svg",
                               price: "\$ 95,295",
                               pr: "5.33%",
                               maincolor: Colors.deepPurpleAccent,
@@ -278,8 +259,8 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                       children: [
                         Expanded(
                           child: _buildcompo1(
-                              title: "New Sales",
-                              iconpath: "assets/coins29.svg",
+                              title: "Biaya (Expenses)",
+                              iconpath: "assets/badge-discount.svg",
                               price: "\$ 1,365",
                               pr: "3.53%",
                               maincolor: const Color(0xff0CAF60),
@@ -287,50 +268,15 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Income per lead",
+                              title: "Pengaturan Aplikasi",
                               iconpath: "assets/user29.svg",
                               price: "\$ 235",
                               pr: "1.77%",
                               maincolor: const Color(0xff0059E7),
-                              secondicon: "assets/arrow-up-small.svg"),
+                              secondicon: "assets/setting.svg"),
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildcompo1(
-                              title: "New leads",
-                              iconpath: "assets/receipt-list29.svg",
-                              price: "\$ 955",
-                              pr: "7.43%",
-                              maincolor: const Color(0xffF7931A),
-                              secondicon: "assets/arrow-down-small.svg"),
-                        ),
-                        Expanded(
-                          child: _buildcompo1(
-                              title: "Conversion rate",
-                              iconpath: "assets/ranking29.svg",
-                              price: "\$ 5,295",
-                              pr: "10.23%",
-                              maincolor: const Color(0xff267DFF),
-                              secondicon: "assets/arrow-up-small.svg"),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(child: _buildcompo2()),
-                        Expanded(child: _buildcompo4()),
-                      ],
-                    ),
-                    _buildcompo3(width: constraints.maxWidth),
-                    Row(
-                      children: [
-                        Expanded(child: _buildcompo5(count: 2)),
-                      ],
-                    ),
-                    _buildcompo6formobile(),
                     const SizeBoxx(),
                     const ComunBottomBar(),
                   ],
@@ -341,13 +287,13 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    const ComunTitle(title: 'Default', path: "Dashboards"),
+                    const ComunTitle(title: 'Dashboard', path: "Menu Utama"),
                     Row(
                       children: [
                         Expanded(
                           child: _buildcompo1(
-                              title: "Total Earnings",
-                              iconpath: "assets/dollar-circle33.svg",
+                              title: "Manajemen Produk",
+                              iconpath: "assets/box-check33.svg",
                               price: "\$ 29,955",
                               pr: "9.55%",
                               maincolor: Colors.blueAccent,
@@ -355,7 +301,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Customer",
+                              title: "COGS Manufaktur",
                               iconpath: "assets/users33.svg",
                               price: "\$ 19,235",
                               pr: "2.29%",
@@ -364,7 +310,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Orders",
+                              title: "Pembelian & Produksi",
                               iconpath: "assets/box-check33.svg",
                               price: "\$ 9,955",
                               pr: "3.23%",
@@ -373,7 +319,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Available Balance",
+                              title: "Penyesuaian",
                               iconpath: "assets/wallet33.svg",
                               price: "\$ 95,295",
                               pr: "5.33%",
@@ -386,7 +332,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                       children: [
                         Expanded(
                           child: _buildcompo1(
-                              title: "New Sales",
+                              title: "Biaya (Expenses)",
                               iconpath: "assets/coins29.svg",
                               price: "\$ 1,365",
                               pr: "3.53%",
@@ -395,55 +341,15 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         ),
                         Expanded(
                           child: _buildcompo1(
-                              title: "Income per lead",
+                              title: "Pengaturan Aplikasi",
                               iconpath: "assets/user29.svg",
                               price: "\$ 235",
                               pr: "1.77%",
                               maincolor: const Color(0xff0059E7),
                               secondicon: "assets/arrow-up-small.svg"),
                         ),
-                        Expanded(
-                          child: _buildcompo1(
-                              title: "New leads",
-                              iconpath: "assets/receipt-list29.svg",
-                              price: "\$ 955",
-                              pr: "7.43%",
-                              maincolor: const Color(0xffF7931A),
-                              secondicon: "assets/arrow-down-small.svg"),
-                        ),
-                        Expanded(
-                          child: _buildcompo1(
-                              title: "Conversion rate",
-                              iconpath: "assets/ranking29.svg",
-                              price: "\$ 5,295",
-                              pr: "10.23%",
-                              maincolor: const Color(0xff267DFF),
-                              secondicon: "assets/arrow-up-small.svg"),
-                        ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: _buildcompo2(),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: _buildcompo3(width: constraints.maxWidth),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: _buildcompo4(),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(child: _buildcompo5(count: 4)),
-                      ],
-                    ),
-                    _buildcompo6(),
                     const SizeBoxx(),
                     const ComunBottomBar(),
                   ],
@@ -495,32 +401,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
               ),
               title: Text(
                 title,
-                style: mediumGreyTextStyle,
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      price,
-                      style:
-                          mainTextStyle.copyWith(color: notifire.getMainText),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                        child: Text(pr,
-                            style: mediumGreyTextStyle,
-                            overflow: TextOverflow.ellipsis)),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    SvgPicture.asset(secondicon,
-                        height: 16, width: 16, color: notifire.getMainText),
-                  ],
-                ),
+                style: bigGreyTextStyle,
               ),
             ),
           ],

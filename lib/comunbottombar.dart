@@ -23,7 +23,7 @@ class _ComunBottomBarState extends State<ComunBottomBar> {
               boxShadow: boxShadow, color: notifire!.getprimerycolor),
           child: Center(
               child: Text(
-            "Copyright 2023 © Buzz.",
+            "Copyright 2024 © Randu Core Admin.",
             style: TextStyle(color: notifire!.getMainText),
           )),
         );
