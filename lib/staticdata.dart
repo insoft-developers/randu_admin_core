@@ -1,6 +1,8 @@
 import 'package:buzz/calender.dart';
 import 'package:buzz/demo/toastification.dart';
 import 'package:buzz/forms_table/data_table.dart';
+import 'package:buzz/manajemen_produk/category/index.dart';
+import 'package:buzz/manajemen_produk/product_list/index.dart';
 import 'package:buzz/newpages/file_manager_page.dart';
 import 'package:buzz/newpages/maps_page.dart';
 import 'package:buzz/newpages/tabs_pills.dart';
@@ -83,11 +85,10 @@ class AppConst extends GetxController implements GetxService {
 
   var page = [
     const NewDefaultPage(),
-    // const DefaultPage(),//
     const EcommercePage(),
     const GeneralPage(),
-    const ChartPage(),
-    const ProjectListPage(),
+    const ProductCategory(),
+    const ProductList(),
     const NewAddProjectPage(),
     // const CreateNewPage(), //
     // const OldProductPage(),//
@@ -101,7 +102,6 @@ class AppConst extends GetxController implements GetxService {
     const ValiDationFormPage(),
     const NewCheckboxRadioPage(),
     // const CheckboxRadioPage(),//
-
   ].obs;
 
   void changePage(int newIndex) {
@@ -122,7 +122,6 @@ class AppConst extends GetxController implements GetxService {
     "Cyclamen",
     "Woman T-shirt",
     "Dream Beauty Fashion",
-
     "Cyclamen",
     "VOXATI",
     "Cyclamen",

@@ -1,11 +1,12 @@
+import 'package:buzz/homepage/homepage_controller.dart';
 import 'package:buzz/provider/proviercolors.dart';
 import 'package:buzz/staticdata.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'appbar.dart';
-import 'appstaticdata/staticdata.dart';
-import 'darwer.dart';
+import '../appbar.dart';
+import '../appstaticdata/staticdata.dart';
+import '../darwer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +18,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   AppConst obj = AppConst();
   final AppConst controller = Get.put(AppConst());
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

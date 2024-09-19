@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, unrelated_type_equality_checks
 
+import 'package:buzz/components/jarak.dart';
+import 'package:buzz/homepage/homepage_controller.dart';
 import 'package:buzz/provider/proviercolors.dart';
 import 'package:buzz/staticdata.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +10,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'appstaticdata/staticdata.dart';
-import 'login_signup/complete_verificaton_process.dart';
-import 'login_signup/email_verification.dart';
-import 'login_signup/forgot_password.dart';
-import 'login_signup/singup.dart';
 
 class DarwerCode extends StatefulWidget {
   const DarwerCode({super.key});
@@ -23,11 +21,18 @@ class DarwerCode extends StatefulWidget {
 class _DarwerCodeState extends State<DarwerCode> {
   AppConst obj = AppConst();
   final AppConst controller = Get.put(AppConst());
+  final HomePageController _homePageController = Get.put(HomePageController());
 
   final screenwidth = Get.width;
   bool ispresent = false;
 
   static const breakpoint = 600.0;
+
+  @override
+  void initState() {
+    _homePageController.checkLogin();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,7 @@ class _DarwerCodeState extends State<DarwerCode> {
             shape: RoundedRectangleBorder(
                 side: BorderSide(color: notifire!.getbordercolor)),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
@@ -61,25 +66,49 @@ class _DarwerCodeState extends State<DarwerCode> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          "assets/applogo.svg",
-                          height: 48,
-                          width: 48,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: Image.asset(
+                            "assets/randu_core_icon.png",
+                            height: 58,
+                            width: 58,
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
                         ),
-                        SvgPicture.asset("assets/Buzz..svg",
-                            height: 25,
-                            width: 32,
-                            color: notifire!.getTextColor1),
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Randu",
+                              style: TextStyle(
+                                  fontSize: 26, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Admin-Core",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
                 ),
+                Jarak(tinggi: 30),
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Obx(
+                      () => Text(_homePageController.fullname.value,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                    )),
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Obx(
+                      () => Text(_homePageController.userEmail.value,
+                          style: TextStyle(fontSize: 14, color: Colors.grey)),
+                    )),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -133,7 +162,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                         _buildsizeboxwithheight(),
                                         InkWell(
                                             onTap: () {
-                                              controller.changePage(5);
+                                              controller.changePage(3);
                                               Get.back();
                                             },
                                             child: Row(

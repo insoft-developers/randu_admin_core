@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:buzz/homepage.dart';
-import 'package:buzz/login_signup/singup.dart';
-import 'package:buzz/loginpage.dart';
+import 'package:buzz/homepage/homepage.dart';
+import 'package:buzz/login/loginpage.dart';
 import 'package:get/get.dart';
 
 import '../login_signup/splash_screen.dart';

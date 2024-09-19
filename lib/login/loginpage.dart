@@ -1,7 +1,10 @@
-import 'package:buzz/homepage.dart';
+import 'package:buzz/components/jarak.dart';
+import 'package:buzz/homepage/homepage.dart';
+import 'package:buzz/login/login_controllder.dart';
 import 'package:buzz/register.dart';
 import 'package:buzz/reset_password.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +14,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final LoginController _loginController = Get.put(LoginController());
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,11 +59,22 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: constraints.maxWidth >= 480 ? 38 : 35,
                                 fontWeight: FontWeight.bold),
                           ),
+                          Jarak(tinggi: 30),
+                          Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.asset(
+                                      "assets/randu_core_icon.png"))),
                           const SizedBox(
                             height: 20,
                           ),
                           const SizedBox(
-                            height: 60,
+                            height: 20,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -75,9 +92,12 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   height: 40,
                                   child: TextField(
+                                    controller: _email,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
                                     decoration: InputDecoration(
                                       hintText: "Masukkan email",
                                       contentPadding: EdgeInsets.all(8),
@@ -103,9 +123,13 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   height: 40,
                                   child: TextField(
+                                    controller: _password,
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.text,
+                                    obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: "Masukkan password",
                                       contentPadding: EdgeInsets.all(8),
@@ -121,28 +145,35 @@ class _LoginPageState extends State<LoginPage> {
                                 const SizedBox(
                                   height: 25,
                                 ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomePage(),
-                                          ));
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        fixedSize: const Size(520, 38),
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))),
-                                    child: Text(
-                                      "Masuk",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: constraints.maxWidth >= 480
-                                              ? 18
-                                              : 14),
-                                    )),
+                                Obx(
+                                  () => _loginController.loading.value
+                                      ? const SizedBox(
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator()))
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            _loginController.login(
+                                                _email.text, _password.text);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              fixedSize: const Size(520, 38),
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  10)))),
+                                          child: Text(
+                                            "Masuk",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    constraints.maxWidth >= 480
+                                                        ? 18
+                                                        : 14),
+                                          )),
+                                ),
                                 const SizedBox(
                                   height: 12,
                                 ),

@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../appstaticdata/staticdata.dart';
-import '../homepage.dart';
+import '../homepage/homepage.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
