@@ -8,13 +8,13 @@ class ProductCategoryController extends GetxController {
   var loading = false.obs;
   var categoryList = List.empty().obs;
 
-  void getCategoryList() async {
+  void getCategoryList(String kataCari) async {
     loading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
     if (user != null) {
       String userId = user['id'].toString();
-      var data = {"userid": userId};
+      var data = {"userid": userId, "kata_cari": kataCari};
       var request = await Network().post(data, '/core/product-category-list');
       var response = jsonDecode(request.body);
       if (response['success']) {
@@ -23,5 +23,9 @@ class ProductCategoryController extends GetxController {
         print(categoryList);
       }
     }
+  }
+
+  void cariKategori(String value) {
+    getCategoryList(value);
   }
 }

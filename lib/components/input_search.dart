@@ -1,5 +1,7 @@
 // ignore: must_be_immutable
+import 'package:buzz/manajemen_produk/category/product_category_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class InputSearch extends StatelessWidget {
   String hint;
@@ -21,10 +23,7 @@ class InputSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-      ),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 3),
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -36,7 +35,13 @@ class InputSearch extends StatelessWidget {
       ),
       child: TextField(
         controller: textEditingController,
-        onChanged: (value) {},
+        onChanged: (value) {
+          if (code == 'product-category') {
+            ProductCategoryController _productCategory =
+                Get.put(ProductCategoryController());
+            _productCategory.cariKategori(value.toString());
+          }
+        },
         keyboardType: textInputType,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
