@@ -48,7 +48,8 @@ class _ProductCategoryState extends State<ProductCategory> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => ProductCategoryAdd());
+                  Get.to(() => ProductCategoryAdd())?.then((value) =>
+                      _productCategoryController.getCategoryList(""));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(5),
@@ -74,6 +75,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                     ? ShimmerList(tinggi: 110, jumlah: 10, pad: 0)
                     : ListView.builder(
                         shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
                         itemCount:
                             _productCategoryController.categoryList.length,
                         itemBuilder: (context, index) {
@@ -122,16 +124,17 @@ class _ProductCategoryState extends State<ProductCategory> {
                                         children: [
                                           Text(
                                               _productCategoryController
-                                                  .categoryList[index]['code']
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                          Jarak(tinggi: 5),
-                                          Text(
-                                              _productCategoryController
                                                   .categoryList[index]['name']
                                                   .toString(),
-                                              style: TextStyle(fontSize: 16)),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18)),
+                                          Jarak(tinggi: 5),
+                                          Text(
+                                            _productCategoryController
+                                                .categoryList[index]['code']
+                                                .toString(),
+                                          ),
                                         ],
                                       ),
                                     ],

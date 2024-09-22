@@ -37,8 +37,7 @@ class InputText extends StatelessWidget {
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(
-              fontFamily: 'Rubik', fontSize: 16, color: Colors.grey),
+          hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
         ),
