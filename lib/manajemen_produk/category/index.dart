@@ -3,10 +3,10 @@ import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/manajemen_produk/category/add/index.dart';
+import 'package:buzz/manajemen_produk/category/edit/index.dart';
 import 'package:buzz/manajemen_produk/category/product_category_controller.dart';
 import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/widgets/comuntitle.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -108,9 +108,8 @@ class _ProductCategoryState extends State<ProductCategory> {
                                               : ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: Constant
-                                                            .PRODUCT_CATEGORY_IMAGE +
+                                                  child: Image.network(
+                                                    Constant.PRODUCT_CATEGORY_IMAGE +
                                                         _productCategoryController
                                                             .categoryList[index]
                                                                 ['image']
@@ -159,33 +158,56 @@ class _ProductCategoryState extends State<ProductCategory> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.orange),
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            color: Colors.orange.shade200),
-                                        child: Icon(
-                                          Icons.edit,
-                                          size: 15,
-                                          color: Colors.white,
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => ProductCategoryEdit(
+                                                  dataList:
+                                                      _productCategoryController
+                                                              .categoryList[
+                                                          index]))!
+                                              .then((value) =>
+                                                  _productCategoryController
+                                                      .getCategoryList(""));
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.orange),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.orange.shade200),
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 15,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                       Spasi(lebar: 15),
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            border:
-                                                Border.all(color: Colors.red),
-                                            color: Colors.red.shade200),
-                                        child: Icon(
-                                          Icons.delete,
-                                          size: 15,
-                                          color: Colors.white,
+                                      GestureDetector(
+                                        onTap: () {
+                                          _showAlertDialog(
+                                              context,
+                                              _productCategoryController
+                                                  .categoryList[index]['id'],
+                                              _productCategoryController
+                                                  .categoryList[index]['name']
+                                                  .toString());
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              border:
+                                                  Border.all(color: Colors.red),
+                                              color: Colors.red.shade200),
+                                          child: Icon(
+                                            Icons.delete,
+                                            size: 15,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                       Spasi(lebar: 5),
@@ -204,4 +226,35 @@ class _ProductCategoryState extends State<ProductCategory> {
       ),
     );
   }
+}
+
+void _showAlertDialog(
+    BuildContext context, int categoryId, String categoryName) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Hapus Kategori'),
+        content: Text(
+            "Apakah anda yakin ingin menghapus kategori [ ${categoryName} ] ?"),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Batal'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Hapus'),
+            onPressed: () {
+              ProductCategoryController _controller =
+                  Get.put(ProductCategoryController());
+              _controller.categoryDelete(categoryId);
+              Get.back();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

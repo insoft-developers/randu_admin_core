@@ -34,4 +34,27 @@ class Helper {
     return List.generate(len, (index) => _chars[r.nextInt(_chars.length)])
         .join();
   }
+
+  static String formatAngka(String angka) {
+    String price = angka;
+    String priceInText = "";
+    int counter = 0;
+    for (int i = (price.length - 1); i >= 0; i--) {
+      counter++;
+      String str = price[i];
+      if ((counter % 3) != 0 && i != 0) {
+        priceInText = "$str$priceInText";
+      } else if (i == 0) {
+        priceInText = "$str$priceInText";
+      } else {
+        priceInText = ",$str$priceInText";
+      }
+    }
+    return priceInText.trim();
+  }
+
+static double roundNumber(double value, int places) {
+    num val = pow(10.0, places);
+    return ((value * val).round().toDouble() / val);
+  }
 }

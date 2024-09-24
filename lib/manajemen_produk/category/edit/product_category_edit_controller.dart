@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductCategoryAddController extends GetxController {
+class ProductCategoryEditController extends GetxController {
   var loading = false.obs;
 
   PickedFile? _pickedFile;
@@ -65,26 +65,27 @@ class ProductCategoryAddController extends GetxController {
     return response;
   }
 
-  void ProductCategoryStore(
-      String _name, String _code, String _description) async {
+  void ProductCategoryUpdate(
+      int id, String _name, String _code, String _description) async {
     loading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
     if (user != null) {
       String userId = user['id'].toString();
       var data = {
+        "id":id,
         "name": _name,
         "code": _code,
         "user_id": userId,
         "description": _description
       };
 
-      var res = await Network().post(data, '/core/product-category-store');
+      var res = await Network().post(data, '/core/product-category-update');
       var body = jsonDecode(res.body);
       if (body['success']) {
         loading(false);
         if (_pickedFile != null) {
-          upload(body['id'].toString());
+          upload(id.toString());
         } else {
           Get.back();
         }

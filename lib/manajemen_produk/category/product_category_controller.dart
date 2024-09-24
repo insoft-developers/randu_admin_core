@@ -24,6 +24,15 @@ class ProductCategoryController extends GetxController {
     }
   }
 
+  void categoryDelete(int id) async {
+    var data = {"id": id};
+    var res = await Network().post(data, '/core/product-category-delete');
+    var body = jsonDecode(res.body);
+    if (body['success']) {
+      getCategoryList("");
+    }
+  }
+
   void cariKategori(String value) {
     getCategoryList(value);
   }
