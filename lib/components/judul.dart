@@ -12,6 +12,7 @@ class Judul extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: pad),
-        child: Text(nama, style: TextStyle(fontSize: ukuran)));
+        padding: const EdgeInsets.only(left: 0),
+        child: Text(nama, style: TextStyle(fontSize: 14)));
   }
 }

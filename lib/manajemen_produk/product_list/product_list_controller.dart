@@ -24,4 +24,8 @@ class ProductListController extends GetxController {
       }
     }
   }
+
+  void cariProduct(String value) {
+    getProductList(value);
+  }
 }

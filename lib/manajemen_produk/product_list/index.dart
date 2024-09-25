@@ -4,6 +4,7 @@ import 'package:buzz/components/input_search.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
+import 'package:buzz/manajemen_produk/product_list/add/product_add.dart';
 import 'package:buzz/manajemen_produk/product_list/detail/index.dart';
 import 'package:buzz/manajemen_produk/product_list/product_list_controller.dart';
 import 'package:buzz/utils/contstant.dart';
@@ -38,14 +39,36 @@ class _ProductListState extends State<ProductList> {
         child: Column(
           children: [
             ComunTitle(title: 'Daftar Produk', path: "Manajemen Produk"),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15),
-              child: InputSearch(
-                  hint: "Cari produk",
-                  textInputType: TextInputType.text,
-                  iconData: Icons.search,
-                  textEditingController: _search,
-                  code: "cari-produk"),
+            Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: InputSearch(
+                      hint: "Cari nama produk",
+                      textInputType: TextInputType.text,
+                      iconData: Icons.search,
+                      textEditingController: _search,
+                      code: "cari-produk"),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const ProductAdd());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    width: 30,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: Colors.green),
+                    child: Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Jarak(tinggi: 20),
             Container(

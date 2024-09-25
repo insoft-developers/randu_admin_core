@@ -1,5 +1,6 @@
 // ignore: must_be_immutable
 import 'package:buzz/manajemen_produk/category/product_category_controller.dart';
+import 'package:buzz/manajemen_produk/product_list/product_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,6 +41,10 @@ class InputSearch extends StatelessWidget {
             ProductCategoryController _productCategory =
                 Get.put(ProductCategoryController());
             _productCategory.cariKategori(value.toString());
+          } else if (code == 'cari-produk') {
+            ProductListController _productListController =
+                Get.put(ProductListController());
+            _productListController.cariProduct(value.toString());
           }
         },
         keyboardType: textInputType,
