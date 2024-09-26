@@ -1,16 +1,20 @@
+import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class SelectData extends StatelessWidget {
   String defValue;
   String label;
   List<DropdownMenuItem<String>> menuItems;
-  SelectData({
-    Key? key,
-    required this.defValue,
-    required this.label,
-    required this.menuItems,
-  }) : super(key: key);
+  String code;
+  SelectData(
+      {Key? key,
+      required this.defValue,
+      required this.label,
+      required this.menuItems,
+      required this.code})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,13 @@ class SelectData extends StatelessWidget {
             border: InputBorder.none,
           ),
           value: defValue,
-          onChanged: (String? newValue) {},
+          onChanged: (String? newValue) {
+            if (code == 'tipe-produk') {
+              ProductAddController _controller =
+                  Get.put(ProductAddController());
+              _controller.onChangeProductType(newValue.toString());
+            }
+          },
           items: menuItems),
     );
   }

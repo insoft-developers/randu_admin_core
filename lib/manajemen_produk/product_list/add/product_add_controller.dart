@@ -7,6 +7,11 @@ class ProductAddController extends GetxController {
   var selectedCategory = "".obs;
   var selectedProductType = "1".obs;
 
+  void onChangeProductType(String value) {
+    selectedProductType.value = value;
+    print(selectedProductType);
+  }
+
   List<String> get categoryDropdown {
     List<String> items = [];
     items.add("");
