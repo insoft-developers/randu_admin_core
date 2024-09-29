@@ -36,6 +36,14 @@ class SelectData extends StatelessWidget {
               ProductAddController _controller =
                   Get.put(ProductAddController());
               _controller.onChangeProductType(newValue.toString());
+            } else if (code == 'buffered-stock') {
+              ProductAddController _controller =
+                  Get.put(ProductAddController());
+              _controller.selectedBufferedStock.value = newValue.toString();
+            } else if (code == 'manufactured') {
+              ProductAddController _controller =
+                  Get.put(ProductAddController());
+              _controller.selectedProductMadeOf.value = newValue.toString();
             }
           },
           items: menuItems),

@@ -1,9 +1,11 @@
 import 'package:buzz/components/bottom_note.dart';
 import 'package:buzz/components/input_readonly.dart';
+import 'package:buzz/components/input_search.dart';
 import 'package:buzz/components/input_text.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/judul.dart';
 import 'package:buzz/components/select.dart';
+import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/varian_controller.dart';
@@ -31,6 +33,9 @@ class _ProductAddState extends State<ProductAdd> {
   final TextEditingController _deliveryPrice = TextEditingController();
   final TextEditingController _marketplacePrice = TextEditingController();
   final TextEditingController _customPrice = TextEditingController();
+  final TextEditingController _barcode = TextEditingController();
+  final TextEditingController _stockAlert = TextEditingController();
+  final TextEditingController _cogs = TextEditingController();
 
   @override
   void initState() {
@@ -83,14 +88,23 @@ class _ProductAddState extends State<ProductAdd> {
               Jarak(tinggi: 30),
               Judul(nama: "Kategori Produk", pad: 20, ukuran: 16),
               Jarak(tinggi: 5),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: InputReadonly(
-                    hint: "Pilih kategori",
-                    textInputType: TextInputType.text,
-                    textEditingController: _category,
-                    obsecureText: false,
-                    code: 'select-product-category'),
+              GestureDetector(
+                onTap: () {
+                  _showCategoryDialog(context);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Obx(
+                    () => InputReadonly(
+                        hint: "Pilih kategori",
+                        textInputType: TextInputType.text,
+                        textEditingController: TextEditingController.fromValue(
+                            TextEditingValue(
+                                text: _controller.selectedCategoryName.value)),
+                        obsecureText: false,
+                        code: 'select-product-category'),
+                  ),
+                ),
               ),
               Jarak(tinggi: 30),
               Judul(nama: "SKU Produk", pad: 20, ukuran: 16),
@@ -344,9 +358,12 @@ class _ProductAddState extends State<ProductAdd> {
                                       width: MediaQuery.of(context).size.width *
                                           1 /
                                           6,
-                                      child: Text(_varianController
-                                          .varianList[index2]['max_quantity']
-                                          .toString()),
+                                      child: Text(
+                                        _varianController.varianList[index2]
+                                                ['max_quantity']
+                                            .toString(),
+                                        textAlign: TextAlign.right,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -411,13 +428,172 @@ class _ProductAddState extends State<ProductAdd> {
                       Text("Single Pick",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                          "Single Pick memungkinkan pelanggan memilih hanya satu varian dari beberapa pilihan yang tersedia. Cocok untuk produk yang hanya bisa dipilih satu varian, seperti satu ukuran atau satu warna pakaian per transaksi.", textAlign:TextAlign.justify ,),
+                        "Single Pick memungkinkan pelanggan memilih hanya satu varian dari beberapa pilihan yang tersedia. Cocok untuk produk yang hanya bisa dipilih satu varian, seperti satu ukuran atau satu warna pakaian per transaksi.",
+                        textAlign: TextAlign.justify,
+                      ),
                       Jarak(tinggi: 10),
                       Text("Max Quantity ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                          "Opsi Max Quantity membatasi jumlah maksimal varian yang bisa dipilih dalam satu transaksi. Berguna untuk mengelola stok dan mencegah over-ordering, seperti membatasi maksimal 3 jenis topping pada satu minuman.", textAlign:TextAlign.justify),
+                          "Opsi Max Quantity membatasi jumlah maksimal varian yang bisa dipilih dalam satu transaksi. Berguna untuk mengelola stok dan mencegah over-ordering, seperti membatasi maksimal 3 jenis topping pada satu minuman.",
+                          textAlign: TextAlign.justify),
                     ]),
+              ),
+              Jarak(tinggi: 30),
+              Judul(nama: "Satuan Produk", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Obx(
+                  () => GestureDetector(
+                    onTap: () {
+                      _showUnitDialog(context);
+                    },
+                    child: InputReadonly(
+                        hint: "",
+                        textInputType: TextInputType.text,
+                        textEditingController: TextEditingController.fromValue(
+                            TextEditingValue(
+                                text: _controller.selectedUnitName.value)),
+                        obsecureText: false,
+                        code: ""),
+                  ),
+                ),
+              ),
+              Jarak(tinggi: 30),
+              Judul(nama: "Barcode Produk (Opsional)", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: InputText(
+                      hint: "Barcode",
+                      textInputType: TextInputType.text,
+                      textEditingController: _barcode,
+                      obsecureText: false,
+                      code: "")),
+              Jarak(tinggi: 30),
+              Judul(nama: "Buffered Stock/Gunakan Stock", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Obx(() => Container(
+                  child: SelectData(
+                      defValue: _controller.selectedBufferedStock.value,
+                      label: "",
+                      menuItems: _controller.bufferedStockDropdown,
+                      code: "buffered-stock"))),
+              Jarak(tinggi: 5),
+              BottomNote(
+                  text:
+                      "*Buffer Stock / Gunakan Stok Produk Otomatis. Jika 'YES' maka produk tidak akan bisa dipesan ketika stoknya 0*",
+                  pad: 20),
+              Jarak(tinggi: 30),
+              Judul(nama: "Stock Alert / Stock Minimal", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Obx(
+                () => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                  ),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: _controller.selectedBufferedStock.value == "1"
+                        ? Colors.white
+                        : Colors.grey.shade300,
+                    border: Border.all(color: Colors.grey.shade300, width: 2.0),
+                  ),
+                  child: Obx(
+                    () => TextField(
+                      controller: _controller.selectedBufferedStock.value == "1"
+                          ? _stockAlert
+                          : TextEditingController.fromValue(
+                              TextEditingValue(text: "")),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(border: InputBorder.none),
+                      readOnly: _controller.selectedBufferedStock.value == "1"
+                          ? false
+                          : true,
+                    ),
+                  ),
+                ),
+              ),
+              Jarak(
+                tinggi: 30,
+              ),
+              Judul(nama: "Jenis HPP/COGS Produk", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Obx(() => SelectData(
+                  defValue: _controller.selectedProductMadeOf.value,
+                  label: "",
+                  menuItems: _controller.productMadeOfDropdown,
+                  code: "manufactured")),
+              Obx(() => _controller.selectedProductMadeOf.value == "2"
+                  ? const SizedBox()
+                  : Jarak(tinggi: 30)),
+              Obx(() => _controller.selectedProductMadeOf.value == "2"
+                  ? const SizedBox()
+                  : Judul(nama: "COGS (HPP)", pad: 20, ukuran: 16)),
+              Obx(() => _controller.selectedProductMadeOf.value == "2"
+                  ? const SizedBox()
+                  : Jarak(tinggi: 5)),
+              Obx(
+                () => _controller.selectedProductMadeOf.value == "2"
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: InputText(
+                            hint: "0",
+                            textInputType: TextInputType.number,
+                            textEditingController: _cogs,
+                            obsecureText: false,
+                            code: ""),
+                      ),
+              ),
+              Jarak(tinggi: 10),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Colors.blue.shade100),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Jarak(tinggi: 5),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 1 / 2,
+                        child: Text("Komposisi Material Produk",
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.green),
+                          child: Icon(Icons.add, color: Colors.white)),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                color: Colors.amber.withOpacity(0.2),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                child: Row(
+                  children: [
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 2 / 3 - 40,
+                        child: Text("Material",
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 1 / 3 - 10,
+                        child: Text("Quantity",
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                  ],
+                ),
               ),
               Jarak(tinggi: 150)
             ])));
@@ -540,6 +716,147 @@ _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {
                             }
                           },
                           child: Text("Tambah Varian")),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+}
+
+_showCategoryDialog(context) {
+  final ProductAddController _controller = Get.put(ProductAddController());
+  final TextEditingController _search = TextEditingController();
+
+  _controller.getProductCategory("");
+
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Jarak(tinggi: 20),
+                    Center(
+                        child: Text("Pilih Kategori Produk",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    InputSearch(
+                        hint: "Cari Kategori Produk",
+                        textInputType: TextInputType.text,
+                        iconData: Icons.search,
+                        textEditingController: _search,
+                        code: "cari-kategori-produk"),
+                    Obx(
+                      () => _controller.categoryLoading.value
+                          ? ShimmerList(tinggi: 30, jumlah: 10, pad: 0)
+                          : ListView.builder(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: _controller.categoryList.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _controller.onCategorySelected(
+                                        _controller.categoryList[index]);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.grey.shade100),
+                                    child: Text(_controller.categoryList[index]
+                                            ['name']
+                                        .toString()),
+                                  ),
+                                );
+                              }),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+}
+
+_showUnitDialog(context) {
+  final ProductAddController _controller = Get.put(ProductAddController());
+  final TextEditingController _search = TextEditingController();
+
+  _controller.getProductUnit("");
+
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Jarak(tinggi: 20),
+                    Center(
+                        child: Text("Pilih Satuan Produk",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    InputSearch(
+                        hint: "Cari Satuan Produk",
+                        textInputType: TextInputType.text,
+                        iconData: Icons.search,
+                        textEditingController: _search,
+                        code: "cari-satuan-produk"),
+                    Jarak(tinggi: 10),
+                    Obx(
+                      () => _controller.satuanLoading.value
+                          ? ShimmerList(tinggi: 30, jumlah: 10, pad: 0)
+                          : ListView.builder(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: _controller.satuanList.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _controller.onUnitSelected(
+                                        _controller.satuanList[index]);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.grey.shade100),
+                                    child: Text(_controller.satuanList[index]
+                                            ['unit_name']
+                                        .toString()),
+                                  ),
+                                );
+                              }),
                     )
                   ],
                 ),
