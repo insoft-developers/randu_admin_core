@@ -52,9 +52,29 @@ class SQLHelper {
     return id;
   }
 
+  static Future<int> tambahProduk(int productId, String productName,
+      String satuan, int productType, int quantity) async {
+    final db = await SQLHelper.db();
+    final data = {
+      'product_id': productId,
+      'product_name': productName,
+      'satuan': satuan,
+      'product_type': productType,
+      'quantity': quantity,
+    };
+    final id = await db.insert("products", data,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    return id;
+  }
+
   static Future<List<Map<String, dynamic>>> getVarians() async {
     final db = await SQLHelper.db();
     return db.query('varians', orderBy: "varian_group desc");
+  }
+
+  static Future<List<Map<String, dynamic>>> getProducts() async {
+    final db = await SQLHelper.db();
+    return db.query('products', orderBy: "id desc");
   }
 
   static Future<void> clearVarian() async {
@@ -66,10 +86,28 @@ class SQLHelper {
     }
   }
 
+  static Future<void> clearProduct() async {
+    final db = await SQLHelper.db();
+    try {
+      await db.delete("products");
+    } catch (err) {
+      debugPrint("Something wrong when deleting all items : $err");
+    }
+  }
+
   static Future<void> deleteVarian(int id) async {
     final db = await SQLHelper.db();
     try {
       await db.delete("varians", where: "id = ?", whereArgs: [id]);
+    } catch (err) {
+      debugPrint("Something wrong when deleting the items : $err");
+    }
+  }
+
+  static Future<void> deleteProduct(int id) async {
+    final db = await SQLHelper.db();
+    try {
+      await db.delete("products", where: "id = ?", whereArgs: [id]);
     } catch (err) {
       debugPrint("Something wrong when deleting the items : $err");
     }
@@ -85,6 +123,22 @@ class SQLHelper {
       'harga': harga,
       'single_pick': singlePick,
       'max_quantity': maxQuantity
+    };
+
+    final result =
+        await db.update("varians", data, where: "id = ?", whereArgs: [id]);
+    return result;
+  }
+
+  static Future<int> updateProduct(int id, int productId, String productName,
+      String satuan, int productType, int quantity) async {
+    final db = await SQLHelper.db();
+    final data = {
+      'product_id': productId,
+      'product_name': productName,
+      'satuan': satuan,
+      'product_type': productType,
+      'quantity': quantity,
     };
 
     final result =

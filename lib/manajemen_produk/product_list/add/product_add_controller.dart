@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:buzz/database/db_helper.dart';
 import 'package:buzz/network/network.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,20 @@ class ProductAddController extends GetxController {
   var satuanLoading = false.obs;
   var selectedBufferedStock = "0".obs;
   var selectedProductMadeOf = "1".obs;
+  var selectedMaterial = "".obs;
+  var materialList = List.empty().obs;
+  var materialLoading = false.obs;
+
+  var komposisiDbList = List.empty().obs;
+
+  var selectedMapMaterial = <String, dynamic>{}.obs;
+
+  void onChangeComposition(String value) {
+    selectedMaterial.value = value;
+    int inof = materialProduct.indexOf(value);
+    selectedMapMaterial.value = materialList[inof];
+    print(selectedMapMaterial);
+  }
 
   void onCategorySelected(Map<String, dynamic> dataList) {
     selectedCategoryId.value = dataList['id'].toString();
@@ -98,5 +114,57 @@ class ProductAddController extends GetxController {
     menuItems
         .add(const DropdownMenuItem(child: Text("Manufactured"), value: "2"));
     return menuItems;
+  }
+
+  List<String> get materialProduct {
+    List<String> menuItems = [];
+
+    for (var i = 0; i < materialList.length; i++) {
+      menuItems.add(materialList[i]['material_name']);
+    }
+    menuItems.add("");
+    return menuItems;
+  }
+
+  void getCompositionProduct() async {
+    materialLoading(true);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user')!);
+    if (user != null) {
+      String userId = user['id'].toString();
+      var data = {"userid": userId};
+      var res = await Network().post(data, '/core/product-composition');
+      var body = jsonDecode(res.body);
+      if (body['success']) {
+        materialLoading(false);
+        materialList.value = body['data'];
+        print(materialList);
+      }
+    }
+  }
+
+  void tambahKomposisi(int quantity) async {
+    await SQLHelper.tambahProduk(
+        selectedMapMaterial['id'],
+        selectedMapMaterial['material_name'],
+        selectedMapMaterial['unit'],
+        selectedMapMaterial['product_type'],
+        quantity);
+    refreshKomposisi();
+    Get.back();
+  }
+
+  void refreshKomposisi() async {
+    final data = await SQLHelper.getProducts();
+    komposisiDbList.value = data;
+  }
+
+  void clearKomposisi() async {
+    await SQLHelper.clearProduct();
+  }
+
+  void deleteKomposisi(int id) async {
+    SQLHelper.deleteProduct(id);
+    refreshKomposisi();
   }
 }

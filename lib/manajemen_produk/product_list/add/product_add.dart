@@ -12,6 +12,7 @@ import 'package:buzz/manajemen_produk/product_list/add/varian_controller.dart';
 import 'package:buzz/new_appbar.dart';
 import 'package:buzz/utils/helper.dart';
 import 'package:buzz/widgets/comuntitle.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,6 +41,7 @@ class _ProductAddState extends State<ProductAdd> {
   @override
   void initState() {
     _varianController.clearVarians();
+    _controller.clearKomposisi();
     super.initState();
   }
 
@@ -567,7 +569,9 @@ class _ProductAddState extends State<ProductAdd> {
                         child: Text("Komposisi Material Produk",
                             style: TextStyle(fontWeight: FontWeight.bold))),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _showKomposisiDialog(context, 'add', 0);
+                      },
                       child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
@@ -595,9 +599,176 @@ class _ProductAddState extends State<ProductAdd> {
                   ],
                 ),
               ),
+              Obx(
+                () => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    itemCount: _controller.komposisiDbList.length,
+                    itemBuilder: (context, index3) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                          6 /
+                                          10 -
+                                      40,
+                                  child: Text(_controller
+                                          .komposisiDbList[index3]
+                                              ['product_name']
+                                          .toString() +
+                                      ' - ( ' +
+                                      _controller.komposisiDbList[index3]
+                                              ['satuan']
+                                          .toString() +
+                                      ' )'),
+                                ),
+                                Spasi(
+                                  lebar: 40,
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                          1 /
+                                          10 -
+                                      10,
+                                  child: Text(_controller
+                                      .komposisiDbList[index3]['quantity']
+                                      .toString()),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _showKomposisiDialog(
+                                        context,
+                                        'edit',
+                                        _controller.komposisiDbList[index3]
+                                            ['id']);
+                                  },
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                            1 /
+                                            10 -
+                                        12,
+                                    child: Icon(Icons.edit,
+                                        size: 18, color: Colors.orange),
+                                  ),
+                                ),
+                                Spasi(lebar: 20),
+                                GestureDetector(
+                                  onTap: () {
+                                    _controller.deleteKomposisi(_controller
+                                        .komposisiDbList[index3]['id']);
+                                  },
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                            1 /
+                                            10 -
+                                        12,
+                                    child: Icon(Icons.delete,
+                                        size: 18, color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(color: Colors.grey.shade300),
+                            Jarak(tinggi: 5),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
               Jarak(tinggi: 150)
             ])));
   }
+}
+
+_showKomposisiDialog(context, String _method, int id) {
+  ProductAddController _controller = Get.put(ProductAddController());
+  TextEditingController _quantity = TextEditingController();
+
+  _controller.getCompositionProduct();
+  _controller.selectedMaterial.value = "";
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Jarak(tinggi: 20),
+                    Center(
+                        child: Text(
+                            "Tambah Komposisi Material Produk Manufaktur",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold))),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    Jarak(tinggi: 10),
+                    Judul(nama: "Material", pad: 0, ukuran: 16),
+                    Jarak(tinggi: 5),
+                    Obx(
+                      () => Container(
+                        padding: const EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            ),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: DropdownSearch<String>(
+                          items: _controller.materialProduct,
+                          popupProps: PopupProps.menu(
+                            showSelectedItems: true,
+                            showSearchBox: true,
+                          ),
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                              baseStyle: TextStyle(fontSize: 16),
+                              dropdownSearchDecoration: InputDecoration(
+                                border: InputBorder.none,
+                              )),
+                          onChanged: (value) {
+                            _controller.onChangeComposition(value!);
+                          },
+                          selectedItem: _controller.selectedMaterial.value,
+                        ),
+                      ),
+                    ),
+                    Jarak(tinggi: 30),
+                    Judul(nama: "Quantity", pad: 0, ukuran: 16),
+                    Jarak(tinggi: 5),
+                    InputText(
+                        hint: "Quantity material",
+                        textInputType: TextInputType.number,
+                        textEditingController: _quantity,
+                        obsecureText: false,
+                        code: ""),
+                    Jarak(tinggi: 30),
+                    Center(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            _controller.tambahKomposisi(_quantity.text.isEmpty
+                                ? 0
+                                : int.parse(_quantity.text));
+                          },
+                          child: Text("Tambah Material")),
+                    ),
+                    Jarak(tinggi: 50),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      });
 }
 
 _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {

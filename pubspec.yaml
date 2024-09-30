@@ -70,7 +70,7 @@ dependencies:
   shimmer: ^2.0.0
   image_picker: ^0.8.6+1
   sqflite: ^2.0.0+3
-  dropdown_search: ^6.0.1
+  dropdown_search: ^5.0.3
 
 flutter_native_splash:
   color: "#42a5f5"
