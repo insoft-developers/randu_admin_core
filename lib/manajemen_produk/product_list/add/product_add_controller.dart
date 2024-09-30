@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductAddController extends GetxController {
+  var storeLoading = false.obs;
   var loading = false.obs;
   var categoryList = List.empty().obs;
   var selectedCategoryId = "".obs;
@@ -23,16 +24,69 @@ class ProductAddController extends GetxController {
   var selectedMaterial = "".obs;
   var materialList = List.empty().obs;
   var materialLoading = false.obs;
-
   var komposisiDbList = List.empty().obs;
-
   var selectedMapMaterial = <String, dynamic>{}.obs;
+  var radioGroupValue = 0.obs;
+
+  void productStore(
+      String code,
+      String sku,
+      String barcode,
+      String name,
+      int price,
+      int cost,
+      int stockAlert,
+      int weight,
+      String description,
+      int priceTa,
+      int priceMp,
+      int priceCus) async {
+    storeLoading(true);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user')!);
+    if (user != null) {
+      int userId = int.parse(user['id'].toString());
+      var data = {
+        "category_id": selectedCategoryId.value,
+        "code": code,
+        "sku": sku,
+        "barcode": barcode,
+        "name": name,
+        "price": price,
+        "cost": cost,
+        "unit": selectedUnitName.value,
+        "stock_alert": stockAlert,
+        "user_id": userId,
+        "is_variant": selectedProductType.value,
+        "is_manufactured": selectedProductMadeOf.value,
+        "buffered_stock": selectedBufferedStock.value,
+        "weight": weight,
+        "description": description,
+        "created_by": radioGroupValue.value,
+        "price_ta": priceTa,
+        "price_mp": priceMp,
+        "price_cus": priceCus
+      };
+      var res = await Network().post(data, '/core/product-store');
+      var body = jsonDecode(res.body);
+      if (body['success']) {
+        storeLoading(false);
+        Get.back();
+      } else {
+        showError(body['message'].toString());
+        storeLoading(false);
+      }
+    }
+  }
+
+  void onChangeRadio(int value) {
+    radioGroupValue.value = value;
+  }
 
   void onChangeComposition(String value) {
     selectedMaterial.value = value;
     int inof = materialProduct.indexOf(value);
     selectedMapMaterial.value = materialList[inof];
-    print(selectedMapMaterial);
   }
 
   void onCategorySelected(Map<String, dynamic> dataList) {
@@ -55,7 +109,6 @@ class ProductAddController extends GetxController {
     if (body['success']) {
       satuanLoading(false);
       satuanList.value = body['data'];
-      print(satuanList);
     }
   }
 
@@ -71,7 +124,6 @@ class ProductAddController extends GetxController {
       if (response['success']) {
         categoryLoading(false);
         categoryList.value = response['data'];
-        print("product kategori printed");
       }
     }
   }
@@ -86,7 +138,6 @@ class ProductAddController extends GetxController {
 
   void onChangeProductType(String value) {
     selectedProductType.value = value;
-    print(selectedProductType);
   }
 
   List<DropdownMenuItem<String>> get productTypeDropdown {
@@ -138,7 +189,6 @@ class ProductAddController extends GetxController {
       if (body['success']) {
         materialLoading(false);
         materialList.value = body['data'];
-        print(materialList);
       }
     }
   }
@@ -166,5 +216,24 @@ class ProductAddController extends GetxController {
   void deleteKomposisi(int id) async {
     SQLHelper.deleteProduct(id);
     refreshKomposisi();
+  }
+
+  void updateKomposisi(int id, int quantity) async {
+    await SQLHelper.updateProduct(
+        id,
+        selectedMapMaterial['id'],
+        selectedMapMaterial['material_name'],
+        selectedMapMaterial['unit'],
+        selectedMapMaterial['product_type'],
+        quantity);
+    refreshKomposisi();
+    Get.back();
+  }
+
+  void showError(String n) {
+    ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+      backgroundColor: Colors.red,
+      content: Text(n, style: TextStyle(color: Colors.white, fontSize: 16)),
+    ));
   }
 }

@@ -53,7 +53,8 @@ class _ProductListState extends State<ProductList> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const ProductAdd());
+                    Get.to(() => const ProductAdd())!
+                        .then((value) => _controller.getProductList(""));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(5),

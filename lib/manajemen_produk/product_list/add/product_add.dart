@@ -7,6 +7,7 @@ import 'package:buzz/components/judul.dart';
 import 'package:buzz/components/select.dart';
 import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
+import 'package:buzz/components/text_area.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/varian_controller.dart';
 import 'package:buzz/new_appbar.dart';
@@ -27,7 +28,6 @@ class _ProductAddState extends State<ProductAdd> {
   final ProductAddController _controller = Get.put(ProductAddController());
   final VarianController _varianController = Get.put(VarianController());
   final TextEditingController _productName = TextEditingController();
-  final TextEditingController _category = TextEditingController();
   final TextEditingController _sku = TextEditingController();
   final TextEditingController _berat = TextEditingController();
   final TextEditingController _defaultPrice = TextEditingController();
@@ -37,6 +37,7 @@ class _ProductAddState extends State<ProductAdd> {
   final TextEditingController _barcode = TextEditingController();
   final TextEditingController _stockAlert = TextEditingController();
   final TextEditingController _cogs = TextEditingController();
+  final TextEditingController _description = TextEditingController();
 
   @override
   void initState() {
@@ -553,144 +554,316 @@ class _ProductAddState extends State<ProductAdd> {
                       ),
               ),
               Jarak(tinggi: 10),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: Colors.blue.shade100),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Jarak(tinggi: 5),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 1 / 2,
-                        child: Text("Komposisi Material Produk",
-                            style: TextStyle(fontWeight: FontWeight.bold))),
-                    GestureDetector(
-                      onTap: () {
-                        _showKomposisiDialog(context, 'add', 0);
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.green),
-                          child: Icon(Icons.add, color: Colors.white)),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                color: Colors.amber.withOpacity(0.2),
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Row(
-                  children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 2 / 3 - 40,
-                        child: Text("Material",
-                            style: TextStyle(fontWeight: FontWeight.bold))),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 1 / 3 - 10,
-                        child: Text("Quantity",
-                            style: TextStyle(fontWeight: FontWeight.bold))),
-                  ],
-                ),
-              ),
               Obx(
-                () => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    itemCount: _controller.komposisiDbList.length,
-                    itemBuilder: (context, index3) {
-                      return Container(
+                () => _controller.selectedProductMadeOf.value == "1"
+                    ? const SizedBox()
+                    : Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Column(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Colors.blue.shade100),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                          6 /
-                                          10 -
-                                      40,
-                                  child: Text(_controller
-                                          .komposisiDbList[index3]
-                                              ['product_name']
-                                          .toString() +
-                                      ' - ( ' +
-                                      _controller.komposisiDbList[index3]
-                                              ['satuan']
-                                          .toString() +
-                                      ' )'),
-                                ),
-                                Spasi(
-                                  lebar: 40,
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                          1 /
-                                          10 -
-                                      10,
-                                  child: Text(_controller
-                                      .komposisiDbList[index3]['quantity']
-                                      .toString()),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    _showKomposisiDialog(
-                                        context,
-                                        'edit',
-                                        _controller.komposisiDbList[index3]
-                                            ['id']);
-                                  },
-                                  child: SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                            1 /
-                                            10 -
-                                        12,
-                                    child: Icon(Icons.edit,
-                                        size: 18, color: Colors.orange),
-                                  ),
-                                ),
-                                Spasi(lebar: 20),
-                                GestureDetector(
-                                  onTap: () {
-                                    _controller.deleteKomposisi(_controller
-                                        .komposisiDbList[index3]['id']);
-                                  },
-                                  child: SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                            1 /
-                                            10 -
-                                        12,
-                                    child: Icon(Icons.delete,
-                                        size: 18, color: Colors.red),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Divider(color: Colors.grey.shade300),
                             Jarak(tinggi: 5),
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 1 / 2,
+                                child: Text("Komposisi Material Produk",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
+                            GestureDetector(
+                              onTap: () {
+                                _showKomposisiDialog(context, 'add', {});
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.green),
+                                  child: Icon(Icons.add, color: Colors.white)),
+                            )
                           ],
                         ),
-                      );
-                    }),
+                      ),
+              ),
+              Obx(
+                () => _controller.selectedProductMadeOf.value == "1"
+                    ? const SizedBox()
+                    : Container(
+                        color: Colors.amber.withOpacity(0.2),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 5),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 2 / 3 -
+                                        40,
+                                child: Text("Material",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 1 / 3 -
+                                        10,
+                                child: Text("Quantity",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
+                          ],
+                        ),
+                      ),
+              ),
+              Obx(
+                () => _controller.selectedProductMadeOf.value == "1"
+                    ? const SizedBox()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        itemCount: _controller.komposisiDbList.length,
+                        itemBuilder: (context, index3) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                              6 /
+                                              10 -
+                                          40,
+                                      child: Text(_controller
+                                              .komposisiDbList[index3]
+                                                  ['product_name']
+                                              .toString() +
+                                          ' - ( ' +
+                                          _controller.komposisiDbList[index3]
+                                                  ['satuan']
+                                              .toString() +
+                                          ' )'),
+                                    ),
+                                    Spasi(
+                                      lebar: 40,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                              1 /
+                                              10 -
+                                          10,
+                                      child: Text(_controller
+                                          .komposisiDbList[index3]['quantity']
+                                          .toString()),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showKomposisiDialog(
+                                            context,
+                                            'edit',
+                                            _controller
+                                                .komposisiDbList[index3]);
+                                      },
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                    1 /
+                                                    10 -
+                                                12,
+                                        child: Icon(Icons.edit,
+                                            size: 18, color: Colors.orange),
+                                      ),
+                                    ),
+                                    Spasi(lebar: 20),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _controller.deleteKomposisi(_controller
+                                            .komposisiDbList[index3]['id']);
+                                      },
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                    1 /
+                                                    10 -
+                                                12,
+                                        child: Icon(Icons.delete,
+                                            size: 18, color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Divider(color: Colors.grey.shade300),
+                                Jarak(tinggi: 5),
+                              ],
+                            ),
+                          );
+                        }),
+              ),
+              Jarak(tinggi: 5),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.red.shade100),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Produk Beli Jadi",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        "'Produk Beli Jadi' adalah produk yang langsung dibeli dari pemasok dalam kondisi siap jual, tanpa perlu diproses lebih lanjut. Contohnya, Lampu, Minuman Kaleng, Baju Branded, dan lain-lain.",
+                        textAlign: TextAlign.justify,
+                      ),
+                      Jarak(tinggi: 10),
+                      Text("Produk Manufaktur",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                          "'Produk Manufactured' adalah produk yang memerlukan perakitan atau pencampuran bahan sebelum dijual. Contohnya, kopi latte yang diracik dari berbagai bahan seperti susu dan espresso sesuai resep. Sistem POS akan melacak penggunaan bahan baku dan menjaga stok tetap sesuai.",
+                          textAlign: TextAlign.justify),
+                      Jarak(tinggi: 10),
+                      Text("COGS (HPP)",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                          "'Harga Pokok Penjualan' adalah biaya yang dikeluarkan untuk memproduksi produk barang atau jasa yang dijual. Jika produknya adalah produk fisik, maka HPP bisa di isikan 0 saja. Karena nanti akan terupdate otomatis oleh sistem.",
+                          textAlign: TextAlign.justify),
+                    ]),
+              ),
+              Jarak(tinggi: 30),
+              Judul(nama: "Opsi produk dibuat", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    ListTile(
+                      title: const Text('Dibuat terlebih dahulu'),
+                      leading: Obx(
+                        () => Radio<int>(
+                          value: 0,
+                          groupValue: _controller.radioGroupValue.value,
+                          onChanged: (value) {
+                            _controller.onChangeRadio(value!);
+                          },
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Dibuat by pesanan'),
+                      leading: Obx(
+                        () => Radio<int>(
+                          value: 1,
+                          groupValue: _controller.radioGroupValue.value,
+                          onChanged: (value) {
+                            _controller.onChangeRadio(value!);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Jarak(tinggi: 5),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.red.shade100),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Produk yang Dibuat Terlebih Dahulu (Make-to-Stock)",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        "adalah produk yang diproduksi dan disimpan dalam stok sebelum ada permintaan spesifik dari pelanggan. Contohnya: Roti, Kue, Fashion, Furniture, dan lain-lain",
+                        textAlign: TextAlign.justify,
+                      ),
+                      Jarak(tinggi: 10),
+                      Text(
+                          "Produk yang Dibuat Berdasarkan Pesanan (Make-to-Order)",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                          "adalah produk yang hanya diproduksi setelah ada pesanan dari pelanggan. Contohnya: nasi Goreng, Kentang Goreng, Kopi, dan lain-lain",
+                          textAlign: TextAlign.justify),
+                      Jarak(tinggi: 10),
+                    ]),
+              ),
+              Jarak(tinggi: 30),
+              Judul(nama: "Deskirpsi Produk", pad: 20, ukuran: 16),
+              Jarak(tinggi: 5),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextArea(
+                    hint: "Deskripsi Produk",
+                    textEditingController: _description,
+                    maxline: 4),
+              ),
+              Jarak(tinggi: 30),
+              Obx(
+                () => _controller.storeLoading.value
+                    ? const SizedBox(
+                        child: Center(child: CircularProgressIndicator()))
+                    : Center(
+                        child: InkWell(
+                        onTap: () {
+                          _controller.productStore(
+                              "",
+                              _sku.text,
+                              _barcode.text,
+                              _productName.text,
+                              _defaultPrice.text.isEmpty
+                                  ? 0
+                                  : int.parse(_defaultPrice.text),
+                              _cogs.text.isEmpty ? 0 : int.parse(_cogs.text),
+                              _stockAlert.text.isEmpty
+                                  ? 0
+                                  : int.parse(_stockAlert.text),
+                              _berat.text.isEmpty ? 0 : int.parse(_berat.text),
+                              _description.text,
+                              _deliveryPrice.text.isEmpty
+                                  ? 0
+                                  : int.parse(_deliveryPrice.text),
+                              _marketplacePrice.text.isEmpty
+                                  ? 0
+                                  : int.parse(_marketplacePrice.text),
+                              _customPrice.text.isEmpty
+                                  ? 0
+                                  : int.parse(_customPrice.text));
+                        },
+                        splashColor: Colors.blue,
+                        borderRadius: BorderRadius.circular(30),
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 40),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.green.withOpacity(0.8)),
+                            child: Text("Simpan",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16))),
+                      )),
               ),
               Jarak(tinggi: 150)
             ])));
   }
 }
 
-_showKomposisiDialog(context, String _method, int id) {
+_showKomposisiDialog(context, String _method, Map<String, dynamic> dataList) {
   ProductAddController _controller = Get.put(ProductAddController());
   TextEditingController _quantity = TextEditingController();
 
   _controller.getCompositionProduct();
-  _controller.selectedMaterial.value = "";
+  if (_method == 'add') {
+    _controller.selectedMaterial.value = "";
+  } else {
+    _controller.selectedMaterial.value = dataList['product_name'];
+    _quantity.text = dataList['quantity'].toString();
+    print(dataList);
+  }
+
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -755,11 +928,19 @@ _showKomposisiDialog(context, String _method, int id) {
                     Center(
                       child: ElevatedButton(
                           onPressed: () {
-                            _controller.tambahKomposisi(_quantity.text.isEmpty
-                                ? 0
-                                : int.parse(_quantity.text));
+                            if (_method == 'add') {
+                              _controller.tambahKomposisi(_quantity.text.isEmpty
+                                  ? 0
+                                  : int.parse(_quantity.text));
+                            } else {
+                              _controller.updateKomposisi(
+                                  dataList['id'],
+                                  _quantity.text.isEmpty
+                                      ? 0
+                                      : int.parse(_quantity.text));
+                            }
                           },
-                          child: Text("Tambah Material")),
+                          child: Text("Simpan Data")),
                     ),
                     Jarak(tinggi: 50),
                   ],

@@ -142,7 +142,7 @@ class SQLHelper {
     };
 
     final result =
-        await db.update("varians", data, where: "id = ?", whereArgs: [id]);
+        await db.update("products", data, where: "id = ?", whereArgs: [id]);
     return result;
   }
 
