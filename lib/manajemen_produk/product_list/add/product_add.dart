@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buzz/components/bottom_note.dart';
 import 'package:buzz/components/input_readonly.dart';
 import 'package:buzz/components/input_search.dart';
@@ -6,6 +8,7 @@ import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/judul.dart';
 import 'package:buzz/components/select.dart';
 import 'package:buzz/components/shimmer_list.dart';
+import 'package:buzz/components/shimmer_text.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/components/text_area.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
@@ -46,6 +49,10 @@ class _ProductAddState extends State<ProductAdd> {
     super.initState();
   }
 
+  _onChangeProductName(String value) {
+    _sku.text = Helper().generateProductCode(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +91,9 @@ class _ProductAddState extends State<ProductAdd> {
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                     ),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _onChangeProductName(value);
+                    },
                   ),
                 ),
               ),
@@ -138,12 +147,34 @@ class _ProductAddState extends State<ProductAdd> {
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: InputText(
-                    hint: "Cth: 10.000",
-                    textInputType: TextInputType.number,
-                    textEditingController: _defaultPrice,
-                    obsecureText: false,
-                    code: "default-price"),
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                ),
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey.shade300, width: 2.0),
+                ),
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  controller: _defaultPrice,
+                  decoration: InputDecoration(
+                    hintText: "Cth: 10.000",
+                    hintStyle:
+                        const TextStyle(fontSize: 16, color: Colors.grey),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _deliveryPrice.text = value;
+                      _marketplacePrice.text = value;
+                      _customPrice.text = value;
+                    });
+                  },
+                ),
               ),
               Jarak(tinggi: 3),
               BottomNote(
@@ -731,65 +762,146 @@ class _ProductAddState extends State<ProductAdd> {
                           textAlign: TextAlign.justify),
                     ]),
               ),
+              Obx(() => _controller.selectedProductMadeOf.value == "1"
+                  ? const SizedBox()
+                  : Jarak(tinggi: 30)),
+              Obx(() => _controller.selectedProductMadeOf.value == "1"
+                  ? const SizedBox()
+                  : Judul(nama: "Opsi produk dibuat", pad: 20, ukuran: 16)),
+              Obx(() => _controller.selectedProductMadeOf.value == "1"
+                  ? const SizedBox()
+                  : Jarak(tinggi: 5)),
+              Obx(
+                () => _controller.selectedProductMadeOf.value == "1"
+                    ? const SizedBox()
+                    : Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            ListTile(
+                              title: const Text('Dibuat terlebih dahulu'),
+                              leading: Obx(
+                                () => Radio<int>(
+                                  value: 0,
+                                  groupValue: _controller.radioGroupValue.value,
+                                  onChanged: (value) {
+                                    _controller.onChangeRadio(value!);
+                                  },
+                                ),
+                              ),
+                            ),
+                            ListTile(
+                              title: const Text('Dibuat by pesanan'),
+                              leading: Obx(
+                                () => Radio<int>(
+                                  value: 1,
+                                  groupValue: _controller.radioGroupValue.value,
+                                  onChanged: (value) {
+                                    _controller.onChangeRadio(value!);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+              Obx(() => _controller.selectedProductMadeOf.value == "1"
+                  ? const SizedBox()
+                  : Jarak(tinggi: 5)),
+              Obx(
+                () => _controller.selectedProductMadeOf.value == "1"
+                    ? const SizedBox()
+                    : Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.red.shade100),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "Produk yang Dibuat Terlebih Dahulu (Make-to-Stock)",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Text(
+                                "adalah produk yang diproduksi dan disimpan dalam stok sebelum ada permintaan spesifik dari pelanggan. Contohnya: Roti, Kue, Fashion, Furniture, dan lain-lain",
+                                textAlign: TextAlign.justify,
+                              ),
+                              Jarak(tinggi: 10),
+                              Text(
+                                  "Produk yang Dibuat Berdasarkan Pesanan (Make-to-Order)",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              Text(
+                                  "adalah produk yang hanya diproduksi setelah ada pesanan dari pelanggan. Contohnya: nasi Goreng, Kentang Goreng, Kopi, dan lain-lain",
+                                  textAlign: TextAlign.justify),
+                              Jarak(tinggi: 10),
+                            ]),
+                      ),
+              ),
               Jarak(tinggi: 30),
-              Judul(nama: "Opsi produk dibuat", pad: 20, ukuran: 16),
-              Jarak(tinggi: 5),
               Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    ListTile(
-                      title: const Text('Dibuat terlebih dahulu'),
-                      leading: Obx(
-                        () => Radio<int>(
-                          value: 0,
-                          groupValue: _controller.radioGroupValue.value,
-                          onChanged: (value) {
-                            _controller.onChangeRadio(value!);
-                          },
-                        ),
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Dibuat by pesanan'),
-                      leading: Obx(
-                        () => Radio<int>(
-                          value: 1,
-                          groupValue: _controller.radioGroupValue.value,
-                          onChanged: (value) {
-                            _controller.onChangeRadio(value!);
-                          },
-                        ),
-                      ),
-                    ),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Colors.blue.shade100),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Jarak(tinggi: 5),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 1 / 2,
+                        child: Text("Tambah Foto Produk",
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                    GestureDetector(
+                      onTap: () {
+                        _controller.selectMultipleImage();
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.green),
+                          child: Icon(Icons.add, color: Colors.white)),
+                    )
                   ],
                 ),
               ),
-              Jarak(tinggi: 5),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.red.shade100),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Produk yang Dibuat Terlebih Dahulu (Make-to-Stock)",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(
-                        "adalah produk yang diproduksi dan disimpan dalam stok sebelum ada permintaan spesifik dari pelanggan. Contohnya: Roti, Kue, Fashion, Furniture, dan lain-lain",
-                        textAlign: TextAlign.justify,
-                      ),
-                      Jarak(tinggi: 10),
-                      Text(
-                          "Produk yang Dibuat Berdasarkan Pesanan (Make-to-Order)",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(
-                          "adalah produk yang hanya diproduksi setelah ada pesanan dari pelanggan. Contohnya: nasi Goreng, Kentang Goreng, Kopi, dan lain-lain",
-                          textAlign: TextAlign.justify),
-                      Jarak(tinggi: 10),
-                    ]),
+              Jarak(tinggi: 10),
+              Obx(
+                () => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: _controller.selectedFileCount.value,
+                    physics: const ScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16),
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          Icon(Icons.remove, size: 25),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: Image.file(
+                                File(_controller.listImagePath[index]),
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ),
               Jarak(tinggi: 30),
               Judul(nama: "Deskirpsi Produk", pad: 20, ukuran: 16),
@@ -890,30 +1002,35 @@ _showKomposisiDialog(context, String _method, Map<String, dynamic> dataList) {
                     Judul(nama: "Material", pad: 0, ukuran: 16),
                     Jarak(tinggi: 5),
                     Obx(
-                      () => Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
+                      () => _controller.materialLoading.value
+                          ? ShimmerText(
+                              lebar: MediaQuery.of(context).size.width,
+                              tinggi: 50)
+                          : Container(
+                              padding: const EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: DropdownSearch<String>(
+                                items: _controller.materialProduct,
+                                popupProps: PopupProps.menu(
+                                  showSelectedItems: true,
+                                  showSearchBox: true,
+                                ),
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                    baseStyle: TextStyle(fontSize: 16),
+                                    dropdownSearchDecoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    )),
+                                onChanged: (value) {
+                                  _controller.onChangeComposition(value!);
+                                },
+                                selectedItem:
+                                    _controller.selectedMaterial.value,
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: DropdownSearch<String>(
-                          items: _controller.materialProduct,
-                          popupProps: PopupProps.menu(
-                            showSelectedItems: true,
-                            showSearchBox: true,
-                          ),
-                          dropdownDecoratorProps: DropDownDecoratorProps(
-                              baseStyle: TextStyle(fontSize: 16),
-                              dropdownSearchDecoration: InputDecoration(
-                                border: InputBorder.none,
-                              )),
-                          onChanged: (value) {
-                            _controller.onChangeComposition(value!);
-                          },
-                          selectedItem: _controller.selectedMaterial.value,
-                        ),
-                      ),
                     ),
                     Jarak(tinggi: 30),
                     Judul(nama: "Quantity", pad: 0, ukuran: 16),
@@ -1111,6 +1228,7 @@ _showCategoryDialog(context) {
                         iconData: Icons.search,
                         textEditingController: _search,
                         code: "cari-kategori-produk"),
+                    Jarak(tinggi: 10),
                     Obx(
                       () => _controller.categoryLoading.value
                           ? ShimmerList(tinggi: 30, jumlah: 10, pad: 0)

@@ -145,7 +145,7 @@ class _ProductListState extends State<ProductList> {
                                               Icon(Icons.code, size: 15),
                                               Spasi(lebar: 5),
                                               Text(_controller
-                                                  .productList[index]['code']
+                                                  .productList[index]['sku']
                                                   .toString()),
                                             ],
                                           ),

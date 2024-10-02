@@ -105,21 +105,6 @@ class _ProductDetailState extends State<ProductDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Code"),
-                    Obx(() => _controller.loading.value
-                        ? ShimmerText(
-                            lebar:
-                                MediaQuery.of(context).size.width * 1 / 2 - 30,
-                            tinggi: 20)
-                        : Text(_controller.productDetail['code'].toString()))
-                  ],
-                ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
                     Text("SKU"),
                     Obx(() => _controller.loading.value
                         ? ShimmerText(
@@ -301,7 +286,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 1 / 6,
-                        child: Text("Qty"),
+                        child: Text("Harga"),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 1 / 6 - 15,

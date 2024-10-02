@@ -25,7 +25,7 @@ class SQLHelper {
       product_type INTEGER NOT NULL,
       quantity INTEGER NOT NULL
        ) """);
-    print("create_table_varians");
+    print("create_table_product");
   }
 
   static Future<sql.Database> db() async {

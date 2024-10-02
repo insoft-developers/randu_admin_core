@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:buzz/database/db_helper.dart';
+import 'package:buzz/manajemen_produk/product_list/add/image_upload_provider.dart';
 import 'package:buzz/network/network.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductAddController extends GetxController {
@@ -28,6 +30,59 @@ class ProductAddController extends GetxController {
   var selectedMapMaterial = <String, dynamic>{}.obs;
   var radioGroupValue = 0.obs;
 
+  final ImagePicker _picker = ImagePicker();
+  List<XFile>? images = [];
+  List<String> listImagePath = [];
+  var selectedFileCount = 0.obs;
+
+  void selectMultipleImage() async {
+    images = await _picker.pickMultiImage();
+    if (images != null) {
+      for (XFile file in images!) {
+        listImagePath.add(file.path);
+      }
+    } else {
+      Get.snackbar('Fail', 'No image selected',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+    selectedFileCount.value = listImagePath.length;
+  }
+
+  void uploadImage() {
+    if (selectedFileCount.value > 0) {
+      Get.dialog(
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+          barrierDismissible: false);
+      ImageUploadProvider().uploadImage(listImagePath).then((resp) {
+        Get.back();
+        if (resp == 'success') {
+          Get.snackbar('Success', 'Images Uploaded',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green,
+              colorText: Colors.white);
+          images = [];
+          listImagePath = [];
+          selectedFileCount.value = listImagePath.length;
+        } else {}
+      }).onError((error, stackTrace) {
+        Get.back();
+        Get.snackbar('Fail', 'Something went wrong!',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
+      });
+    } else {
+      Get.snackbar('Fail', 'No image selected',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
+
   void productStore(
       String code,
       String sku,
@@ -42,6 +97,7 @@ class ProductAddController extends GetxController {
       int priceMp,
       int priceCus) async {
     storeLoading(true);
+
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
     if (user != null) {
@@ -55,14 +111,15 @@ class ProductAddController extends GetxController {
         "price": price,
         "cost": cost,
         "unit": selectedUnitName.value,
-        "stock_alert": stockAlert,
+        "stock_alert": selectedBufferedStock.value == "1" ? stockAlert : 0,
         "user_id": userId,
         "is_variant": selectedProductType.value,
         "is_manufactured": selectedProductMadeOf.value,
         "buffered_stock": selectedBufferedStock.value,
         "weight": weight,
         "description": description,
-        "created_by": radioGroupValue.value,
+        "created_by":
+            selectedProductMadeOf.value == "2" ? radioGroupValue.value : null,
         "price_ta": priceTa,
         "price_mp": priceMp,
         "price_cus": priceCus
@@ -70,8 +127,15 @@ class ProductAddController extends GetxController {
       var res = await Network().post(data, '/core/product-store');
       var body = jsonDecode(res.body);
       if (body['success']) {
+        if (selectedProductType.value == "2") {
+          varianItemStore(body['id']);
+        }
+        if (selectedProductMadeOf.value == "2") {
+          productItemStore(body['id']);
+        }
         storeLoading(false);
         Get.back();
+        print(body);
       } else {
         showError(body['message'].toString());
         storeLoading(false);
@@ -93,6 +157,7 @@ class ProductAddController extends GetxController {
     selectedCategoryId.value = dataList['id'].toString();
     selectedCategoryName.value = dataList['name'].toString();
     Get.back();
+    print(selectedCategoryId);
   }
 
   void onUnitSelected(Map<String, dynamic> dataList) {
@@ -228,6 +293,75 @@ class ProductAddController extends GetxController {
         quantity);
     refreshKomposisi();
     Get.back();
+  }
+
+  void varianItemStore(int transactionId) async {
+    final data = await SQLHelper.getVarians();
+
+    for (var i = 0; i < data.length; i++) {
+      sendVarianTiem(
+          transactionId,
+          data[i]['varian_group'].toString(),
+          data[i]['varian_name'].toString(),
+          data[i]['sku'].toString(),
+          data[i]['harga'],
+          data[i]['single_pick'],
+          data[i]['max_quantity']);
+    }
+
+    await SQLHelper.clearVarian();
+    loading(false);
+  }
+
+  void sendVarianTiem(
+      int id,
+      String varianGroup,
+      String varianName,
+      String varianSku,
+      int varianPrice,
+      int singlePick,
+      int maxQuantity) async {
+    var data = {
+      "id": id,
+      "varian_group": varianGroup,
+      "varian_name": varianName,
+      "varian_sku": varianSku,
+      "varian_price": varianPrice,
+      "single_pick": singlePick,
+      "max_quantity": maxQuantity
+    };
+    var res = await Network().post(data, '/core/product-varian-store');
+    var body = jsonDecode(res.body);
+    if (body['success']) {
+      print("varian sent");
+    }
+  }
+
+  void productItemStore(int transactionId) async {
+    final data = await SQLHelper.getProducts();
+
+    for (var i = 0; i < data.length; i++) {
+      sendProductItem(transactionId, data[i]['product_id'], data[i]['quantity'],
+          data[i]['product_type']);
+    }
+
+    await SQLHelper.clearProduct();
+    loading(false);
+  }
+
+  void sendProductItem(
+      int id, int productId, int quantity, int productType) async {
+    var data = {
+      "id": id,
+      "product_id": productId,
+      "quantity": quantity,
+      "product_type": productType,
+    };
+    var res = await Network().post(data, '/core/product-composition-store');
+    var body = jsonDecode(res.body);
+    if (body['success']) {
+      print("item product added");
+    }
   }
 
   void showError(String n) {
