@@ -49,6 +49,7 @@ class SQLHelper {
     };
     final id = await db.insert("varians", data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    print('insert varian');
     return id;
   }
 

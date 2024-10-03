@@ -23,7 +23,6 @@ class ProductDetailController extends GetxController {
       productComposition.value = body['komposisi'];
       categoryName.value = body['category_name'];
       imageList.value = body['images'];
-      print(imageList);
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add.dart';
 import 'package:buzz/manajemen_produk/product_list/detail/index.dart';
+import 'package:buzz/manajemen_produk/product_list/edit/product_edit.dart';
 import 'package:buzz/manajemen_produk/product_list/product_list_controller.dart';
 import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/utils/helper.dart';
@@ -333,7 +334,15 @@ class _ProductListState extends State<ProductList> {
                                       ),
                                       Spasi(lebar: 15),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Get.to(() => ProductEdit(
+                                                    id: _controller
+                                                            .productList[index]
+                                                        ['id'],
+                                                  ))
+                                              ?.then((value) => _controller
+                                                  .getProductList(""));
+                                        },
                                         child: Container(
                                           padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(

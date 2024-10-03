@@ -3,13 +3,14 @@ import 'dart:convert';
 
 import 'package:buzz/database/db_helper.dart';
 import 'package:buzz/manajemen_produk/product_list/add/image_upload_provider.dart';
+import 'package:buzz/manajemen_produk/product_list/add/varian_controller.dart';
 import 'package:buzz/network/network.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductAddController extends GetxController {
+class ProductEditController extends GetxController {
   var storeLoading = false.obs;
   var loading = false.obs;
   var categoryList = List.empty().obs;
@@ -29,6 +30,12 @@ class ProductAddController extends GetxController {
   var komposisiDbList = List.empty().obs;
   var selectedMapMaterial = <String, dynamic>{}.obs;
   var radioGroupValue = 0.obs;
+
+  var productDetail = <String, dynamic>{}.obs;
+  var productVarian = List.empty().obs;
+  var productComposition = List.empty().obs;
+  var categoryName = "".obs;
+  var imageList = List.empty().obs;
 
   final ImagePicker _picker = ImagePicker();
   List<XFile>? images = [];
@@ -92,6 +99,7 @@ class ProductAddController extends GetxController {
   }
 
   void productStore(
+      int id,
       String code,
       String sku,
       String barcode,
@@ -111,6 +119,7 @@ class ProductAddController extends GetxController {
     if (user != null) {
       int userId = int.parse(user['id'].toString());
       var data = {
+        "id": id,
         "category_id": selectedCategoryId.value,
         "code": code,
         "sku": sku,
@@ -132,7 +141,7 @@ class ProductAddController extends GetxController {
         "price_mp": priceMp,
         "price_cus": priceCus
       };
-      var res = await Network().post(data, '/core/product-store');
+      var res = await Network().post(data, '/core/product-update');
       var body = jsonDecode(res.body);
       if (body['success']) {
         if (selectedProductType.value == "2") {
@@ -146,7 +155,6 @@ class ProductAddController extends GetxController {
         }
         storeLoading(false);
         Get.back();
-        print(body);
       } else {
         showError(body['message'].toString());
         storeLoading(false);
@@ -168,7 +176,6 @@ class ProductAddController extends GetxController {
     selectedCategoryId.value = dataList['id'].toString();
     selectedCategoryName.value = dataList['name'].toString();
     Get.back();
-    print(selectedCategoryId);
   }
 
   void onUnitSelected(Map<String, dynamic> dataList) {
@@ -380,5 +387,76 @@ class ProductAddController extends GetxController {
       backgroundColor: Colors.red,
       content: Text(n, style: TextStyle(color: Colors.white, fontSize: 16)),
     ));
+  }
+
+  // ============================= INIT DATA ==============================
+
+  Future getProductDetail(int id) async {
+    loading(true);
+    var data = {"id": id};
+    var res = await Network().post(data, '/core/product-detail');
+    var body = jsonDecode(res.body);
+    if (body['success']) {
+      loading(false);
+      productDetail.value = body['data'];
+      productVarian.value = body['varian'];
+      productComposition.value = body['komposisi'];
+      categoryName.value = body['category_name'];
+      imageList.value = body['images'];
+      if (productDetail['is_variant'] == 2) {
+        clearVarian();
+        varianInsert();
+      }
+
+      if (productDetail['is_manufactured'] == 2) {
+        clearMaterial();
+        compositionInsert();
+      }
+
+      print(productComposition);
+    }
+  }
+
+  void clearVarian() async {
+    await SQLHelper.clearVarian();
+  }
+
+  void clearMaterial() async {
+    await SQLHelper.clearProduct();
+  }
+
+  void varianInsert() async {
+    for (var i = 0; i < productVarian.length; i++) {
+      tambahVarian(
+          productVarian[i]['varian_group'],
+          productVarian[i]['varian_name'],
+          productVarian[i]['sku'],
+          productVarian[i]['varian_price'],
+          productVarian[i]['single_pick'],
+          productVarian[i]['max_quantity']);
+    }
+  }
+
+  void compositionInsert() async {
+    for (var i = 0; i < productComposition.length; i++) {
+      attachComposition(
+          productComposition[i]['material_id'],
+          productComposition[i]['material_name'],
+          productComposition[i]['unit'],
+          productComposition[i]['product_type'],
+          productComposition[i]['quantity']);
+    }
+  }
+
+  void tambahVarian(String varianGroup, String varianName, String sku,
+      int harga, int singlePick, int maxQuantity) async {
+    await SQLHelper.tambahVarian(
+        varianGroup, varianName, sku, harga, singlePick, maxQuantity);
+  }
+
+  void attachComposition(int productId, String productName, String satuan,
+      int productType, int quantity) async {
+    await SQLHelper.tambahProduk(
+        productId, productName, satuan, productType, quantity);
   }
 }

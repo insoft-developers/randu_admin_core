@@ -11,24 +11,26 @@ import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/shimmer_text.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/components/text_area.dart';
-import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/varian_controller.dart';
+import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:buzz/new_appbar.dart';
+import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/utils/helper.dart';
 import 'package:buzz/widgets/comuntitle.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductAdd extends StatefulWidget {
-  const ProductAdd({super.key});
+class ProductEdit extends StatefulWidget {
+  int id;
+  ProductEdit({super.key, required this.id});
 
   @override
-  State<ProductAdd> createState() => _ProductAddState();
+  State<ProductEdit> createState() => _ProductEditState();
 }
 
-class _ProductAddState extends State<ProductAdd> {
-  final ProductAddController _controller = Get.put(ProductAddController());
+class _ProductEditState extends State<ProductEdit> {
+  final ProductEditController _controller = Get.put(ProductEditController());
   final VarianController _varianController = Get.put(VarianController());
   final TextEditingController _productName = TextEditingController();
   final TextEditingController _sku = TextEditingController();
@@ -44,9 +46,43 @@ class _ProductAddState extends State<ProductAdd> {
 
   @override
   void initState() {
-    _varianController.clearVarians();
-    _controller.clearKomposisi();
+    _controller.getProductDetail(widget.id).then((value) {
+      _initValue();
+    });
+
     super.initState();
+  }
+
+  _initValue() {
+    _productName.text = _controller.productDetail['name'].toString();
+    _controller.selectedCategoryId.value =
+        _controller.productDetail['category_id'].toString();
+    _sku.text = _controller.productDetail['sku'].toString();
+    _berat.text = _controller.productDetail['weight'].toString();
+    _defaultPrice.text = _controller.productDetail['price'].toString();
+    _deliveryPrice.text = _controller.productDetail['price_ta'].toString();
+    _marketplacePrice.text = _controller.productDetail['price_mp'].toString();
+    _customPrice.text = _controller.productDetail['price_cus'].toString();
+    _controller.selectedProductType.value =
+        _controller.productDetail['is_variant'].toString();
+    _controller.selectedUnitName.value =
+        _controller.productDetail['unit'].toString();
+    _barcode.text = _controller.productDetail['barcode'] == null
+        ? ''
+        : _controller.productDetail['barcode'].toString();
+    _controller.selectedBufferedStock.value =
+        _controller.productDetail['buffered_stock'].toString();
+    _stockAlert.text = _controller.productDetail['stock_alert'].toString();
+    _controller.selectedProductMadeOf.value =
+        _controller.productDetail['is_manufactured'].toString();
+    _cogs.text = _controller.productDetail['cost'].toString();
+    _description.text = _controller.productDetail['description'] == null
+        ? ''
+        : _controller.productDetail['description'].toString();
+    _controller.radioGroupValue.value =
+        _controller.productDetail['created_by'] == 1 ? 1 : 0;
+    _varianController.refreshVarians();
+    _controller.refreshKomposisi();
   }
 
   _onChangeProductName(String value) {
@@ -62,7 +98,7 @@ class _ProductAddState extends State<ProductAdd> {
             physics: const BouncingScrollPhysics(),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              ComunTitle(title: 'Tambah Produk', path: "Daftar Produk"),
+              ComunTitle(title: 'Edit Produk', path: "Daftar Produk"),
               Jarak(tinggi: 20),
               Judul(nama: "Nama Produk *", pad: 20, ukuran: 16),
               Jarak(tinggi: 5),
@@ -112,7 +148,7 @@ class _ProductAddState extends State<ProductAdd> {
                         textInputType: TextInputType.text,
                         textEditingController: TextEditingController.fromValue(
                             TextEditingValue(
-                                text: _controller.selectedCategoryName.value)),
+                                text: _controller.categoryName.value)),
                         obsecureText: false,
                         code: 'select-product-category'),
                   ),
@@ -239,7 +275,7 @@ class _ProductAddState extends State<ProductAdd> {
                     defValue: _controller.selectedProductType.value,
                     label: "",
                     menuItems: _controller.productTypeDropdown,
-                    code: 'tipe-produk',
+                    code: 'tipe-produk-edit',
                   )),
               Jarak(tinggi: 15),
               Obx(
@@ -513,7 +549,7 @@ class _ProductAddState extends State<ProductAdd> {
                       defValue: _controller.selectedBufferedStock.value,
                       label: "",
                       menuItems: _controller.bufferedStockDropdown,
-                      code: "buffered-stock"))),
+                      code: "buffered-stock-edit"))),
               Jarak(tinggi: 5),
               BottomNote(
                   text:
@@ -561,7 +597,7 @@ class _ProductAddState extends State<ProductAdd> {
                   defValue: _controller.selectedProductMadeOf.value,
                   label: "",
                   menuItems: _controller.productMadeOfDropdown,
-                  code: "manufactured")),
+                  code: "manufactured-edit")),
               Obx(() => _controller.selectedProductMadeOf.value == "2"
                   ? const SizedBox()
                   : Jarak(tinggi: 30)),
@@ -922,6 +958,40 @@ class _ProductAddState extends State<ProductAdd> {
                   ),
                 ),
               ),
+              Obx(
+                () => _controller.selectedFileCount.value > 0
+                    ? const SizedBox()
+                    : Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: _controller.imageList.length,
+                          physics: const ScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                    Constant.PRODUCT_IMAGE +
+                                        _controller.imageList[index].toString(),
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+              ),
               Jarak(tinggi: 30),
               Judul(nama: "Deskirpsi Produk", pad: 20, ukuran: 16),
               Jarak(tinggi: 5),
@@ -941,6 +1011,7 @@ class _ProductAddState extends State<ProductAdd> {
                         child: InkWell(
                         onTap: () {
                           _controller.productStore(
+                              widget.id,
                               "",
                               _sku.text,
                               _barcode.text,
@@ -983,7 +1054,7 @@ class _ProductAddState extends State<ProductAdd> {
 }
 
 _showKomposisiDialog(context, String _method, Map<String, dynamic> dataList) {
-  ProductAddController _controller = Get.put(ProductAddController());
+  ProductEditController _controller = Get.put(ProductEditController());
   TextEditingController _quantity = TextEditingController();
 
   _controller.getCompositionProduct();
@@ -1215,7 +1286,7 @@ _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {
 }
 
 _showCategoryDialog(context) {
-  final ProductAddController _controller = Get.put(ProductAddController());
+  final ProductEditController _controller = Get.put(ProductEditController());
   final TextEditingController _search = TextEditingController();
 
   _controller.getProductCategory("");
@@ -1286,7 +1357,7 @@ _showCategoryDialog(context) {
 }
 
 _showUnitDialog(context) {
-  final ProductAddController _controller = Get.put(ProductAddController());
+  final ProductEditController _controller = Get.put(ProductEditController());
   final TextEditingController _search = TextEditingController();
 
   _controller.getProductUnit("");

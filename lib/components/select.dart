@@ -1,4 +1,5 @@
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
+import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,6 +44,18 @@ class SelectData extends StatelessWidget {
             } else if (code == 'manufactured') {
               ProductAddController _controller =
                   Get.put(ProductAddController());
+              _controller.selectedProductMadeOf.value = newValue.toString();
+            } else if (code == 'tipe-produk-edit') {
+              ProductEditController _controller =
+                  Get.put(ProductEditController());
+              _controller.onChangeProductType(newValue.toString());
+            } else if (code == 'buffered-stock-edit') {
+              ProductEditController _controller =
+                  Get.put(ProductEditController());
+              _controller.selectedBufferedStock.value = newValue.toString();
+            } else if (code == 'manufactured-edit') {
+              ProductEditController _controller =
+                  Get.put(ProductEditController());
               _controller.selectedProductMadeOf.value = newValue.toString();
             }
           },
