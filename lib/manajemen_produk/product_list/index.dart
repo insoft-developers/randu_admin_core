@@ -80,7 +80,7 @@ class _ProductListState extends State<ProductList> {
                     ? ShimmerList(tinggi: 280, jumlah: 4, pad: 0)
                     : ListView.builder(
                         shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
+                        physics: const PositionRetainedScrollPhysics(),
                         itemCount: _controller.productList.length,
                         itemBuilder: (context, index) {
                           return Container(
@@ -360,7 +360,54 @@ class _ProductListState extends State<ProductList> {
                                       ),
                                       Spasi(lebar: 15),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Get.defaultDialog(
+                                            title: "Peringatan",
+                                            content:
+                                                Text("Yakin hapus produk ini?"),
+                                            confirm: MaterialButton(
+                                                child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 30,
+                                                        vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30),
+                                                      color: Colors.green,
+                                                    ),
+                                                    child: Text("Ya",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white))),
+                                                onPressed: () {
+                                                  _controller.productDelete(
+                                                      _controller.productList[
+                                                          index]['id']);
+                                                  Get.back();
+                                                }),
+                                            cancel: MaterialButton(
+                                                child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 30,
+                                                        vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30),
+                                                      color: Colors.red,
+                                                    ),
+                                                    child: Text("Batal",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white))),
+                                                onPressed: () {
+                                                  Get.back();
+                                                }),
+                                          );
+                                        },
                                         child: Container(
                                           padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
@@ -388,5 +435,43 @@ class _ProductListState extends State<ProductList> {
         ),
       ),
     );
+  }
+}
+
+class PositionRetainedScrollPhysics extends ScrollPhysics {
+  final bool shouldRetain;
+  const PositionRetainedScrollPhysics({super.parent, this.shouldRetain = true});
+
+  @override
+  PositionRetainedScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return PositionRetainedScrollPhysics(
+      parent: buildParent(ancestor),
+      shouldRetain: shouldRetain,
+    );
+  }
+
+  @override
+  double adjustPositionForNewDimensions({
+    required ScrollMetrics oldPosition,
+    required ScrollMetrics newPosition,
+    required bool isScrolling,
+    required double velocity,
+  }) {
+    final position = super.adjustPositionForNewDimensions(
+      oldPosition: oldPosition,
+      newPosition: newPosition,
+      isScrolling: isScrolling,
+      velocity: velocity,
+    );
+
+    final diff = newPosition.maxScrollExtent - oldPosition.maxScrollExtent;
+
+    if (oldPosition.pixels > oldPosition.minScrollExtent &&
+        diff > 0 &&
+        shouldRetain) {
+      return position + diff;
+    } else {
+      return position;
+    }
   }
 }

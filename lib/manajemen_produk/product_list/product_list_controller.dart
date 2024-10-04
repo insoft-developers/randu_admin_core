@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:buzz/network/network.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 class ProductListController extends GetxController {
   var loading = false.obs;
@@ -27,5 +28,24 @@ class ProductListController extends GetxController {
 
   void cariProduct(String value) {
     getProductList(value);
+  }
+
+  void productDelete(int id) async {
+    var data = {"id": id};
+    var res = await Network().post(data, '/core/product-delete');
+    var body = jsonDecode(res.body);
+    if (body['success']) {
+      Get.snackbar("Sukses", "Hapus Data Berhasil",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white);
+      Get.back();
+      getProductList("");
+    } else {
+      Get.snackbar("Gagal", body['message'].toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white);
+    }
   }
 }

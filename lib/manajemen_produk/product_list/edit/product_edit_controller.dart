@@ -430,10 +430,14 @@ class ProductEditController extends GetxController {
       tambahVarian(
           productVarian[i]['varian_group'],
           productVarian[i]['varian_name'],
-          productVarian[i]['sku'],
+          productVarian[i]['sku'] == null ? '-' : productVarian[i]['sku'],
           productVarian[i]['varian_price'],
-          productVarian[i]['single_pick'],
-          productVarian[i]['max_quantity']);
+          productVarian[i]['single_pick'] == null
+              ? 0
+              : productVarian[i]['single_pick'],
+          productVarian[i]['max_quantity'] == null
+              ? 0
+              : productVarian[i]['max_quantity']);
     }
   }
 
