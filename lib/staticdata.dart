@@ -1,44 +1,15 @@
-import 'package:buzz/calender.dart';
-import 'package:buzz/demo/toastification.dart';
-import 'package:buzz/forms_table/data_table.dart';
 import 'package:buzz/manajemen_produk/category/index.dart';
 import 'package:buzz/manajemen_produk/product_list/index.dart';
-import 'package:buzz/newpages/file_manager_page.dart';
-import 'package:buzz/newpages/maps_page.dart';
-import 'package:buzz/newpages/tabs_pills.dart';
-import 'package:buzz/projectlistpage.dart';
+import 'package:buzz/cogs_manufactur/bahan_baku/index.dart';
 import 'package:get/get.dart';
 
-import 'Buttons/default_style.dart';
-import 'Buttons/edge_style.dart';
-import 'Buttons/flat_style.dart';
-import 'Buttons/raised_style.dart';
-import 'FAQ/faq.dart';
-import 'Ui_kits/avatars.dart';
-import 'Ui_kits/modal.dart';
 import 'Users/users_cards.dart';
 import 'Users/users_edit.dart';
-import 'chartpage.dart';
-import 'chat/chatscreenpages/messages.dart';
-import 'ecommerce_pages/cart1.dart';
-import 'ecommerce_pages/checkout.dart';
-import 'ecommerce_pages/invoice.dart';
-import 'ecommerce_pages/pricing.dart';
-import 'ecommerce_pages/product_detils_page.dart';
-import 'ecommerce_pages/product_page.dart';
 import 'ecommercepage.dart';
-import 'forms_table/basic_tables.dart';
-import 'forms_table/datepicker.dart';
 import 'forms_table/validation_form.dart';
 import 'generalpage.dart';
-import 'login_signup/complete_verificaton_process.dart';
-import 'login_signup/email_verification.dart';
-import 'login_signup/forgot_password.dart';
-import 'login_signup/singup.dart';
-import 'newpages/newaddtoproject.dart';
 import 'newpages/newcheckboxpage.dart';
 import 'newpages/newdefault_page.dart';
-import 'newpages/newuserprofile.dart';
 
 class AppConst extends GetxController implements GetxService {
   bool showDrawer = true;
@@ -89,13 +60,14 @@ class AppConst extends GetxController implements GetxService {
     const GeneralPage(),
     const ProductCategory(),
     const ProductList(),
-    const NewAddProjectPage(),
+    const BahanBaku(),
+    // const NewAddProjectPage(),
     // const CreateNewPage(), //
     // const OldProductPage(),//
 
-    const Messages(),
+    // const Messages(),
     // const ChatPage(),//
-    const NewUserProfile(),
+    // const NewUserProfile(),
     // const UsersProfilePage(),//
     const UsersEditPage(),
     const UsersCardsPage(),

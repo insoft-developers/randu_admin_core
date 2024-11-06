@@ -100,7 +100,7 @@ class _ProductEditState extends State<ProductEdit> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               ComunTitle(title: 'Edit Produk', path: "Daftar Produk"),
               Jarak(tinggi: 20),
-              Judul(nama: "Nama Produk *", pad: 20, ukuran: 16),
+              Judul(nama: "Nama Produk", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -134,7 +134,7 @@ class _ProductEditState extends State<ProductEdit> {
                 ),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "Kategori Produk", pad: 20, ukuran: 16),
+              Judul(nama: "Kategori Produk", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
               GestureDetector(
                 onTap: () {
@@ -155,7 +155,7 @@ class _ProductEditState extends State<ProductEdit> {
                 ),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "SKU Produk", pad: 20, ukuran: 16),
+              Judul(nama: "SKU Produk", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -167,19 +167,27 @@ class _ProductEditState extends State<ProductEdit> {
                     code: "product-sku"),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "Berat Produk in (Gram)", pad: 20, ukuran: 16),
+              Judul(
+                  nama: "Berat Produk in (Gram)",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 0),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: InputText(
-                    hint: "Cth: 100 (Opsional)",
+                    hint: "Cth: 100 ",
                     textInputType: TextInputType.number,
                     textEditingController: _berat,
                     obsecureText: false,
                     code: "product-weight"),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "Harga Jual Default", pad: 20, ukuran: 16),
+              Judul(
+                  nama: "Harga Jual Default",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 1),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -219,9 +227,10 @@ class _ProductEditState extends State<ProductEdit> {
                   pad: 20),
               Jarak(tinggi: 30),
               Judul(
-                  nama: "Harga Delivery / Take Away (Opsional)",
+                  nama: "Harga Delivery / Take Away",
                   pad: 20,
-                  ukuran: 16),
+                  ukuran: 16,
+                  mandatory: 0),
               Jarak(tinggi: 5),
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -237,7 +246,11 @@ class _ProductEditState extends State<ProductEdit> {
                       "*Isi jika perlu harga yang berbeda jika pesanannya dikirim / dibawa pulang.",
                   pad: 20),
               Jarak(tinggi: 30),
-              Judul(nama: "Harga Marketplace (Opsional)", pad: 20, ukuran: 16),
+              Judul(
+                  nama: "Harga Marketplace ",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 0),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -254,7 +267,7 @@ class _ProductEditState extends State<ProductEdit> {
                       "*Isi jika perlu harga yang berbeda khusus untuk Shopee, Tokopedia, GrabFood, GoFood DLL.",
                   pad: 20),
               Jarak(tinggi: 30),
-              Judul(nama: "Harga Custom (Opsional)", pad: 20, ukuran: 16),
+              Judul(nama: "Harga Custom ", pad: 20, ukuran: 16, mandatory: 0),
               Jarak(tinggi: 5),
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -269,7 +282,7 @@ class _ProductEditState extends State<ProductEdit> {
                   text: "*Isi jika perlu harga jual yang berbeda Lainnya",
                   pad: 20),
               Jarak(tinggi: 30),
-              Judul(nama: "Tipe Produk", pad: 20, ukuran: 16),
+              Judul(nama: "Tipe Produk", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
               Obx(() => SelectData(
                     defValue: _controller.selectedProductType.value,
@@ -510,7 +523,7 @@ class _ProductEditState extends State<ProductEdit> {
                     ]),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "Satuan Produk", pad: 20, ukuran: 16),
+              Judul(nama: "Satuan Produk", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -531,7 +544,7 @@ class _ProductEditState extends State<ProductEdit> {
                 ),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "Barcode Produk (Opsional)", pad: 20, ukuran: 16),
+              Judul(nama: "Barcode Produk ", pad: 20, ukuran: 16, mandatory: 0),
               Jarak(tinggi: 5),
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -541,57 +554,14 @@ class _ProductEditState extends State<ProductEdit> {
                       textEditingController: _barcode,
                       obsecureText: false,
                       code: "")),
-              Jarak(tinggi: 30),
-              Judul(nama: "Buffered Stock/Gunakan Stock", pad: 20, ukuran: 16),
-              Jarak(tinggi: 5),
-              Obx(() => Container(
-                  child: SelectData(
-                      defValue: _controller.selectedBufferedStock.value,
-                      label: "",
-                      menuItems: _controller.bufferedStockDropdown,
-                      code: "buffered-stock-edit"))),
-              Jarak(tinggi: 5),
-              BottomNote(
-                  text:
-                      "*Buffer Stock / Gunakan Stok Produk Otomatis. Jika 'YES' maka produk tidak akan bisa dipesan ketika stoknya 0*",
-                  pad: 20),
-              Jarak(tinggi: 30),
-              Judul(nama: "Stock Alert / Stock Minimal", pad: 20, ukuran: 16),
-              Jarak(tinggi: 5),
-              Obx(
-                () => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    right: 10,
-                  ),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: _controller.selectedBufferedStock.value == "1"
-                        ? Colors.white
-                        : Colors.grey.shade300,
-                    border: Border.all(color: Colors.grey.shade300, width: 2.0),
-                  ),
-                  child: Obx(
-                    () => TextField(
-                      controller: _controller.selectedBufferedStock.value == "1"
-                          ? _stockAlert
-                          : TextEditingController.fromValue(
-                              TextEditingValue(text: "")),
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(border: InputBorder.none),
-                      readOnly: _controller.selectedBufferedStock.value == "1"
-                          ? false
-                          : true,
-                    ),
-                  ),
-                ),
-              ),
               Jarak(
                 tinggi: 30,
               ),
-              Judul(nama: "Jenis HPP/COGS Produk", pad: 20, ukuran: 16),
+              Judul(
+                  nama: "Jenis HPP/COGS Produk",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 1),
               Jarak(tinggi: 5),
               Obx(() => SelectData(
                   defValue: _controller.selectedProductMadeOf.value,
@@ -603,7 +573,8 @@ class _ProductEditState extends State<ProductEdit> {
                   : Jarak(tinggi: 30)),
               Obx(() => _controller.selectedProductMadeOf.value == "2"
                   ? const SizedBox()
-                  : Judul(nama: "COGS (HPP)", pad: 20, ukuran: 16)),
+                  : Judul(
+                      nama: "COGS (HPP)", pad: 20, ukuran: 16, mandatory: 1)),
               Obx(() => _controller.selectedProductMadeOf.value == "2"
                   ? const SizedBox()
                   : Jarak(tinggi: 5)),
@@ -803,7 +774,11 @@ class _ProductEditState extends State<ProductEdit> {
                   : Jarak(tinggi: 30)),
               Obx(() => _controller.selectedProductMadeOf.value == "1"
                   ? const SizedBox()
-                  : Judul(nama: "Opsi produk dibuat", pad: 20, ukuran: 16)),
+                  : Judul(
+                      nama: "Opsi produk dibuat",
+                      pad: 20,
+                      ukuran: 16,
+                      mandatory: 1)),
               Obx(() => _controller.selectedProductMadeOf.value == "1"
                   ? const SizedBox()
                   : Jarak(tinggi: 5)),
@@ -877,6 +852,68 @@ class _ProductEditState extends State<ProductEdit> {
                             ]),
                       ),
               ),
+              Jarak(tinggi: 30),
+              Judul(
+                  nama: "Buffered Stock/Gunakan Stock",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 1),
+              Jarak(tinggi: 5),
+              Obx(() => Container(
+                  child: SelectData(
+                      defValue: _controller.selectedBufferedStock.value,
+                      label: _controller.selectedProductMadeOf.value == "2"
+                          ? "readonly"
+                          : "",
+                      menuItems: _controller.bufferedStockDropdown,
+                      code: "buffered-stock-edit"))),
+              Jarak(tinggi: 5),
+              BottomNote(
+                  text:
+                      "*Buffer Stock / Gunakan Stok Produk Otomatis. Jika 'YES' maka produk tidak akan bisa dipesan ketika stoknya 0*",
+                  pad: 20),
+              Jarak(tinggi: 30),
+              Judul(
+                  nama: "Stock Ditahan / Stock Minimal",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 0),
+              Jarak(tinggi: 5),
+              Obx(
+                () => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                  ),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: _controller.selectedBufferedStock.value == "1"
+                        ? Colors.white
+                        : Colors.grey.shade300,
+                    border: Border.all(color: Colors.grey.shade300, width: 2.0),
+                  ),
+                  child: Obx(
+                    () => TextField(
+                      controller: _controller.selectedBufferedStock.value == "1"
+                          ? _stockAlert
+                          : TextEditingController.fromValue(
+                              TextEditingValue(text: "")),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(border: InputBorder.none),
+                      readOnly: _controller.selectedBufferedStock.value == "1"
+                          ? false
+                          : true,
+                    ),
+                  ),
+                ),
+              ),
+              Jarak(tinggi: 5),
+              BottomNote(
+                  text:
+                      "*Jika stok produk 10 dan stok di tahan adalah 2, maka hanya 8 yang bisa dipesan",
+                  pad: 20),
               Jarak(tinggi: 30),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -993,7 +1030,8 @@ class _ProductEditState extends State<ProductEdit> {
                       ),
               ),
               Jarak(tinggi: 30),
-              Judul(nama: "Deskirpsi Produk", pad: 20, ukuran: 16),
+              Judul(
+                  nama: "Deskirpsi Produk", pad: 20, ukuran: 16, mandatory: 0),
               Jarak(tinggi: 5),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -1089,7 +1127,7 @@ _showKomposisiDialog(context, String _method, Map<String, dynamic> dataList) {
                       color: Colors.grey,
                     ),
                     Jarak(tinggi: 10),
-                    Judul(nama: "Material", pad: 0, ukuran: 16),
+                    Judul(nama: "Material", pad: 0, ukuran: 16, mandatory: 1),
                     Jarak(tinggi: 5),
                     Obx(
                       () => _controller.materialLoading.value
@@ -1123,7 +1161,7 @@ _showKomposisiDialog(context, String _method, Map<String, dynamic> dataList) {
                             ),
                     ),
                     Jarak(tinggi: 30),
-                    Judul(nama: "Quantity", pad: 0, ukuran: 16),
+                    Judul(nama: "Quantity", pad: 0, ukuran: 16, mandatory: 1),
                     Jarak(tinggi: 5),
                     InputText(
                         hint: "Quantity material",
@@ -1165,7 +1203,7 @@ _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {
   TextEditingController _varianName = TextEditingController();
   TextEditingController _sku = TextEditingController();
   TextEditingController _harga = TextEditingController();
-  TextEditingController _maxQuantity = TextEditingController();
+  TextEditingController _maxQuantity = TextEditingController(text: "10");
 
   if (trans == 2 || trans == 3) {
     _varianGroup.text = dataList['varian_group'].toString();
@@ -1178,6 +1216,10 @@ _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {
     _maxQuantity.text = dataList['max_quantity'].toString();
     _varianController
         .onClickSinglePick(dataList['single_pick'] == 1 ? true : false);
+  }
+
+  _onChangeVarianName(String value) {
+    _sku.text = Helper().generateProductCode(value);
   }
 
   showDialog(
@@ -1208,12 +1250,31 @@ _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {
                         obsecureText: false,
                         code: ""),
                     Jarak(tinggi: 10),
-                    InputText(
-                        hint: "Varian Name",
-                        textInputType: TextInputType.text,
-                        textEditingController: _varianName,
-                        obsecureText: false,
-                        code: ""),
+                    Container(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 2.0),
+                      ),
+                      child: TextField(
+                        controller: _varianName,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            hintStyle: const TextStyle(
+                                fontSize: 16, color: Colors.grey),
+                            border: InputBorder.none,
+                            hintText: "Varian Name"),
+                        onChanged: (value) {
+                          _onChangeVarianName(value);
+                        },
+                      ),
+                    ),
                     Jarak(tinggi: 10),
                     InputText(
                         hint: "SKU",
@@ -1223,7 +1284,7 @@ _showSimpleModalDialog(context, int trans, Map<String, dynamic> dataList) {
                         code: ""),
                     Jarak(tinggi: 10),
                     InputText(
-                        hint: "Harga",
+                        hint: "Tambahan Harga",
                         textInputType: TextInputType.number,
                         textEditingController: _harga,
                         obsecureText: false,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buzz/homepage/homepage.dart';
+import 'package:buzz/login/loginpage.dart';
 import 'package:buzz/network/network.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -74,5 +75,15 @@ class LoginController extends GetxController {
       backgroundColor: Colors.red,
       content: Text(n.toString()),
     ));
+  }
+
+  void logout() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user')!);
+    if (user != null) {
+      localStorage.remove('user');
+      localStorage.remove('token');
+      Get.offAll(() => const LoginPage());
+    }
   }
 }

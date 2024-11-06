@@ -1,10 +1,9 @@
 import 'package:buzz/components/jarak.dart';
-import 'package:buzz/homepage/homepage.dart';
 import 'package:buzz/login/login_controllder.dart';
-import 'package:buzz/register.dart';
 import 'package:buzz/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -175,66 +174,47 @@ class _LoginPageState extends State<LoginPage> {
                                           )),
                                 ),
                                 const SizedBox(
-                                  height: 12,
+                                  height: 42,
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Icon(
-                                      Icons.lock,
-                                      color: Colors.blue,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
+                                    Text(
+                                      "Belum Daftar? atau lupa password ?",
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: constraints.maxWidth >= 480
+                                              ? 14
+                                              : 12,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const ResetPassword(),
-                                              ));
-                                        },
-                                        child: Text(
-                                          "Lupa password",
-                                          style: TextStyle(
-                                              color: Colors.blue,
-                                              fontSize:
-                                                  constraints.maxWidth >= 480
-                                                      ? 14
-                                                      : 12,
-                                              fontWeight: FontWeight.bold),
-                                        )),
+                                      onTap: () {
+                                        launchUrl(
+                                            Uri.parse(
+                                                'https://app.randu.co.id'),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      },
+                                      child: Text(
+                                        "Klik disini",
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Colors.blue,
+                                            fontSize:
+                                                constraints.maxWidth >= 480
+                                                    ? 14
+                                                    : 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "Privacy",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    SizedBox(
-                                      width:
-                                          constraints.maxWidth >= 480 ? 35 : 25,
-                                    ),
-                                    const Text(
-                                      "Terms",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    SizedBox(
-                                      width:
-                                          constraints.maxWidth >= 480 ? 35 : 25,
-                                    ),
-                                    const Text(
-                                      "© 2024 Randu",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           )

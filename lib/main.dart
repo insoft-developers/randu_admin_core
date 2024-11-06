@@ -3,7 +3,6 @@ import 'package:buzz/login/loginpage.dart';
 import 'package:buzz/provider/proviercolors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +12,7 @@ import 'appstaticdata/routes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 5));
-  FlutterNativeSplash.remove();
+
   runApp(const MyApp());
 }
 

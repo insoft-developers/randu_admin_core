@@ -32,33 +32,39 @@ class SelectData extends StatelessWidget {
             border: InputBorder.none,
           ),
           value: defValue,
-          onChanged: (String? newValue) {
-            if (code == 'tipe-produk') {
-              ProductAddController _controller =
-                  Get.put(ProductAddController());
-              _controller.onChangeProductType(newValue.toString());
-            } else if (code == 'buffered-stock') {
-              ProductAddController _controller =
-                  Get.put(ProductAddController());
-              _controller.selectedBufferedStock.value = newValue.toString();
-            } else if (code == 'manufactured') {
-              ProductAddController _controller =
-                  Get.put(ProductAddController());
-              _controller.selectedProductMadeOf.value = newValue.toString();
-            } else if (code == 'tipe-produk-edit') {
-              ProductEditController _controller =
-                  Get.put(ProductEditController());
-              _controller.onChangeProductType(newValue.toString());
-            } else if (code == 'buffered-stock-edit') {
-              ProductEditController _controller =
-                  Get.put(ProductEditController());
-              _controller.selectedBufferedStock.value = newValue.toString();
-            } else if (code == 'manufactured-edit') {
-              ProductEditController _controller =
-                  Get.put(ProductEditController());
-              _controller.selectedProductMadeOf.value = newValue.toString();
-            }
-          },
+          onChanged: label == "readonly"
+              ? null
+              : (String? newValue) {
+                  if (code == 'tipe-produk') {
+                    ProductAddController _controller =
+                        Get.put(ProductAddController());
+                    _controller.onChangeProductType(newValue.toString());
+                  } else if (code == 'buffered-stock') {
+                    ProductAddController _controller =
+                        Get.put(ProductAddController());
+                    _controller.selectedBufferedStock.value =
+                        newValue.toString();
+                  } else if (code == 'manufactured') {
+                    ProductAddController _controller =
+                        Get.put(ProductAddController());
+                    _controller.selectedProductMadeOf.value =
+                        newValue.toString();
+                  } else if (code == 'tipe-produk-edit') {
+                    ProductEditController _controller =
+                        Get.put(ProductEditController());
+                    _controller.onChangeProductType(newValue.toString());
+                  } else if (code == 'buffered-stock-edit') {
+                    ProductEditController _controller =
+                        Get.put(ProductEditController());
+                    _controller.selectedBufferedStock.value =
+                        newValue.toString();
+                  } else if (code == 'manufactured-edit') {
+                    ProductEditController _controller =
+                        Get.put(ProductEditController());
+                    _controller.selectedProductMadeOf.value =
+                        newValue.toString();
+                  }
+                },
           items: menuItems),
     );
   }

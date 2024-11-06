@@ -198,7 +198,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                         ),
                                         InkWell(
                                             onTap: () {
-                                              controller.changePage(4);
+                                              controller.changePage(5);
                                               Get.back();
                                             },
                                             child: Row(
@@ -212,8 +212,8 @@ class _DarwerCodeState extends State<DarwerCode> {
                                         _buildsizeboxwithheight(),
                                         InkWell(
                                             onTap: () {
-                                              controller.changePage(5);
-                                              Get.back();
+                                              // controller.changePage(5);
+                                              // Get.back();
                                             },
                                             child: Row(
                                               children: [
@@ -563,7 +563,7 @@ class _DarwerCodeState extends State<DarwerCode> {
   Widget _buildcomuntext({required String title, required int index}) {
     return Obx(
       () => SizedBox(
-        width: MediaQuery.of(context).size.width - 173,
+        width: MediaQuery.of(context).size.width - 220,
         child: Text(title,
             style: mediumGreyTextStyle.copyWith(
                 fontSize: 13,

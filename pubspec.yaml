@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.1.0+3
 
 environment:
   sdk: ">=3.0.3 <4.0.0"
@@ -71,11 +71,12 @@ dependencies:
   image_picker: ^0.8.6+1
   sqflite: ^2.0.0+3
   dropdown_search: ^5.0.3
+
 flutter_native_splash:
   color: "#42a5f5"
   #background_image: "assets/background.png"
 
-  image: assets/randu_adcore.png
+  image: assets/splash-trans.png
 
   #branding: assets/dart.png
 
@@ -105,23 +106,23 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-    #image: assets/android12splash.png
+    image: assets/icon_core.png
 
-    # Splash screen background color.
-    #color: "#42a5f5"
+  # Splash screen background color.
+  # color: "#42a5f5"
 
-    # App icon background color.
-    #icon_background_color: "#111111"
+  # App icon background color.
+  #icon_background_color: "#111111"
 
-    # The branding property allows you to specify an image used as branding in the splash screen.
-    #branding: assets/dart.png
+  # The branding property allows you to specify an image used as branding in the splash screen.
+  #branding: assets/dart.png
 
-    # The image_dark, color_dark, icon_background_color_dark, and branding_dark set values that
-    # apply when the device is in dark mode. If they are not specified, the app will use the
-    # parameters from above.
-    #image_dark: assets/android12splash-invert.png
-    #color_dark: "#042a49"
-    #icon_background_color_dark: "#eeeeee"
+  # The image_dark, color_dark, icon_background_color_dark, and branding_dark set values that
+  # apply when the device is in dark mode. If they are not specified, the app will use the
+  # parameters from above.
+  #image_dark: assets/android12splash-invert.png
+  #color_dark: "#042a49"
+  #icon_background_color_dark: "#eeeeee"
 
   # The android, ios and web parameters can be used to disable generating a splash screen on a given
   # platform.
@@ -206,7 +207,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/randu_core_icon.png"
+  image_path: "assets/icon-revisi.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

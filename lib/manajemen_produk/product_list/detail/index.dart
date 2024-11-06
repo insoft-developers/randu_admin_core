@@ -1,7 +1,6 @@
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/shimmer_text.dart';
 import 'package:buzz/manajemen_produk/product_list/detail/product_detail_controller.dart';
-import 'package:buzz/manajemen_produk/product_list/detail/slider.dart';
 import 'package:buzz/new_appbar.dart';
 import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/utils/helper.dart';

@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:buzz/database/db_helper.dart';
 import 'package:buzz/manajemen_produk/product_list/add/image_upload_provider.dart';
-import 'package:buzz/manajemen_produk/product_list/add/varian_controller.dart';
 import 'package:buzz/network/network.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -162,8 +161,13 @@ class ProductEditController extends GetxController {
     }
   }
 
-  void onChangeRadio(int value) {
-    radioGroupValue.value = value;
+  void onChangeRadio(int nilai) {
+    radioGroupValue.value = nilai;
+    if (nilai == 1) {
+      selectedBufferedStock.value = "0";
+    } else if (nilai == 0) {
+      selectedBufferedStock.value = "1";
+    }
   }
 
   void onChangeComposition(String value) {

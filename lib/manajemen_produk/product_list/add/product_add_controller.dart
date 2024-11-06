@@ -17,11 +17,10 @@ class ProductAddController extends GetxController {
   var selectedCategoryName = "".obs;
   var selectedProductType = "1".obs;
   var categoryLoading = false.obs;
-  var selectedUnitId = "".obs;
-  var selectedUnitName = "".obs;
+  var selectedUnitName = "Unit (Satuan)".obs;
   var satuanList = List.empty().obs;
   var satuanLoading = false.obs;
-  var selectedBufferedStock = "0".obs;
+  var selectedBufferedStock = "1".obs;
   var selectedProductMadeOf = "1".obs;
   var selectedMaterial = "".obs;
   var materialList = List.empty().obs;
@@ -154,8 +153,13 @@ class ProductAddController extends GetxController {
     }
   }
 
-  void onChangeRadio(int value) {
-    radioGroupValue.value = value;
+  void onChangeRadio(int nilai) {
+    radioGroupValue.value = nilai;
+    if (nilai == 1) {
+      selectedBufferedStock.value = "0";
+    } else if (nilai == 0) {
+      selectedBufferedStock.value = "1";
+    }
   }
 
   void onChangeComposition(String value) {
@@ -172,7 +176,6 @@ class ProductAddController extends GetxController {
   }
 
   void onUnitSelected(Map<String, dynamic> dataList) {
-    selectedUnitId.value = dataList['id'].toString();
     selectedUnitName.value = dataList['unit_name'].toString();
     Get.back();
   }

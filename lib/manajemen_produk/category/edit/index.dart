@@ -54,7 +54,7 @@ class _ProductCategoryEditState extends State<ProductCategoryEdit> {
         children: [
           ComunTitle(title: 'Edit Kategori', path: "Daftar Kategori"),
           Jarak(tinggi: 20),
-          Judul(nama: "Nama Kategori *", pad: 20, ukuran: 16),
+          Judul(nama: "Nama Kategori *", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -87,7 +87,7 @@ class _ProductCategoryEditState extends State<ProductCategoryEdit> {
             ),
           ),
           Jarak(tinggi: 30),
-          Judul(nama: "Kode Kategori", pad: 20, ukuran: 16),
+          Judul(nama: "Kode Kategori", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -99,7 +99,8 @@ class _ProductCategoryEditState extends State<ProductCategoryEdit> {
                 code: ""),
           ),
           Jarak(tinggi: 30),
-          Judul(nama: "Upload Foto Kategori", pad: 20, ukuran: 16),
+          Judul(
+              nama: "Upload Foto Kategori", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
           Subtitle(
             text: "Foto kategori 500 x 500 pixel ukuran persegi",
@@ -162,7 +163,8 @@ class _ProductCategoryEditState extends State<ProductCategoryEdit> {
                       );
           }),
           Jarak(tinggi: 30),
-          Judul(nama: "Keterangan (Opsional)", pad: 20, ukuran: 16),
+          Judul(
+              nama: "Keterangan (Opsional)", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),

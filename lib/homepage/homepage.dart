@@ -1,4 +1,3 @@
-import 'package:buzz/homepage/homepage_controller.dart';
 import 'package:buzz/provider/proviercolors.dart';
 import 'package:buzz/staticdata.dart';
 import 'package:flutter/material.dart';

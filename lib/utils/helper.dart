@@ -28,6 +28,33 @@ class Helper {
     }
   }
 
+  String generateSKU(String value) {
+    value = value.replaceAll('a', '');
+    value = value.replaceAll('i', '');
+    value = value.replaceAll('u', '');
+    value = value.replaceAll('e', '');
+    value = value.replaceAll('o', '');
+    value = value.replaceAll('A', '');
+    value = value.replaceAll('I', '');
+    value = value.replaceAll('U', '');
+    value = value.replaceAll('E', '');
+    value = value.replaceAll('O', '');
+    value = value.replaceAll(' ', '');
+
+    value = value.toUpperCase() + '-';
+
+    var rng = new Random();
+    var code = rng.nextInt(9000) + 1000;
+
+    String f = value[0] + code.toString() + generateRandomString(2);
+    print(value);
+    if (value == '-') {
+      return '';
+    } else {
+      return f;
+    }
+  }
+
   String generateProductCode(String value) {
     value = value.isNotEmpty
         ? value.trim().split(' ').map((l) => l[0]).take(5).join()
