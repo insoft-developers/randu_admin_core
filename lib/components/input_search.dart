@@ -1,5 +1,6 @@
 // ignore: must_be_immutable
 import 'package:buzz/cogs_manufactur/bahan_baku/bahan_baku_controller.dart';
+import 'package:buzz/cogs_manufactur/barang_setengah_jadi/inter_product_controller.dart';
 import 'package:buzz/manajemen_produk/category/product_category_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/product_list_controller.dart';
@@ -55,6 +56,10 @@ class InputSearch extends StatelessWidget {
             _controller.unitSearch(value.toString());
           } else if (code == 'cari-material') {
             BahanBakuController _controller = Get.put(BahanBakuController());
+            _controller.materialSearch(value.toString());
+          } else if (code == 'cari-inter-product') {
+            InterProductController _controller =
+                Get.put(InterProductController());
             _controller.materialSearch(value.toString());
           }
         },

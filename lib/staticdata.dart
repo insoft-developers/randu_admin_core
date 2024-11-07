@@ -1,3 +1,4 @@
+import 'package:buzz/cogs_manufactur/barang_setengah_jadi/index.dart';
 import 'package:buzz/manajemen_produk/category/index.dart';
 import 'package:buzz/manajemen_produk/product_list/index.dart';
 import 'package:buzz/cogs_manufactur/bahan_baku/index.dart';
@@ -61,19 +62,7 @@ class AppConst extends GetxController implements GetxService {
     const ProductCategory(),
     const ProductList(),
     const BahanBaku(),
-    // const NewAddProjectPage(),
-    // const CreateNewPage(), //
-    // const OldProductPage(),//
-
-    // const Messages(),
-    // const ChatPage(),//
-    // const NewUserProfile(),
-    // const UsersProfilePage(),//
-    const UsersEditPage(),
-    const UsersCardsPage(),
-    const ValiDationFormPage(),
-    const NewCheckboxRadioPage(),
-    // const CheckboxRadioPage(),//
+    const InterProduct(),
   ].obs;
 
   void changePage(int newIndex) {
