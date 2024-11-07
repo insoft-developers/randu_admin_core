@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:buzz/cogs_manufactur/bahan_baku/add/bahan_baku_add_controller.dart';
 import 'package:buzz/cogs_manufactur/barang_setengah_jadi/add/inter_product_add_controller.dart';
 import 'package:buzz/components/input_text.dart';
 import 'package:buzz/components/jarak.dart';
@@ -29,25 +28,41 @@ class _InterProductAddState extends State<InterProductAdd> {
   final TextEditingController _description = TextEditingController();
   final TextEditingController _minStock = TextEditingController();
   final TextEditingController _idealStock = TextEditingController();
-  final List<TextEditingController> _products = [TextEditingController()];
   final List<TextEditingController> _qty = [TextEditingController()];
+  final List<String> _materials = [""];
+  final List<String> _selectedMaterials = [""];
 
   @override
   void initState() {
     _controller.getCategoryData();
     _controller.getUnitData();
+    _controller.getMaterialData();
     super.initState();
   }
 
   _addItem() {
     setState(() {
-      _products.add(TextEditingController());
+      _materials.add("");
+      _selectedMaterials.add("");
       _qty.add(TextEditingController());
     });
   }
 
   _generateSKU(String value) {
     _sku.text = Helper().generateSKU(value);
+  }
+
+  _onInterProductSubmit() {
+    List<String> _komposisi = [];
+    List<String> _jumlah = [];
+
+    for (var i = 0; i < _qty.length; i++) {
+      _komposisi.add(_materials[i].isEmpty ? "" : _selectedMaterials[i]);
+      _jumlah.add(_qty[i].text.isEmpty ? "0" : _qty[i].text);
+    }
+
+    _controller.interProductStore(_materialName.text, _sku.text, _minStock.text,
+        _idealStock.text, _komposisi, _jumlah, _description.text);
   }
 
   @override
@@ -276,24 +291,18 @@ class _InterProductAddState extends State<InterProductAdd> {
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: _products.length,
+                itemCount: _qty.length,
                 physics: const ScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.grey.shade300),
+                    margin: const EdgeInsets.only(bottom: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 4 / 8,
                           child: Obx(
-                            () => _controller.satuanLoading.value
+                            () => _controller.materialLoading.value
                                 ? Container(
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 20),
@@ -304,7 +313,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                                   )
                                 : Container(
                                     margin: const EdgeInsets.symmetric(
-                                        horizontal: 20),
+                                        horizontal: 0),
                                     padding: const EdgeInsets.only(left: 10),
                                     decoration: BoxDecoration(
                                         border: Border.all(
@@ -313,7 +322,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     child: DropdownSearch<String>(
-                                      items: _controller.dropdownSatuan,
+                                      items: _controller.dropdownMaterial,
                                       popupProps: PopupProps.menu(
                                         showSelectedItems: true,
                                         showSearchBox: true,
@@ -326,9 +335,23 @@ class _InterProductAddState extends State<InterProductAdd> {
                                                   InputDecoration(
                                                 border: InputBorder.none,
                                               )),
-                                      onChanged: (value) {},
-                                      selectedItem:
-                                          _controller.selectedSatuan.value,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _materials[index] = value.toString();
+                                          int indexSelected = _controller
+                                              .dropdownMaterial
+                                              .indexOf(value!);
+                                          Map<String, dynamic>
+                                              _selectedComponent = _controller
+                                                  .materialList[indexSelected];
+                                          String _materialId =
+                                              "${_selectedComponent['id']}_${_selectedComponent['product_type']}";
+                                          _selectedMaterials[index] =
+                                              _materialId;
+                                          print(_selectedMaterials);
+                                        });
+                                      },
+                                      selectedItem: _materials[index],
                                     ),
                                   ),
                           ),
@@ -336,18 +359,30 @@ class _InterProductAddState extends State<InterProductAdd> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 2 / 8,
                           child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
                             child: InputText(
-                                hint: "Ideal Stock",
+                                hint: "Qty",
                                 textInputType: TextInputType.number,
-                                textEditingController: _idealStock,
+                                textEditingController: _qty[index],
                                 obsecureText: false,
                                 code: ""),
                           ),
                         ),
                         SizedBox(
-                            width: MediaQuery.of(context).size.width * 2 / 8,
-                            child: Icon(Icons.delete, size: 15)),
+                            width: MediaQuery.of(context).size.width * 1 / 8,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _materials.removeAt(index);
+                                  _selectedMaterials.removeAt(index);
+                                  _qty[index].clear();
+                                  _qty.removeAt(index);
+                                });
+                              },
+                              child: Container(
+                                  child: Icon(Icons.delete_forever,
+                                      size: 25, color: Colors.red[900])),
+                            ))
                       ],
                     ),
                   );
@@ -392,8 +427,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                 : Center(
                     child: InkWell(
                     onTap: () {
-                      _controller.bahanBakuStore(_materialName.text, _sku.text,
-                          _minStock.text, _idealStock.text, _description.text);
+                      _onInterProductSubmit();
                     },
                     splashColor: Colors.blue,
                     borderRadius: BorderRadius.circular(30),

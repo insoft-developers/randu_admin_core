@@ -30,9 +30,9 @@ class InterProductController extends GetxController {
     getInterProductList(value);
   }
 
-  void bahanBakuDelete(String id) async {
+  void interProductDelete(String id) async {
     var data = {"id": id};
-    var res = await Network().post(data, '/core/material-delete');
+    var res = await Network().post(data, '/core/inter-product-delete');
     var body = jsonDecode(res.body);
     if (body['success']) {
       Get.back();

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class InterProductAddController extends GetxController {
+class InterProductEditController extends GetxController {
   var loading = false.obs;
   var selectedCategory = "".obs;
   var selectedCategoryId = "".obs;
@@ -26,7 +26,7 @@ class InterProductAddController extends GetxController {
     selectedSatuan.value = value;
   }
 
-  void getCategoryData() async {
+  Future getCategoryData() async {
     categoryLoading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
@@ -75,7 +75,7 @@ class InterProductAddController extends GetxController {
     return menuItems;
   }
 
-  void getUnitData() async {
+  Future getUnitData() async {
     satuanLoading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
@@ -92,7 +92,7 @@ class InterProductAddController extends GetxController {
     }
   }
 
-  void getMaterialData() async {
+  Future getMaterialData() async {
     materialLoading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
@@ -109,7 +109,8 @@ class InterProductAddController extends GetxController {
     }
   }
 
-  void interProductStore(
+  Future interProductStore(
+      String id,
       String productName,
       String sku,
       String minStock,
@@ -123,6 +124,7 @@ class InterProductAddController extends GetxController {
     if (user != null) {
       String userId = user['id'].toString();
       var data = {
+        "id": id,
         "userid": userId,
         "product_name": productName,
         "sku": sku,
@@ -134,7 +136,7 @@ class InterProductAddController extends GetxController {
         "quantity": quantity,
         "description": description
       };
-      var res = await Network().post(data, '/core/inter-product-store');
+      var res = await Network().post(data, '/core/inter-product-update');
       var body = jsonDecode(res.body);
       if (body['success']) {
         loading(false);

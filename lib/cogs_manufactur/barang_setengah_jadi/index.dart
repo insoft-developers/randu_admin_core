@@ -185,12 +185,12 @@ class _InterProductState extends State<InterProduct> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          // Get.to(() => InterProductEdit(
-                                          //         dataList: _controller
-                                          //             .interProductList[index]))!
-                                          //     .then((value) =>
-                                          //         _controller
-                                          //             .getInterProductList(""));
+                                          Get.to(() => InterProductEdit(
+                                                  dataList: _controller
+                                                          .interProductList[
+                                                      index]))!
+                                              .then((value) => _controller
+                                                  .getInterProductList(""));
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(5),
@@ -217,7 +217,7 @@ class _InterProductState extends State<InterProduct> {
                                                   .toString(),
                                               _controller
                                                   .interProductList[index]
-                                                      ['material_name']
+                                                      ['product_name']
                                                   .toString());
                                         },
                                         child: Container(
@@ -258,7 +258,7 @@ void _showAlertDialog(BuildContext context, String id, String name) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Hapus Bahan Baku'),
+        title: const Text('Hapus Barang Setengah Jadi'),
         content:
             Text("Apakah anda yakin ingin menghapus bahan baku [ ${name} ] ?"),
         actions: <Widget>[
@@ -271,9 +271,10 @@ void _showAlertDialog(BuildContext context, String id, String name) {
           TextButton(
             child: const Text('Hapus'),
             onPressed: () {
-              // InterProductController _controller = Get.put(InterProductController());
-              // _controller.InterProductDelete(id);
-              // Get.back();
+              InterProductController _controller =
+                  Get.put(InterProductController());
+              _controller.interProductDelete(id);
+              Get.back();
             },
           ),
         ],
