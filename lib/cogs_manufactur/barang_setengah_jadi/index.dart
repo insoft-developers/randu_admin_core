@@ -177,6 +177,67 @@ class _InterProductState extends State<InterProduct> {
                                           ),
                                         ],
                                       ),
+                                      Divider(
+                                        color: Colors.grey[400],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  1 /
+                                                  4,
+                                              child: Text("Komposisi")),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    3 /
+                                                    4 -
+                                                50,
+                                            child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: _controller
+                                                    .interProductList[index]
+                                                        ['komposisi']
+                                                    .length,
+                                                itemBuilder: (context, index2) {
+                                                  return Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            bottom: 3),
+                                                    child: Text(
+                                                      _controller
+                                                              .interProductList[index]
+                                                                  ['komposisi']
+                                                                  [index2][
+                                                                  'material_name']
+                                                              .toString() +
+                                                          ' - ' +
+                                                          _controller
+                                                              .interProductList[index]
+                                                                  ['komposisi']
+                                                                  [index2]
+                                                                  ['quantity']
+                                                              .toString() +
+                                                          ' ' +
+                                                          _controller
+                                                              .interProductList[index]
+                                                                  ['komposisi']
+                                                                  [index2]
+                                                                  ['unit']
+                                                              .toString(),
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                    ),
+                                                  );
+                                                }),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                   Jarak(tinggi: 15),

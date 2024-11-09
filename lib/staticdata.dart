@@ -2,6 +2,7 @@ import 'package:buzz/cogs_manufactur/barang_setengah_jadi/index.dart';
 import 'package:buzz/manajemen_produk/category/index.dart';
 import 'package:buzz/manajemen_produk/product_list/index.dart';
 import 'package:buzz/cogs_manufactur/bahan_baku/index.dart';
+import 'package:buzz/pembelian/beli_produk_jadi/index.dart';
 import 'package:get/get.dart';
 
 import 'Users/users_cards.dart';
@@ -63,6 +64,7 @@ class AppConst extends GetxController implements GetxService {
     const ProductList(),
     const BahanBaku(),
     const InterProduct(),
+    const BeliProduk(),
   ].obs;
 
   void changePage(int newIndex) {
