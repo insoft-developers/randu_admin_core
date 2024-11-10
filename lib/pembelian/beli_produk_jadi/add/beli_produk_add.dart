@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:buzz/components/input_display.dart';
+import 'package:buzz/components/input_readonly.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/judul.dart';
 import 'package:buzz/components/select.dart';
@@ -8,6 +10,7 @@ import 'package:buzz/components/spasi.dart';
 
 import 'package:buzz/new_appbar.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add_controller.dart';
+import 'package:buzz/utils/helper.dart';
 
 import 'package:buzz/widgets/comuntitle.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -36,6 +39,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _other = TextEditingController();
   final TextEditingController _finalPrice = TextEditingController();
+  int totalTransaction = 0;
 
   @override
   void initState() {
@@ -45,6 +49,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
     _controller.getProductPurchaseType("0");
     _controller.getProductData();
     super.initState();
+    _countFinalPrice();
   }
 
   _addItem() {
@@ -54,6 +59,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
       _totalPrices.add(TextEditingController());
       _quantities.add(TextEditingController());
       _unitPrices.add(TextEditingController());
+      _countFinalPrice();
     });
   }
 
@@ -67,6 +73,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
       _totalPrices.removeAt(index);
       _quantities.removeAt(index);
       _unitPrices.removeAt(index);
+      _countFinalPrice();
     });
   }
 
@@ -92,16 +99,60 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
       } else {
         _unitPrices[index].text = "0";
       }
+      _countFinalPrice();
     });
+  }
+
+  _countFinalPrice() {
+    setState(() {
+      int total = 0;
+      for (var i = 0; i < _totalPrices.length; i++) {
+        int tambahan =
+            _totalPrices[i].text.isEmpty ? 0 : int.parse(_totalPrices[i].text);
+        total = total + tambahan;
+      }
+      int pajak = _tax.text.isEmpty ? 0 : int.parse(_tax.text);
+      int diskon = _discount.text.isEmpty ? 0 : int.parse(_discount.text);
+
+      int lain = _other.text.isEmpty ? 0 : int.parse(_other.text);
+
+      int grand = total + pajak - diskon + lain;
+      totalTransaction = grand;
+      _finalPrice.text = Helper.formatAngka(grand.toString());
+    });
+  }
+
+  void _productPurchaseStore() {
+    List<String> pQuantity = [];
+    List<String> pTotalPrice = [];
+    List<String> pUnitPrice = [];
+
+    for (var i = 0; i < _quantities.length; i++) {
+      pQuantity.add(_quantities[i].text);
+      pTotalPrice.add(_totalPrices[i].text);
+      pUnitPrice.add(_unitPrices[i].text);
+    }
+
+    _controller.productPurchaseStore(
+        _tanggal.text,
+        _quantities.length.toString(),
+        totalTransaction.toString(),
+        _selectedProducts,
+        pTotalPrice,
+        pQuantity,
+        pUnitPrice,
+        _tax.text,
+        _discount.text,
+        _other.text);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: NewAppBar(),
-          body: ListView(
+    return Scaffold(
+      appBar: NewAppBar(),
+      body: Stack(
+        children: [
+          ListView(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
             children: [
@@ -268,6 +319,8 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                                                         TextStyle(fontSize: 16),
                                                     dropdownSearchDecoration:
                                                         InputDecoration(
+                                                      label:
+                                                          Text("Pilih produk"),
                                                       border: InputBorder.none,
                                                     )),
                                             onChanged: (value) {
@@ -299,114 +352,156 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                                       width: MediaQuery.of(context).size.width *
                                           1 /
                                           3,
-                                      child: Container(
-                                        padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                        ),
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: Colors.grey.shade300,
-                                              width: 2.0),
-                                        ),
-                                        child: TextField(
-                                          controller: _totalPrices[index],
-                                          obscureText: false,
-                                          keyboardType: TextInputType.number,
-                                          textInputAction: TextInputAction.next,
-                                          decoration: InputDecoration(
-                                            hintText: "Harga Total",
-                                            hintStyle: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                            ),
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                  width: 2.0),
+                                            ),
+                                            child: TextField(
+                                              controller: _totalPrices[index],
+                                              obscureText: false,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              decoration: InputDecoration(
+                                                hintText: "Harga Total",
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey),
+                                                enabledBorder: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                              ),
+                                              onChanged: (value) {
+                                                _calculateUnitPrice(index);
+                                              },
+                                            ),
                                           ),
-                                          onChanged: (value) {
-                                            _calculateUnitPrice(index);
-                                          },
-                                        ),
+                                          Jarak(tinggi: 5),
+                                          Text(
+                                              Helper.formatAngka(
+                                                  _totalPrices[index].text),
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.red),
+                                              textAlign: TextAlign.right)
+                                        ],
                                       )),
                                   SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                               1 /
                                               3 -
                                           40,
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 3),
-                                        padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                        ),
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: Colors.grey.shade300,
-                                              width: 2.0),
-                                        ),
-                                        child: TextField(
-                                          controller: _quantities[index],
-                                          obscureText: false,
-                                          keyboardType: TextInputType.number,
-                                          textInputAction: TextInputAction.next,
-                                          decoration: InputDecoration(
-                                            hintText: "Qty",
-                                            hintStyle: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 3),
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                            ),
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                  width: 2.0),
+                                            ),
+                                            child: TextField(
+                                              controller: _quantities[index],
+                                              obscureText: false,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              decoration: InputDecoration(
+                                                hintText: "Qty",
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey),
+                                                enabledBorder: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                              ),
+                                              onChanged: (value) {
+                                                _calculateUnitPrice(index);
+                                              },
+                                            ),
                                           ),
-                                          onChanged: (value) {
-                                            _calculateUnitPrice(index);
-                                          },
-                                        ),
+                                          Jarak(tinggi: 5),
+                                          Text(
+                                              Helper.formatAngka(
+                                                  _quantities[index].text),
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.red),
+                                              textAlign: TextAlign.right)
+                                        ],
                                       )),
                                   SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           1 /
                                           3,
-                                      child: Container(
-                                        padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                        ),
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: Colors.grey.shade300,
-                                              width: 2.0),
-                                        ),
-                                        child: TextField(
-                                          readOnly: true,
-                                          controller: _unitPrices[index],
-                                          keyboardType: TextInputType.number,
-                                          textInputAction: TextInputAction.next,
-                                          decoration: InputDecoration(
-                                            hintText: "Harga Satuan",
-                                            hintStyle: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                            ),
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                  color: Colors.grey.shade300,
+                                                  width: 2.0),
+                                            ),
+                                            child: TextField(
+                                              readOnly: true,
+                                              controller: _unitPrices[index],
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              decoration: InputDecoration(
+                                                hintText: "Harga Satuan",
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey),
+                                                enabledBorder: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                              ),
+                                              onChanged: (value) {},
+                                            ),
                                           ),
-                                          onChanged: (value) {},
-                                        ),
+                                          Jarak(tinggi: 5),
+                                          Text(
+                                              Helper.formatAngka(
+                                                  _unitPrices[index].text),
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.red),
+                                              textAlign: TextAlign.right)
+                                        ],
                                       )),
                                 ],
                               ),
-                              Jarak(tinggi: 5),
+                              Divider(color: Colors.grey.shade400),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -463,31 +558,42 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                   ukuran: 16,
                   mandatory: 0),
               Jarak(tinggi: 5),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade300, width: 2.0),
-                ),
-                child: TextField(
-                  controller: _tax,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Pajak (Rupiah)",
-                    hintStyle:
-                        const TextStyle(fontSize: 16, color: Colors.grey),
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                    ),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border:
+                          Border.all(color: Colors.grey.shade300, width: 2.0),
+                    ),
+                    child: TextField(
+                      controller: _tax,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Pajak (Rupiah)",
+                        hintStyle:
+                            const TextStyle(fontSize: 16, color: Colors.grey),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        _countFinalPrice();
+                      },
+                    ),
                   ),
-                  onChanged: (value) {},
-                ),
+                  Jarak(tinggi: 5),
+                  Text(Helper.formatAngka(_tax.text),
+                      style: TextStyle(fontSize: 13, color: Colors.red),
+                      textAlign: TextAlign.right)
+                ],
               ),
               Jarak(tinggi: 30),
               Judul(
@@ -496,31 +602,42 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                   ukuran: 16,
                   mandatory: 0),
               Jarak(tinggi: 5),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade300, width: 2.0),
-                ),
-                child: TextField(
-                  controller: _discount,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Discount / Potongan",
-                    hintStyle:
-                        const TextStyle(fontSize: 16, color: Colors.grey),
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                    ),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border:
+                          Border.all(color: Colors.grey.shade300, width: 2.0),
+                    ),
+                    child: TextField(
+                      controller: _discount,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Discount / Potongan",
+                        hintStyle:
+                            const TextStyle(fontSize: 16, color: Colors.grey),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        _countFinalPrice();
+                      },
+                    ),
                   ),
-                  onChanged: (value) {},
-                ),
+                  Jarak(tinggi: 5),
+                  Text(Helper.formatAngka(_discount.text),
+                      style: TextStyle(fontSize: 13, color: Colors.red),
+                      textAlign: TextAlign.right)
+                ],
               ),
               Jarak(tinggi: 30),
               Judul(
@@ -529,31 +646,62 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                   ukuran: 16,
                   mandatory: 0),
               Jarak(tinggi: 5),
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                    ),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border:
+                          Border.all(color: Colors.grey.shade300, width: 2.0),
+                    ),
+                    child: TextField(
+                      controller: _other,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Ongkir / Ongkos Kerja DLL",
+                        hintStyle:
+                            const TextStyle(fontSize: 16, color: Colors.grey),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        _countFinalPrice();
+                      },
+                    ),
+                  ),
+                  Jarak(tinggi: 5),
+                  Text(Helper.formatAngka(_other.text),
+                      style: TextStyle(fontSize: 13, color: Colors.red),
+                      textAlign: TextAlign.right)
+                ],
+              ),
+              Jarak(tinggi: 30),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
-                height: 50,
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade300, width: 2.0),
-                ),
-                child: TextField(
-                  controller: _other,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Ongkir / Ongkos Kerja DLL",
-                    hintStyle:
-                        const TextStyle(fontSize: 16, color: Colors.grey),
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                  ),
-                  onChanged: (value) {},
-                ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.green.shade100),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Penjelasan fitur transaksi Beli Produk",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Jarak(tinggi: 5),
+                      Text(
+                        "Transaksi ini digunakan saat dilakukan pembelian/kulak dari supplier yang mana stok produk akan langsung bertambah setelah transaksi ini sukses dibuat. \n\nHarga pokok penjualan / COGS pada produk yang dibuat akan otomatis terhitung dari total transaksi dibagi dengan jumlah produk yang dibeli. Contoh : Jika total transaksi = Rp. 100.000 dan produk yang dibeli adalah 5 pcs maka masing masing produk HPP nya adalah 100.000/5 = Rp. 20.000. \n\nGunakan tipe Utang jika pembeliannya menggunaan sistem utang. Fitur Utang juga bisa digunakan untuk sistem konsinyasi bisnis/Supplier menitipkan produk untuk dijual",
+                        textAlign: TextAlign.justify,
+                      ),
+                      Jarak(tinggi: 10),
+                    ]),
               ),
               Jarak(tinggi: 50),
               Obx(
@@ -563,8 +711,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                     : Center(
                         child: InkWell(
                         onTap: () {
-                          // _controller.ProductCategoryStore(_namaKategori.text,
-                          //     _codeKategori.text, _description.text);
+                          _productPurchaseStore();
                         },
                         splashColor: Colors.blue,
                         borderRadius: BorderRadius.circular(30),
@@ -579,21 +726,25 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                                     color: Colors.white, fontSize: 16))),
                       )),
               ),
-              Jarak(tinggi: 100),
+              Jarak(tinggi: 150),
             ],
           ),
-        ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Center(
-                  child: Text("Rp. 20.000.000",
-                      style: TextStyle(fontSize: 20, color: Colors.blue)))),
-        )
-      ],
+          Positioned(
+            bottom: 0,
+            child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(color: Colors.grey.shade200),
+                child: Center(
+                    child: InputDisplay(
+                        hint: "Rp. 0",
+                        textInputType: TextInputType.number,
+                        textEditingController: _finalPrice,
+                        obsecureText: false,
+                        code: ""))),
+          )
+        ],
+      ),
     );
   }
 }

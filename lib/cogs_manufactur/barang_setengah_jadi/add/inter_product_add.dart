@@ -156,6 +156,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                       dropdownDecoratorProps: DropDownDecoratorProps(
                           baseStyle: TextStyle(fontSize: 16),
                           dropdownSearchDecoration: InputDecoration(
+                            label: Text("Pilih Kategori"),
                             border: InputBorder.none,
                           )),
                       onChanged: (value) {
@@ -198,6 +199,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                       dropdownDecoratorProps: DropDownDecoratorProps(
                           baseStyle: TextStyle(fontSize: 16),
                           dropdownSearchDecoration: InputDecoration(
+                            label: Text("Pilih Satuan"),
                             border: InputBorder.none,
                           )),
                       onChanged: (value) {
@@ -333,6 +335,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                                                   TextStyle(fontSize: 16),
                                               dropdownSearchDecoration:
                                                   InputDecoration(
+                                                label: Text("Pilih Material"),
                                                 border: InputBorder.none,
                                               )),
                                       onChanged: (value) {
@@ -380,7 +383,7 @@ class _InterProductAddState extends State<InterProductAdd> {
                                 });
                               },
                               child: Container(
-                                  child: Icon(Icons.delete_forever,
+                                  child: Icon(Icons.delete,
                                       size: 25, color: Colors.red[900])),
                             ))
                       ],

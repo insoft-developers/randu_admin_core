@@ -257,7 +257,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                                       lebar: 8),
                                                                   SizedBox(
                                                                     width: MediaQuery.of(context).size.width *
-                                                                            1 /
+                                                                            2 /
                                                                             8 -
                                                                         10,
                                                                     child: Text(
@@ -271,7 +271,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                                     width: MediaQuery.of(context)
                                                                             .size
                                                                             .width *
-                                                                        1 /
+                                                                        2 /
                                                                         8,
                                                                     child: Text(
                                                                       Helper.formatAngka(_controller
@@ -349,12 +349,12 @@ class _BeliProdukState extends State<BeliProduk> {
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                // Get.to(() => BeliProdukEdit(
-                                                //         dataList: _controller
-                                                //                 .productPurchaseList[
-                                                //             index]))!
-                                                //     .then((value) => _controller
-                                                //         .getProductPurchaseList(""));
+                                                _showSynctDialog(
+                                                    context,
+                                                    _controller
+                                                        .productPurchaseList[
+                                                            index]['id']
+                                                        .toString());
                                               },
                                               child: Container(
                                                 padding:
@@ -382,10 +382,6 @@ class _BeliProdukState extends State<BeliProduk> {
                                               _controller
                                                   .productPurchaseList[index]
                                                       ['id']
-                                                  .toString(),
-                                              _controller
-                                                  .productPurchaseList[index]
-                                                      ['product_name']
                                                   .toString());
                                         },
                                         child: Container(
@@ -421,28 +417,58 @@ class _BeliProdukState extends State<BeliProduk> {
   }
 }
 
-void _showAlertDialog(BuildContext context, String id, String name) {
+void _showAlertDialog(BuildContext context, String id) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Hapus Barang Setengah Jadi'),
+        title: const Text('Delete Data'),
         content:
-            Text("Apakah anda yakin ingin menghapus bahan baku [ ${name} ] ?"),
+            Text("Are your sure, do your want to delete this transaction..?"),
         actions: <Widget>[
           TextButton(
-            child: const Text('Batal'),
+            child: const Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: const Text('Hapus'),
+            child: const Text('Yes, Delete it'),
             onPressed: () {
-              // BeliProdukJadiController _controller =
-              //     Get.put(BeliProdukJadiController());
-              // _controller.BeliProdukDelete(id);
-              // Get.back();
+              BeliProdukJadiController _controller =
+                  Get.put(BeliProdukJadiController());
+              _controller.productPurchaseDelete(id);
+              Get.back();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSynctDialog(BuildContext context, String id) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Are your sure?'),
+        content:
+            Text("You will syncronize this transaction into journal account ?"),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Yes, Syncronize it'),
+            onPressed: () {
+              BeliProdukJadiController _controller =
+                  Get.put(BeliProdukJadiController());
+              _controller.sync(id);
+              Get.back();
             },
           ),
         ],

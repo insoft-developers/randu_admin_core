@@ -92,4 +92,54 @@ class BeliProdukAddController extends GetxController {
     menuItems.add("");
     return menuItems;
   }
+
+  void productPurchaseStore(
+      String transactionDate,
+      String productCount,
+      String totalPurchase,
+      List<String> productId,
+      List<String> purchaseAmount,
+      List<String> purchaseQuantity,
+      List<String> unitPrice,
+      String tax,
+      String discount,
+      String other) async {
+    loading(true);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user')!);
+    if (user != null) {
+      String userId = user['id'].toString();
+      var data = {
+        "userid": userId,
+        "transaction_date": transactionDate,
+        "account_id": selectedAccountId.value,
+        "product_count": productCount,
+        "total_purchase": totalPurchase,
+        "product_id": productId,
+        "purchase_amount": purchaseAmount,
+        "quantity": purchaseQuantity,
+        "unit_price": unitPrice,
+        "payment_type": selectedPaymentType.value,
+        "tax": tax,
+        "discount": discount,
+        "other_expense": other
+      };
+      var res = await Network().post(data, '/core/product-purchase-store');
+      var body = jsonDecode(res.body);
+      if (body['success']) {
+        Get.back();
+        loading(false);
+      } else {
+        showError(body['message'].toString());
+        loading(false);
+      }
+    }
+  }
+
+  void showError(String n) {
+    ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+      backgroundColor: Colors.red,
+      content: Text(n, style: TextStyle(color: Colors.white, fontSize: 16)),
+    ));
+  }
 }
