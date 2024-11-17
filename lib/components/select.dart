@@ -1,6 +1,7 @@
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add_controller.dart';
+import 'package:buzz/pembelian/manufacture/add/product_manufacture_add_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,6 +72,10 @@ class SelectData extends StatelessWidget {
                   } else if (code == 'account-id') {
                     BeliProdukAddController _controller =
                         Get.put(BeliProdukAddController());
+                    _controller.onChangeAccoundId(newValue.toString());
+                  } else if (code == 'product-manufacture-account-id') {
+                    ProductManufactureAddController _controller =
+                        Get.put(ProductManufactureAddController());
                     _controller.onChangeAccoundId(newValue.toString());
                   }
                 },

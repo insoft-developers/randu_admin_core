@@ -4,6 +4,7 @@ import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/beli_produk_jadi_controller.dart';
+import 'package:buzz/pembelian/manufacture/add/product_manufacture_add.dart';
 import 'package:buzz/pembelian/manufacture/product_manufacture_controller.dart';
 import 'package:buzz/utils/helper.dart';
 
@@ -50,8 +51,8 @@ class _ProductManufactureState extends State<ProductManufacture> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Get.to(() => ProductManufactureAdd())
-                  //     ?.then((value) => _controller.getProductManufactureData(""));
+                  Get.to(() => ProductManufactureAdd())?.then(
+                      (value) => _controller.getProductManufactureData(""));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(5),
@@ -221,12 +222,12 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                // _showSynctDialog(
-                                                //     context,
-                                                //     _controller
-                                                //         .productManufactureList[
-                                                //             index]['id']
-                                                //         .toString());
+                                                _showSynctDialog(
+                                                    context,
+                                                    _controller
+                                                        .productManufactureList[
+                                                            index]['id']
+                                                        .toString());
                                               },
                                               child: Container(
                                                 padding:
@@ -249,12 +250,12 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                       Spasi(lebar: 15),
                                       GestureDetector(
                                         onTap: () {
-                                          // _showAlertDialog(
-                                          //     context,
-                                          //     _controller
-                                          //         .productManufactureList[index]
-                                          //             ['id']
-                                          //         .toString());
+                                          _showAlertDialog(
+                                              context,
+                                              _controller
+                                                  .productManufactureList[index]
+                                                      ['id']
+                                                  .toString());
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(5),
@@ -307,10 +308,10 @@ void _showAlertDialog(BuildContext context, String id) {
           TextButton(
             child: const Text('Yes, Delete it'),
             onPressed: () {
-              // ProductManufactureController _controller =
-              //     Get.put(ProductManufactureController());
-              // _controller.productPurchaseDelete(id);
-              // Get.back();
+              ProductManufactureController _controller =
+                  Get.put(ProductManufactureController());
+              _controller.destroy(id);
+              Get.back();
             },
           ),
         ],
@@ -337,10 +338,10 @@ void _showSynctDialog(BuildContext context, String id) {
           TextButton(
             child: const Text('Yes, Syncronize it'),
             onPressed: () {
-              // ProductManufactureController _controller =
-              //     Get.put(ProductManufactureController());
-              // _controller.sync(id);
-              // Get.back();
+              ProductManufactureController _controller =
+                  Get.put(ProductManufactureController());
+              _controller.sync(id);
+              Get.back();
             },
           ),
         ],
