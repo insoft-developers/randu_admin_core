@@ -2,34 +2,34 @@ import 'package:buzz/components/input_search.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
-import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add.dart';
-import 'package:buzz/pembelian/beli_produk_jadi/beli_produk_jadi_controller.dart';
+import 'package:buzz/pembelian/material_purchase/add/material_purchase_add.dart';
+import 'package:buzz/pembelian/material_purchase/material_purchase_controller.dart';
 import 'package:buzz/utils/helper.dart';
 
 import 'package:buzz/widgets/comuntitle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BeliProduk extends StatefulWidget {
-  const BeliProduk({super.key});
+class MaterialPurchase extends StatefulWidget {
+  const MaterialPurchase({super.key});
 
   @override
-  State<BeliProduk> createState() => _BeliProdukState();
+  State<MaterialPurchase> createState() => _MaterialPurchaseState();
 }
 
-class _BeliProdukState extends State<BeliProduk> {
+class _MaterialPurchaseState extends State<MaterialPurchase> {
   final TextEditingController _search = TextEditingController();
-  final BeliProdukJadiController _controller =
-      Get.put(BeliProdukJadiController());
+  final MaterialPurchaseController _controller =
+      Get.put(MaterialPurchaseController());
 
   @override
   void initState() {
-    _controller.getProductPurchaseList("");
+    _controller.getMaterialPurchaseData("");
     super.initState();
   }
 
   Future<void> _pullRefresh() async {
-    _controller.getProductPurchaseList("");
+    _controller.getMaterialPurchaseData("");
   }
 
   @override
@@ -40,14 +40,14 @@ class _BeliProdukState extends State<BeliProduk> {
         child: Column(
           children: [
             ComunTitle(
-                title: 'Transaksi Beli \nProduk', path: "Pembelian & Produksi"),
+                title: 'Transaksi Bahan Baku', path: "Pembelian & Produksi"),
             Row(
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width - 40,
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: InputSearch(
-                      hint: "Cari nama barang setengah jadi",
+                      hint: "Cari nama bahan baku",
                       textInputType: TextInputType.text,
                       iconData: Icons.search,
                       textEditingController: _search,
@@ -55,8 +55,8 @@ class _BeliProdukState extends State<BeliProduk> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => BeliProdukAdd())?.then(
-                        (value) => _controller.getProductPurchaseList(""));
+                    Get.to(() => MaterialPurchaseAdd())?.then(
+                        (value) => _controller.getMaterialPurchaseData(""));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(5),
@@ -83,7 +83,7 @@ class _BeliProdukState extends State<BeliProduk> {
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
-                          itemCount: _controller.productPurchaseList.length,
+                          itemCount: _controller.materialPurchaseList.length,
                           itemBuilder: (context, index) {
                             return Container(
                                 margin: const EdgeInsets.only(bottom: 20),
@@ -103,7 +103,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                             Text("Transaction Date"),
                                             Text(
                                               _controller
-                                                  .productPurchaseList[index]
+                                                  .materialPurchaseList[index]
                                                       ['transaction_date']
                                                   .toString(),
                                             ),
@@ -119,7 +119,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                             Text("Total Price"),
                                             Text(
                                               Helper.formatAngka(_controller
-                                                  .productPurchaseList[index]
+                                                  .materialPurchaseList[index]
                                                       ['total_purchase']
                                                   .toString()),
                                             ),
@@ -134,13 +134,13 @@ class _BeliProdukState extends State<BeliProduk> {
                                           children: [
                                             Text("Tax"),
                                             Text(
-                                              _controller.productPurchaseList[
+                                              _controller.materialPurchaseList[
                                                           index]['tax'] ==
                                                       null
                                                   ? "0"
                                                   : Helper.formatAngka(
                                                       _controller
-                                                          .productPurchaseList[
+                                                          .materialPurchaseList[
                                                               index]['tax']
                                                           .toString()),
                                             ),
@@ -155,13 +155,13 @@ class _BeliProdukState extends State<BeliProduk> {
                                           children: [
                                             Text("Discount"),
                                             Text(
-                                              _controller.productPurchaseList[
+                                              _controller.materialPurchaseList[
                                                           index]['discount'] ==
                                                       null
                                                   ? "0"
                                                   : Helper.formatAngka(
                                                       _controller
-                                                          .productPurchaseList[
+                                                          .materialPurchaseList[
                                                               index]['discount']
                                                           .toString()),
                                             ),
@@ -176,14 +176,14 @@ class _BeliProdukState extends State<BeliProduk> {
                                           children: [
                                             Text("Other Expense"),
                                             Text(
-                                              _controller.productPurchaseList[
+                                              _controller.materialPurchaseList[
                                                               index]
                                                           ['other_expense'] ==
                                                       null
                                                   ? "0"
                                                   : Helper.formatAngka(
                                                       _controller
-                                                          .productPurchaseList[
+                                                          .materialPurchaseList[
                                                               index]
                                                               ['other_expense']
                                                           .toString()),
@@ -204,7 +204,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                 BorderRadius.circular(4),
                                           ),
                                           child: ExpansionTile(
-                                            title: Text("Produk Detail",
+                                            title: Text("Material Detail",
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 )),
@@ -225,9 +225,9 @@ class _BeliProdukState extends State<BeliProduk> {
                                                             const ScrollPhysics(),
                                                         shrinkWrap: true,
                                                         itemCount: _controller
-                                                            .productPurchaseList[
+                                                            .materialPurchaseList[
                                                                 index][
-                                                                'product_purchase_item']
+                                                                'material_purchase_item']
                                                             .length,
                                                         itemBuilder:
                                                             (context, index2) {
@@ -245,16 +245,16 @@ class _BeliProdukState extends State<BeliProduk> {
                                                                       .width,
                                                                   child: Text(
                                                                     _controller
-                                                                        .productPurchaseList[
+                                                                        .materialPurchaseList[
                                                                             index]
                                                                             [
-                                                                            'product_purchase_item']
+                                                                            'material_purchase_item']
                                                                             [
                                                                             index2]
                                                                             [
-                                                                            'product']
+                                                                            'material']
                                                                             [
-                                                                            'name']
+                                                                            'material_name']
                                                                         .toString(),
                                                                   ),
                                                                 ),
@@ -275,7 +275,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                                           10,
                                                                       child:
                                                                           Text(
-                                                                        _controller.productPurchaseList[index]['product_purchase_item'][index2]['quantity'].toString() +
+                                                                        _controller.materialPurchaseList[index]['material_purchase_item'][index2]['quantity'].toString() +
                                                                             ' x ',
                                                                       ),
                                                                     ),
@@ -288,7 +288,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                                       child:
                                                                           Text(
                                                                         Helper.formatAngka(_controller
-                                                                            .productPurchaseList[index]['product_purchase_item'][index2]['unit_price']
+                                                                            .materialPurchaseList[index]['material_purchase_item'][index2]['unit_price']
                                                                             .toString()),
                                                                       ),
                                                                     ),
@@ -301,7 +301,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                                       child:
                                                                           Text(
                                                                         Helper.formatAngka(_controller
-                                                                            .productPurchaseList[index]['product_purchase_item'][index2]['purchase_amount']
+                                                                            .materialPurchaseList[index]['material_purchase_item'][index2]['purchase_amount']
                                                                             .toString()),
                                                                         textAlign:
                                                                             TextAlign.right,
@@ -330,7 +330,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        _controller.productPurchaseList[index]
+                                        _controller.materialPurchaseList[index]
                                                     ['sync_status'] ==
                                                 1
                                             ? Container(
@@ -355,7 +355,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                   _showSynctDialog(
                                                       context,
                                                       _controller
-                                                          .productPurchaseList[
+                                                          .materialPurchaseList[
                                                               index]['id']
                                                           .toString());
                                                 },
@@ -383,7 +383,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                             _showAlertDialog(
                                                 context,
                                                 _controller
-                                                    .productPurchaseList[index]
+                                                    .materialPurchaseList[index]
                                                         ['id']
                                                     .toString());
                                           },
@@ -439,8 +439,8 @@ void _showAlertDialog(BuildContext context, String id) {
           TextButton(
             child: const Text('Yes, Delete it'),
             onPressed: () {
-              BeliProdukJadiController _controller =
-                  Get.put(BeliProdukJadiController());
+              MaterialPurchaseController _controller =
+                  Get.put(MaterialPurchaseController());
               _controller.productPurchaseDelete(id);
               Get.back();
             },
@@ -469,8 +469,8 @@ void _showSynctDialog(BuildContext context, String id) {
           TextButton(
             child: const Text('Yes, Syncronize it'),
             onPressed: () {
-              BeliProdukJadiController _controller =
-                  Get.put(BeliProdukJadiController());
+              MaterialPurchaseController _controller =
+                  Get.put(MaterialPurchaseController());
               _controller.sync(id);
               Get.back();
             },

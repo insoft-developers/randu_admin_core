@@ -31,284 +31,298 @@ class _InterProductState extends State<InterProduct> {
     super.initState();
   }
 
+  Future<void> _pullRefresh() async {
+    _controller.getInterProductList("");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          ComunTitle(
-              title: 'Daftar Barang \nSetengah Jadi', path: "COGS Manufaktur"),
-          Row(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width - 40,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: InputSearch(
-                    hint: "Cari nama barang setengah jadi",
-                    textInputType: TextInputType.text,
-                    iconData: Icons.search,
-                    textEditingController: _search,
-                    code: "cari-inter-product"),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => InterProductAdd())
-                      ?.then((value) => _controller.getInterProductList(""));
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  width: 30,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Colors.green),
-                  child: Icon(
-                    Icons.add,
-                    size: 20,
-                    color: Colors.white,
+      body: RefreshIndicator(
+        onRefresh: _pullRefresh,
+        child: Column(
+          children: [
+            ComunTitle(
+                title: 'Daftar Barang \nSetengah Jadi',
+                path: "COGS Manufaktur"),
+            Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: InputSearch(
+                      hint: "Cari nama barang setengah jadi",
+                      textInputType: TextInputType.text,
+                      iconData: Icons.search,
+                      textEditingController: _search,
+                      code: "cari-inter-product"),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => InterProductAdd())
+                        ?.then((value) => _controller.getInterProductList(""));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    width: 30,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: Colors.green),
+                    child: Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Jarak(tinggi: 20),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Obx(
-                () => _controller.loading.value
-                    ? ShimmerList(tinggi: 110, jumlah: 10, pad: 0)
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: _controller.interProductList.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                              margin: const EdgeInsets.only(bottom: 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Spasi(lebar: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Jarak(tinggi: 10),
-                                      Text(
-                                          _controller.interProductList[index]
-                                                  ['product_name']
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18)),
-                                      Jarak(tinggi: 10),
-                                      Divider(
-                                        color: Colors.grey[400],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("SKU"),
-                                          Text(
+              ],
+            ),
+            Jarak(tinggi: 20),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Obx(
+                  () => _controller.loading.value
+                      ? ShimmerList(tinggi: 110, jumlah: 10, pad: 0)
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: _controller.interProductList.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                                margin: const EdgeInsets.only(bottom: 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Spasi(lebar: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Jarak(tinggi: 10),
+                                        Text(
                                             _controller.interProductList[index]
-                                                    ['sku']
+                                                    ['product_name']
                                                 .toString(),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.grey[400],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Kategori"),
-                                          Text(
-                                            _controller.interProductList[index]
-                                                    ['category_name']
-                                                .toString(),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.grey[400],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Satuan"),
-                                          Text(
-                                            _controller.interProductList[index]
-                                                    ['unit']
-                                                .toString(),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.grey[400],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Stock"),
-                                          Text(
-                                            Helper.formatAngka(_controller
-                                                .interProductList[index]
-                                                    ['stock']
-                                                .toString()),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.grey[400],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Cost"),
-                                          Text(
-                                            Helper.formatAngka(_controller
-                                                .interProductList[index]['cost']
-                                                .toString()),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: Colors.grey[400],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  1 /
-                                                  4,
-                                              child: Text("Komposisi")),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    3 /
-                                                    4 -
-                                                50,
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: _controller
-                                                    .interProductList[index]
-                                                        ['komposisi']
-                                                    .length,
-                                                itemBuilder: (context, index2) {
-                                                  return Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            bottom: 3),
-                                                    child: Text(
-                                                      _controller
-                                                              .interProductList[index]
-                                                                  ['komposisi']
-                                                                  [index2][
-                                                                  'material_name']
-                                                              .toString() +
-                                                          ' - ' +
-                                                          _controller
-                                                              .interProductList[index]
-                                                                  ['komposisi']
-                                                                  [index2]
-                                                                  ['quantity']
-                                                              .toString() +
-                                                          ' ' +
-                                                          _controller
-                                                              .interProductList[index]
-                                                                  ['komposisi']
-                                                                  [index2]
-                                                                  ['unit']
-                                                              .toString(),
-                                                      textAlign:
-                                                          TextAlign.right,
-                                                    ),
-                                                  );
-                                                }),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Jarak(tinggi: 15),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => InterProductEdit(
-                                                  dataList: _controller
-                                                          .interProductList[
-                                                      index]))!
-                                              .then((value) => _controller
-                                                  .getInterProductList(""));
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.orange),
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              color: Colors.orange.shade200),
-                                          child: Icon(
-                                            Icons.edit,
-                                            size: 15,
-                                            color: Colors.white,
-                                          ),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18)),
+                                        Jarak(tinggi: 10),
+                                        Divider(
+                                          color: Colors.grey[400],
                                         ),
-                                      ),
-                                      Spasi(lebar: 15),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showAlertDialog(
-                                              context,
-                                              _controller
-                                                  .interProductList[index]['id']
-                                                  .toString(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("SKU"),
+                                            Text(
                                               _controller
                                                   .interProductList[index]
-                                                      ['product_name']
-                                                  .toString());
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              border:
-                                                  Border.all(color: Colors.red),
-                                              color: Colors.red.shade200),
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 15,
-                                            color: Colors.white,
+                                                      ['sku']
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Kategori"),
+                                            Text(
+                                              _controller
+                                                  .interProductList[index]
+                                                      ['category_name']
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Satuan"),
+                                            Text(
+                                              _controller
+                                                  .interProductList[index]
+                                                      ['unit']
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Stock"),
+                                            Text(
+                                              Helper.formatAngka(_controller
+                                                  .interProductList[index]
+                                                      ['stock']
+                                                  .toString()),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Cost"),
+                                            Text(
+                                              Helper.formatAngka(_controller
+                                                  .interProductList[index]
+                                                      ['cost']
+                                                  .toString()),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    1 /
+                                                    4,
+                                                child: Text("Komposisi")),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      3 /
+                                                      4 -
+                                                  50,
+                                              child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount: _controller
+                                                      .interProductList[index]
+                                                          ['komposisi']
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index2) {
+                                                    return Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              bottom: 3),
+                                                      child: Text(
+                                                        _controller
+                                                                .interProductList[index]
+                                                                    ['komposisi']
+                                                                    [index2][
+                                                                    'material_name']
+                                                                .toString() +
+                                                            ' - ' +
+                                                            _controller
+                                                                .interProductList[index]
+                                                                    ['komposisi']
+                                                                    [index2]
+                                                                    ['quantity']
+                                                                .toString() +
+                                                            ' ' +
+                                                            _controller
+                                                                .interProductList[index]
+                                                                    ['komposisi']
+                                                                    [index2]
+                                                                    ['unit']
+                                                                .toString(),
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Jarak(tinggi: 15),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => InterProductEdit(
+                                                    dataList: _controller
+                                                            .interProductList[
+                                                        index]))!
+                                                .then((value) => _controller
+                                                    .getInterProductList(""));
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.orange),
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                color: Colors.orange.shade200),
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 15,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Spasi(lebar: 5),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: Colors.grey[400],
-                                  )
-                                ],
-                              ));
-                        }),
+                                        Spasi(lebar: 15),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _showAlertDialog(
+                                                context,
+                                                _controller
+                                                    .interProductList[index]
+                                                        ['id']
+                                                    .toString(),
+                                                _controller
+                                                    .interProductList[index]
+                                                        ['product_name']
+                                                    .toString());
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                border: Border.all(
+                                                    color: Colors.red),
+                                                color: Colors.red.shade200),
+                                            child: Icon(
+                                              Icons.delete,
+                                              size: 15,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        Spasi(lebar: 5),
+                                      ],
+                                    ),
+                                    Divider(
+                                      color: Colors.grey[400],
+                                    )
+                                  ],
+                                ));
+                          }),
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

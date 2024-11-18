@@ -1,7 +1,10 @@
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add_controller.dart';
+import 'package:buzz/pembelian/inter_purchase/add/inter_purchase_add_controller.dart';
 import 'package:buzz/pembelian/manufacture/add/product_manufacture_add_controller.dart';
+import 'package:buzz/pembelian/material_purchase/add/material_purchase_add.dart';
+import 'package:buzz/pembelian/material_purchase/add/material_purchase_add_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -76,6 +79,19 @@ class SelectData extends StatelessWidget {
                   } else if (code == 'product-manufacture-account-id') {
                     ProductManufactureAddController _controller =
                         Get.put(ProductManufactureAddController());
+                    _controller.onChangeAccoundId(newValue.toString());
+                  } else if (code == 'inter-purchase-account-id') {
+                    InterPurchaseAddController _controller =
+                        Get.put(InterPurchaseAddController());
+                    _controller.onChangeAccoundId(newValue.toString());
+                    newValue.toString();
+                  } else if (code == 'material-payment-type') {
+                    MaterialPurchaseAddController _controller =
+                        Get.put(MaterialPurchaseAddController());
+                    _controller.onChangePaymentType(newValue.toString());
+                  } else if (code == 'material-account-id') {
+                    MaterialPurchaseAddController _controller =
+                        Get.put(MaterialPurchaseAddController());
                     _controller.onChangeAccoundId(newValue.toString());
                   }
                 },

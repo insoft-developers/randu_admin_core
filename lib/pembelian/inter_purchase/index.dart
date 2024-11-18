@@ -4,6 +4,8 @@ import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/beli_produk_jadi_controller.dart';
+import 'package:buzz/pembelian/inter_purchase/add/inter_purchase_add.dart';
+import 'package:buzz/pembelian/inter_purchase/inter_purchase_controller.dart';
 import 'package:buzz/pembelian/manufacture/add/product_manufacture_add.dart';
 import 'package:buzz/pembelian/manufacture/product_manufacture_controller.dart';
 import 'package:buzz/utils/helper.dart';
@@ -12,26 +14,26 @@ import 'package:buzz/widgets/comuntitle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductManufacture extends StatefulWidget {
-  const ProductManufacture({super.key});
+class InterPurchase extends StatefulWidget {
+  const InterPurchase({super.key});
 
   @override
-  State<ProductManufacture> createState() => _ProductManufactureState();
+  State<InterPurchase> createState() => _InterPurchaseState();
 }
 
-class _ProductManufactureState extends State<ProductManufacture> {
+class _InterPurchaseState extends State<InterPurchase> {
   final TextEditingController _search = TextEditingController();
-  final ProductManufactureController _controller =
-      Get.put(ProductManufactureController());
+  final InterPurchaseController _controller =
+      Get.put(InterPurchaseController());
 
   @override
   void initState() {
-    _controller.getProductManufactureData("");
+    _controller.getInterPurchaseData("");
     super.initState();
   }
 
   Future<void> _pullRefresh() async {
-    _controller.getProductManufactureData("");
+    _controller.getInterPurchaseData("");
   }
 
   @override
@@ -42,7 +44,8 @@ class _ProductManufactureState extends State<ProductManufacture> {
         child: Column(
           children: [
             ComunTitle(
-                title: 'Transaksi Buat \nProduk', path: "Pembelian & Produksi"),
+                title: 'Transaksi Barang \n1/2 Jadi',
+                path: "Pembelian & Produksi"),
             Row(
               children: [
                 Container(
@@ -57,8 +60,8 @@ class _ProductManufactureState extends State<ProductManufacture> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => ProductManufactureAdd())?.then(
-                        (value) => _controller.getProductManufactureData(""));
+                    Get.to(() => InterPurchaseAdd())
+                        ?.then((value) => _controller.getInterPurchaseData(""));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(5),
@@ -85,7 +88,7 @@ class _ProductManufactureState extends State<ProductManufacture> {
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
-                          itemCount: _controller.productManufactureList.length,
+                          itemCount: _controller.interPurchaseList.length,
                           itemBuilder: (context, index) {
                             return Container(
                                 margin: const EdgeInsets.only(bottom: 20),
@@ -105,7 +108,7 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                             Text("Transaction Date"),
                                             Text(
                                               _controller
-                                                  .productManufactureList[index]
+                                                  .interPurchaseList[index]
                                                       ['transaction_date']
                                                   .toString(),
                                             ),
@@ -127,9 +130,9 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                                   2,
                                               child: Text(
                                                   _controller
-                                                      .productManufactureList[
-                                                          index]['product']
-                                                          ['name']
+                                                      .interPurchaseList[index]
+                                                          ['inter_product']
+                                                          ['product_name']
                                                       .toString(),
                                                   textAlign: TextAlign.right),
                                             ),
@@ -144,7 +147,7 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                           children: [
                                             Text("Total Price"),
                                             Text(Helper.formatAngka(_controller
-                                                .productManufactureList[index]
+                                                .interPurchaseList[index]
                                                     ['total_purchase']
                                                 .toString())),
                                           ],
@@ -157,13 +160,13 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text("Tax"),
-                                            Text(_controller.productManufactureList[
+                                            Text(_controller.interPurchaseList[
                                                         index]['tax'] ==
                                                     null
                                                 ? "0"
                                                 : Helper.formatAngka(_controller
-                                                    .productManufactureList[
-                                                        index]['tax']
+                                                    .interPurchaseList[index]
+                                                        ['tax']
                                                     .toString())),
                                           ],
                                         ),
@@ -175,13 +178,13 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text("Discount"),
-                                            Text(_controller.productManufactureList[
+                                            Text(_controller.interPurchaseList[
                                                         index]['discount'] ==
                                                     null
                                                 ? "0"
                                                 : Helper.formatAngka(_controller
-                                                    .productManufactureList[
-                                                        index]['discount']
+                                                    .interPurchaseList[index]
+                                                        ['discount']
                                                     .toString())),
                                           ],
                                         ),
@@ -193,14 +196,14 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text("Other Expense"),
-                                            Text(_controller.productManufactureList[
+                                            Text(_controller.interPurchaseList[
                                                             index]
                                                         ['other_expense'] ==
                                                     null
                                                 ? "0"
                                                 : Helper.formatAngka(_controller
-                                                    .productManufactureList[
-                                                        index]['other_expense']
+                                                    .interPurchaseList[index]
+                                                        ['other_expense']
                                                     .toString())),
                                           ],
                                         ),
@@ -210,8 +213,8 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        _controller.productManufactureList[
-                                                    index]['sync_status'] ==
+                                        _controller.interPurchaseList[index]
+                                                    ['sync_status'] ==
                                                 1
                                             ? Container(
                                                 padding:
@@ -235,7 +238,7 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                                   _showSynctDialog(
                                                       context,
                                                       _controller
-                                                          .productManufactureList[
+                                                          .interPurchaseList[
                                                               index]['id']
                                                           .toString());
                                                 },
@@ -263,8 +266,8 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                             _showAlertDialog(
                                                 context,
                                                 _controller
-                                                    .productManufactureList[
-                                                        index]['id']
+                                                    .interPurchaseList[index]
+                                                        ['id']
                                                     .toString());
                                           },
                                           child: Container(
@@ -319,8 +322,8 @@ void _showAlertDialog(BuildContext context, String id) {
           TextButton(
             child: const Text('Yes, Delete it'),
             onPressed: () {
-              ProductManufactureController _controller =
-                  Get.put(ProductManufactureController());
+              InterPurchaseController _controller =
+                  Get.put(InterPurchaseController());
               _controller.destroy(id);
               Get.back();
             },
@@ -349,8 +352,8 @@ void _showSynctDialog(BuildContext context, String id) {
           TextButton(
             child: const Text('Yes, Syncronize it'),
             onPressed: () {
-              ProductManufactureController _controller =
-                  Get.put(ProductManufactureController());
+              InterPurchaseController _controller =
+                  Get.put(InterPurchaseController());
               _controller.sync(id);
               Get.back();
             },
