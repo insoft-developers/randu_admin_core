@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:buzz/network/network.dart';
+import 'package:buzz/utils/contstant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class BeliProdukAddController extends GetxController {
   var loading = false.obs;
@@ -13,6 +17,62 @@ class BeliProdukAddController extends GetxController {
   var selectedAccountId = "".obs;
   var productList = List.empty().obs;
   var productLoading = false.obs;
+  var supplierLoading = false.obs;
+  var supplierList = List.empty().obs;
+  var selectedSupplier = "".obs;
+
+  PickedFile? _pickedFile;
+  PickedFile? get pickedFile => _pickedFile;
+  String? _imagePath;
+  String? get imagePath => _imagePath;
+  final _picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    _pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    update();
+  }
+
+  Future<void> resetPicker() async {
+    _pickedFile = null;
+    update();
+  }
+
+  Future<bool> upload(String ids) async {
+    update();
+    bool success = false;
+    http.StreamedResponse response = await updateImage(_pickedFile, ids);
+
+    if (response.statusCode == 200) {
+      Map map = jsonDecode(await response.stream.bytesToString());
+      String message = map["message"];
+      success = true;
+      _imagePath = message;
+      print(message);
+    } else {}
+    update();
+    Get.back();
+    return success;
+  }
+
+  Future<http.StreamedResponse> updateImage(
+      PickedFile? data, String ids) async {
+    http.MultipartRequest request = http.MultipartRequest('POST',
+        Uri.parse(Constant.UPLOAD_IMAGE_URL + '/core/product-purchase-upload'));
+
+    if (GetPlatform.isMobile && data != null) {
+      File _file = File(data.path);
+      request.files.add(http.MultipartFile(
+          'image', _file.readAsBytes().asStream(), _file.lengthSync(),
+          filename: _file.path.split('/').last));
+    }
+
+    Map<String, String> _fields = {};
+    _fields.addAll(<String, String>{'ids': ids});
+    request.fields.addAll(_fields);
+
+    http.StreamedResponse response = await request.send();
+    return response;
+  }
 
   void getProductData() async {
     productLoading(true);
@@ -50,6 +110,18 @@ class BeliProdukAddController extends GetxController {
     List<DropdownMenuItem<String>> menuItems = [];
     menuItems.add(const DropdownMenuItem(child: Text("Tunai"), value: "0"));
     menuItems.add(const DropdownMenuItem(child: Text("Utang"), value: "1"));
+    return menuItems;
+  }
+
+  List<DropdownMenuItem<String>> get dropdownSupplier {
+    List<DropdownMenuItem<String>> menuItems = [];
+    menuItems.add(const DropdownMenuItem(child: Text("Pilih"), value: ""));
+    for (var i = 0; i < supplierList.length; i++) {
+      menuItems.add(DropdownMenuItem(
+          child: Text(supplierList[i]['name'].toString()),
+          value: supplierList[i]['id'].toString()));
+    }
+
     return menuItems;
   }
 
@@ -95,6 +167,7 @@ class BeliProdukAddController extends GetxController {
 
   void productPurchaseStore(
       String transactionDate,
+      String ref,
       String productCount,
       String totalPurchase,
       List<String> productId,
@@ -112,6 +185,8 @@ class BeliProdukAddController extends GetxController {
       var data = {
         "userid": userId,
         "transaction_date": transactionDate,
+        "reference": ref,
+        "supplier_id": selectedSupplier.value,
         "account_id": selectedAccountId.value,
         "product_count": productCount,
         "total_purchase": totalPurchase,
@@ -127,11 +202,30 @@ class BeliProdukAddController extends GetxController {
       var res = await Network().post(data, '/core/product-purchase-store');
       var body = jsonDecode(res.body);
       if (body['success']) {
+        if (_pickedFile != null) {
+          upload(body['id'].toString());
+        }
         Get.back();
         loading(false);
       } else {
         showError(body['message'].toString());
         loading(false);
+      }
+    }
+  }
+
+  void getSupplierData() async {
+    supplierLoading(true);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user')!);
+    if (user != null) {
+      String userId = user['id'].toString();
+      var data = {"userid": userId};
+      var res = await Network().post(data, '/core/product-purchase-supplier');
+      var body = jsonDecode(res.body);
+      if (body['success']) {
+        supplierLoading(false);
+        supplierList.value = body['data'];
       }
     }
   }

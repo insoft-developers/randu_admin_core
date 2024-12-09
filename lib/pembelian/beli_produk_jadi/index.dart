@@ -4,6 +4,8 @@ import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/beli_produk_jadi_controller.dart';
+import 'package:buzz/pembelian/beli_produk_jadi/foto.dart';
+import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/utils/helper.dart';
 
 import 'package:buzz/widgets/comuntitle.dart';
@@ -47,11 +49,11 @@ class _BeliProdukState extends State<BeliProduk> {
                   width: MediaQuery.of(context).size.width - 40,
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: InputSearch(
-                      hint: "Cari nama barang setengah jadi",
+                      hint: "Cari nama barang jadi",
                       textInputType: TextInputType.text,
                       iconData: Icons.search,
                       textEditingController: _search,
-                      code: "cari-inter-product"),
+                      code: "cari-product-purchase"),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -107,6 +109,96 @@ class _BeliProdukState extends State<BeliProduk> {
                                                       ['transaction_date']
                                                   .toString(),
                                             ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Reference"),
+                                            Text(
+                                              _controller
+                                                  .productPurchaseList[index]
+                                                      ['reference']
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Supplier"),
+                                            Text(
+                                              _controller.productPurchaseList[
+                                                          index]['supplier'] ==
+                                                      null
+                                                  ? ''
+                                                  : _controller
+                                                      .productPurchaseList[
+                                                          index]['supplier']
+                                                          ['name']
+                                                      .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Dokumen Transaksi"),
+                                            _controller.productPurchaseList[
+                                                        index]['image'] !=
+                                                    null
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() => Foto(
+                                                            url: Constant
+                                                                    .PRODUCT_PURCHASE_IMAGE +
+                                                                _controller
+                                                                    .productPurchaseList[
+                                                                        index][
+                                                                        'image']
+                                                                    .toString(),
+                                                          ));
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child: Image.network(
+                                                            Constant.PRODUCT_PURCHASE_IMAGE +
+                                                                _controller
+                                                                    .productPurchaseList[
+                                                                        index][
+                                                                        'image']
+                                                                    .toString(),
+                                                            fit: BoxFit.cover),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : const SizedBox()
                                           ],
                                         ),
                                         Divider(
@@ -204,7 +296,7 @@ class _BeliProdukState extends State<BeliProduk> {
                                                 BorderRadius.circular(4),
                                           ),
                                           child: ExpansionTile(
-                                            title: Text("Produk Detail",
+                                            title: Text("Produk Item",
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 )),

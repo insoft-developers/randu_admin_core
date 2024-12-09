@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:buzz/components/input_display.dart';
 import 'package:buzz/components/input_readonly.dart';
+import 'package:buzz/components/input_text.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/judul.dart';
 import 'package:buzz/components/select.dart';
@@ -39,6 +40,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _other = TextEditingController();
   final TextEditingController _finalPrice = TextEditingController();
+  final TextEditingController _ref = TextEditingController();
   int totalTransaction = 0;
 
   @override
@@ -46,8 +48,10 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
     var now = DateTime.now();
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
     _tanggal.text = formattedDate;
+    _controller.getSupplierData();
     _controller.getProductPurchaseType("0");
     _controller.getProductData();
+
     super.initState();
     _countFinalPrice();
   }
@@ -135,6 +139,7 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
 
     _controller.productPurchaseStore(
         _tanggal.text,
+        _ref.text,
         _quantities.length.toString(),
         totalTransaction.toString(),
         _selectedProducts,
@@ -185,6 +190,39 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                   },
                 ),
               ),
+              Jarak(tinggi: 30),
+              Judul(
+                  nama: "Referensi/Invoice No",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 0),
+              Jarak(tinggi: 5),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: InputText(
+                    hint: "masukkan no referensi/invoice",
+                    textInputType: TextInputType.text,
+                    textEditingController: _ref,
+                    obsecureText: false,
+                    code: "ref"),
+              ),
+              Jarak(tinggi: 30),
+              Judul(nama: "Pilih Supplier", pad: 20, ukuran: 16, mandatory: 1),
+              Jarak(tinggi: 5),
+              Obx(() => _controller.supplierLoading.value
+                  ? Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ShimmerText(
+                        lebar: MediaQuery.of(context).size.width,
+                        tinggi: 50,
+                      ),
+                    )
+                  : SelectData(
+                      defValue: _controller.selectedSupplier.value,
+                      label: "",
+                      menuItems: _controller.dropdownSupplier,
+                      code: 'product-purchase-supplier',
+                    )),
               Jarak(tinggi: 30),
               Judul(nama: "Tipe Pembayaran", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
@@ -683,6 +721,51 @@ class _BeliProdukAddState extends State<BeliProdukAdd> {
                       textAlign: TextAlign.right)
                 ],
               ),
+              Jarak(tinggi: 30),
+              Judul(
+                  nama: "Upload Dokumen Transaksi",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 0),
+              Jarak(tinggi: 5),
+              GetBuilder<BeliProdukAddController>(builder: (builderController) {
+                return builderController.pickedFile != null
+                    ? GestureDetector(
+                        onTap: () {
+                          _controller.pickImage();
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.grey.shade300, width: 2.0)),
+                            height: 200,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                File(builderController.pickedFile!.path),
+                                fit: BoxFit.contain,
+                              ),
+                            )),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          _controller.pickImage();
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.grey.shade300, width: 2.0)),
+                            height: 200,
+                            child: Image.asset("assets/image_upload.png")),
+                      );
+              }),
               Jarak(tinggi: 30),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),

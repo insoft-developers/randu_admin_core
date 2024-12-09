@@ -9,6 +9,10 @@ class BeliProdukJadiController extends GetxController {
   var loading = false.obs;
   var productPurchaseList = List.empty().obs;
 
+  void productPurchaseFilter(String kata) {
+    getProductPurchaseList(kata);
+  }
+
   void getProductPurchaseList(String kataCari) async {
     loading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
