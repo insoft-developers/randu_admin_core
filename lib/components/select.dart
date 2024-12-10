@@ -98,6 +98,10 @@ class SelectData extends StatelessWidget {
                     BeliProdukAddController _controller =
                         Get.put(BeliProdukAddController());
                     _controller.selectedSupplier.value = newValue.toString();
+                  } else if (code == 'material-purchase-supplier') {
+                    MaterialPurchaseAddController _controller =
+                        Get.put(MaterialPurchaseAddController());
+                    _controller.selectedSupplier.value = newValue.toString();
                   }
                 },
           items: menuItems),

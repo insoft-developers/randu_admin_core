@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:buzz/components/input_display.dart';
+import 'package:buzz/components/input_text.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/judul.dart';
 import 'package:buzz/components/select.dart';
@@ -38,6 +39,7 @@ class _MaterialPurchaseAddState extends State<MaterialPurchaseAdd> {
   final TextEditingController _discount = TextEditingController();
   final TextEditingController _other = TextEditingController();
   final TextEditingController _finalPrice = TextEditingController();
+  final TextEditingController _ref = TextEditingController();
   int totalTransaction = 0;
 
   @override
@@ -47,6 +49,7 @@ class _MaterialPurchaseAddState extends State<MaterialPurchaseAdd> {
     _tanggal.text = formattedDate;
     _controller.getMaterialPurchaseType("0");
     _controller.getMaterialData();
+    _controller.getSupplierData();
     super.initState();
     _countFinalPrice();
   }
@@ -142,7 +145,8 @@ class _MaterialPurchaseAddState extends State<MaterialPurchaseAdd> {
         pUnitPrice,
         _tax.text,
         _discount.text,
-        _other.text);
+        _other.text,
+        _ref.text);
   }
 
   @override
@@ -183,6 +187,31 @@ class _MaterialPurchaseAddState extends State<MaterialPurchaseAdd> {
                   },
                 ),
               ),
+              Jarak(tinggi: 30),
+              Judul(
+                  nama: "Referensi/Invoice No",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 1),
+              Jarak(tinggi: 5),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: InputText(
+                    hint: "masukkan no referensi/invoice",
+                    textInputType: TextInputType.text,
+                    textEditingController: _ref,
+                    obsecureText: false,
+                    code: "ref"),
+              ),
+              Jarak(tinggi: 30),
+              Judul(nama: "Supplier", pad: 20, ukuran: 16, mandatory: 1),
+              Jarak(tinggi: 5),
+              Obx(() => SelectData(
+                    defValue: _controller.selectedSupplier.value,
+                    label: "",
+                    menuItems: _controller.dropdownSupplier,
+                    code: 'material-purchase-supplier',
+                  )),
               Jarak(tinggi: 30),
               Judul(nama: "Tipe Pembayaran", pad: 20, ukuran: 16, mandatory: 1),
               Jarak(tinggi: 5),
@@ -660,6 +689,52 @@ class _MaterialPurchaseAddState extends State<MaterialPurchaseAdd> {
                       textAlign: TextAlign.right)
                 ],
               ),
+              Jarak(tinggi: 30),
+              Judul(
+                  nama: "Upload Dokumen Transaksi",
+                  pad: 20,
+                  ukuran: 16,
+                  mandatory: 0),
+              Jarak(tinggi: 5),
+              GetBuilder<MaterialPurchaseAddController>(
+                  builder: (builderController) {
+                return builderController.pickedFile != null
+                    ? GestureDetector(
+                        onTap: () {
+                          _controller.pickImage();
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.grey.shade300, width: 2.0)),
+                            height: 200,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                File(builderController.pickedFile!.path),
+                                fit: BoxFit.contain,
+                              ),
+                            )),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          _controller.pickImage();
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Colors.grey.shade300, width: 2.0)),
+                            height: 200,
+                            child: Image.asset("assets/image_upload.png")),
+                      );
+              }),
               Jarak(tinggi: 30),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),

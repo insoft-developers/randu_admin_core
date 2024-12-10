@@ -9,6 +9,8 @@ class Constant {
   static String PRODUCT_IMAGE = ROOT_URL + "storage/app/public/images/product/";
   static String PRODUCT_PURCHASE_IMAGE =
       ROOT_URL + "storage/app/public/images/product_purchase/";
+  static String MATERIAAL_PURCHASE_IMAGE =
+      ROOT_URL + "storage/app/public/images/material_purchase/";
 
 // static String ROOT_URL = "https://app.randu.co.id/";
 

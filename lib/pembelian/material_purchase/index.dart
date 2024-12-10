@@ -2,8 +2,10 @@ import 'package:buzz/components/input_search.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/spasi.dart';
+import 'package:buzz/pembelian/beli_produk_jadi/foto.dart';
 import 'package:buzz/pembelian/material_purchase/add/material_purchase_add.dart';
 import 'package:buzz/pembelian/material_purchase/material_purchase_controller.dart';
+import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/utils/helper.dart';
 
 import 'package:buzz/widgets/comuntitle.dart';
@@ -107,6 +109,96 @@ class _MaterialPurchaseState extends State<MaterialPurchase> {
                                                       ['transaction_date']
                                                   .toString(),
                                             ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Reference/Invoice No"),
+                                            Text(
+                                              _controller
+                                                  .materialPurchaseList[index]
+                                                      ['reference']
+                                                  .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Supplier"),
+                                            Text(
+                                              _controller.materialPurchaseList[
+                                                          index]['supplier'] ==
+                                                      null
+                                                  ? ''
+                                                  : _controller
+                                                      .materialPurchaseList[
+                                                          index]['supplier']
+                                                          ['name']
+                                                      .toString(),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Dokumen Transaksi"),
+                                            _controller.materialPurchaseList[
+                                                        index]['image'] !=
+                                                    null
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      Get.to(() => Foto(
+                                                            url: Constant
+                                                                    .MATERIAAL_PURCHASE_IMAGE +
+                                                                _controller
+                                                                    .materialPurchaseList[
+                                                                        index][
+                                                                        'image']
+                                                                    .toString(),
+                                                          ));
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child: Image.network(
+                                                            Constant.MATERIAAL_PURCHASE_IMAGE +
+                                                                _controller
+                                                                    .materialPurchaseList[
+                                                                        index][
+                                                                        'image']
+                                                                    .toString(),
+                                                            fit: BoxFit.cover),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : const SizedBox()
                                           ],
                                         ),
                                         Divider(
