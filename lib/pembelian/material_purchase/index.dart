@@ -53,7 +53,7 @@ class _MaterialPurchaseState extends State<MaterialPurchase> {
                       textInputType: TextInputType.text,
                       iconData: Icons.search,
                       textEditingController: _search,
-                      code: "cari-inter-product"),
+                      code: "cari-material-purchase"),
                 ),
                 GestureDetector(
                   onTap: () {

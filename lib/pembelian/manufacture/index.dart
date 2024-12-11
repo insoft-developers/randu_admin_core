@@ -142,6 +142,29 @@ class _ProductManufactureState extends State<ProductManufacture> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
+                                            Text("Quantity"),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  1 /
+                                                  2,
+                                              child: Text(
+                                                  _controller
+                                                      .productManufactureList[
+                                                          index]['quantity']
+                                                      .toString(),
+                                                  textAlign: TextAlign.right),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
                                             Text("Total Price"),
                                             Text(Helper.formatAngka(_controller
                                                 .productManufactureList[index]

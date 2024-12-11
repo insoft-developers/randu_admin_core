@@ -6,6 +6,7 @@ import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.da
 import 'package:buzz/manajemen_produk/product_list/product_list_controller.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/beli_produk_jadi_controller.dart';
 import 'package:buzz/pembelian/manufacture/product_manufacture_controller.dart';
+import 'package:buzz/pembelian/material_purchase/material_purchase_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,6 +72,10 @@ class InputSearch extends StatelessWidget {
             BeliProdukJadiController _controller =
                 Get.put(BeliProdukJadiController());
             _controller.productPurchaseFilter(value.toString());
+          } else if (code == 'cari-material-purchase') {
+            MaterialPurchaseController _controller =
+                Get.put(MaterialPurchaseController());
+            _controller.materialPurchaseFilter(value.toString());
           }
         },
         keyboardType: textInputType,

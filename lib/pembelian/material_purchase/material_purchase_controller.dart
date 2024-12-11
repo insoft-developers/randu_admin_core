@@ -9,6 +9,10 @@ class MaterialPurchaseController extends GetxController {
   var loading = false.obs;
   var materialPurchaseList = List.empty().obs;
 
+  void materialPurchaseFilter(String search) {
+    getMaterialPurchaseData(search);
+  }
+
   void getMaterialPurchaseData(String kataCari) async {
     loading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();

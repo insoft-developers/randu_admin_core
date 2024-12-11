@@ -145,6 +145,29 @@ class _InterPurchaseState extends State<InterPurchase> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
+                                            Text("Quantity"),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  1 /
+                                                  2,
+                                              child: Text(
+                                                  _controller
+                                                      .interPurchaseList[index]
+                                                          ['quantity']
+                                                      .toString(),
+                                                  textAlign: TextAlign.right),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey[400],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
                                             Text("Total Price"),
                                             Text(Helper.formatAngka(_controller
                                                 .interPurchaseList[index]

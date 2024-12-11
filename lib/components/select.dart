@@ -1,3 +1,4 @@
+import 'package:buzz/adjustment/add/adjustment_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add_controller.dart';
@@ -102,6 +103,14 @@ class SelectData extends StatelessWidget {
                     MaterialPurchaseAddController _controller =
                         Get.put(MaterialPurchaseAddController());
                     _controller.selectedSupplier.value = newValue.toString();
+                  } else if (code == 'adjustment-add-category') {
+                    AdjustmentAddController _controller =
+                        Get.put(AdjustmentAddController());
+                    _controller.selectedCategory.value = newValue.toString();
+                  } else if (code == 'adjustment-add-account') {
+                    AdjustmentAddController _controller =
+                        Get.put(AdjustmentAddController());
+                    _controller.selectedAccount.value = newValue.toString();
                   }
                 },
           items: menuItems),
