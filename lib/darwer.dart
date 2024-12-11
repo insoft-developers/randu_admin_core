@@ -359,7 +359,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                         _buildsizeboxwithheight(),
                                         InkWell(
                                             onTap: () {
-                                              controller.changePage(5);
+                                              controller.changePage(13);
                                               Get.back();
                                             },
                                             child: Row(
@@ -374,7 +374,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                         _buildsizeboxwithheight(),
                                         InkWell(
                                             onTap: () {
-                                              controller.changePage(5);
+                                              controller.changePage(14);
                                               Get.back();
                                             },
                                             child: Row(
@@ -389,7 +389,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                         _buildsizeboxwithheight(),
                                         InkWell(
                                             onTap: () {
-                                              controller.changePage(5);
+                                              controller.changePage(15);
                                               Get.back();
                                             },
                                             child: Row(

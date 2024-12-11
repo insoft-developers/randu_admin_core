@@ -1,4 +1,7 @@
 import 'package:buzz/adjustment/add/index.dart';
+import 'package:buzz/adjustment/add_inter/index.dart';
+import 'package:buzz/adjustment/add_material/index.dart';
+import 'package:buzz/adjustment/category/index.dart';
 import 'package:buzz/adjustment/index.dart';
 import 'package:buzz/cogs_manufactur/barang_setengah_jadi/index.dart';
 import 'package:buzz/manajemen_produk/category/index.dart';
@@ -74,7 +77,10 @@ class AppConst extends GetxController implements GetxService {
     const InterPurchase(),
     const MaterialPurchase(),
     const Adjustment(),
-    const AdjustmentAdd()
+    const AdjustmentAdd(),
+    const AdjustmentAddInterProduct(),
+    const AdjustmentAddMaterial(),
+    const AdjustmentCategory()
   ].obs;
 
   void changePage(int newIndex) {

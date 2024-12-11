@@ -1,4 +1,6 @@
 import 'package:buzz/adjustment/add/adjustment_add_controller.dart';
+import 'package:buzz/adjustment/add_inter/adjustment_add_inter_controller.dart';
+import 'package:buzz/adjustment/add_material/adjustment_add_material_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add_controller.dart';
@@ -110,6 +112,22 @@ class SelectData extends StatelessWidget {
                   } else if (code == 'adjustment-add-account') {
                     AdjustmentAddController _controller =
                         Get.put(AdjustmentAddController());
+                    _controller.selectedAccount.value = newValue.toString();
+                  } else if (code == 'adjustment-add-inter-product-category') {
+                    AdjustmentAddInterProductController _controller =
+                        Get.put(AdjustmentAddInterProductController());
+                    _controller.selectedCategory.value = newValue.toString();
+                  } else if (code == 'adjustment-add-inter-product-account') {
+                    AdjustmentAddInterProductController _controller =
+                        Get.put(AdjustmentAddInterProductController());
+                    _controller.selectedAccount.value = newValue.toString();
+                  } else if (code == 'adjustment-add-material-category') {
+                    AdjustmentAddMaterialController _controller =
+                        Get.put(AdjustmentAddMaterialController());
+                    _controller.selectedCategory.value = newValue.toString();
+                  } else if (code == 'adjustment-add-material-account') {
+                    AdjustmentAddMaterialController _controller =
+                        Get.put(AdjustmentAddMaterialController());
                     _controller.selectedAccount.value = newValue.toString();
                   }
                 },

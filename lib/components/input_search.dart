@@ -1,4 +1,5 @@
 // ignore: must_be_immutable
+import 'package:buzz/adjustment/category/adjustment_category_controller.dart';
 import 'package:buzz/cogs_manufactur/bahan_baku/bahan_baku_controller.dart';
 import 'package:buzz/cogs_manufactur/barang_setengah_jadi/inter_product_controller.dart';
 import 'package:buzz/manajemen_produk/category/product_category_controller.dart';
@@ -76,6 +77,10 @@ class InputSearch extends StatelessWidget {
             MaterialPurchaseController _controller =
                 Get.put(MaterialPurchaseController());
             _controller.materialPurchaseFilter(value.toString());
+          } else if (code == 'adjustment-input-category') {
+            AdjustmentCategoryController _controller =
+                Get.put(AdjustmentCategoryController());
+            _controller.cariKategori(value.toString());
           }
         },
         keyboardType: textInputType,
