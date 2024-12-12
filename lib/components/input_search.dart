@@ -2,6 +2,7 @@
 import 'package:buzz/adjustment/category/adjustment_category_controller.dart';
 import 'package:buzz/cogs_manufactur/bahan_baku/bahan_baku_controller.dart';
 import 'package:buzz/cogs_manufactur/barang_setengah_jadi/inter_product_controller.dart';
+import 'package:buzz/expenses/expense/expense_controller.dart';
 import 'package:buzz/manajemen_produk/category/product_category_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/product_list_controller.dart';
@@ -81,6 +82,9 @@ class InputSearch extends StatelessWidget {
             AdjustmentCategoryController _controller =
                 Get.put(AdjustmentCategoryController());
             _controller.cariKategori(value.toString());
+          } else if (code == 'cari-input-expense') {
+            ExpenseController _controller = Get.put(ExpenseController());
+            _controller.getExpenseData(value.toString());
           }
         },
         keyboardType: textInputType,

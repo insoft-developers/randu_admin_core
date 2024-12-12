@@ -1,4 +1,5 @@
 import 'package:buzz/adjustment/adjustment_controller.dart';
+import 'package:buzz/expenses/expense/expense_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,6 +54,23 @@ class SelectPeriode extends StatelessWidget {
                   if (code == 'adjustment-category') {
                     AdjustmentController _controller =
                         Get.put(AdjustmentController());
+                    _controller.onchangeCategory(newValue.toString());
+                  }
+                  if (code == 'expense-month') {
+                    ExpenseController _controller =
+                        Get.put(ExpenseController());
+                    _controller.onchangeMonth(newValue.toString());
+                  }
+
+                  if (code == 'expense-year') {
+                    ExpenseController _controller =
+                        Get.put(ExpenseController());
+                    _controller.onchangeYear(newValue.toString());
+                  }
+
+                  if (code == 'expense-category') {
+                    ExpenseController _controller =
+                        Get.put(ExpenseController());
                     _controller.onchangeCategory(newValue.toString());
                   }
                 },
