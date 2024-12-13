@@ -98,8 +98,8 @@ class _ExpenseCategoryState extends State<ExpenseCategory> {
                                                     ['name']
                                                 .toString(),
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18)),
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16)),
                                         Jarak(tinggi: 5),
                                       ],
                                     ),

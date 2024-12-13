@@ -1,6 +1,7 @@
 import 'package:buzz/adjustment/add/adjustment_add_controller.dart';
 import 'package:buzz/adjustment/add_inter/adjustment_add_inter_controller.dart';
 import 'package:buzz/adjustment/add_material/adjustment_add_material_controller.dart';
+import 'package:buzz/expenses/expense/add/expense_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/add/product_add_controller.dart';
 import 'package:buzz/manajemen_produk/product_list/edit/product_edit_controller.dart';
 import 'package:buzz/pembelian/beli_produk_jadi/add/beli_produk_add_controller.dart';
@@ -129,6 +130,19 @@ class SelectData extends StatelessWidget {
                     AdjustmentAddMaterialController _controller =
                         Get.put(AdjustmentAddMaterialController());
                     _controller.selectedAccount.value = newValue.toString();
+                  } else if (code == 'expense-add-category') {
+                    ExpenseAddController _controller =
+                        Get.put(ExpenseAddController());
+                    _controller.selectedCategory.value = newValue.toString();
+                    print(_controller.selectedCategory);
+                  } else if (code == 'expense-account-from') {
+                    ExpenseAddController _controller =
+                        Get.put(ExpenseAddController());
+                    _controller.selectedAccount.value = newValue.toString();
+                  } else if (code == 'expense-account-to') {
+                    ExpenseAddController _controller =
+                        Get.put(ExpenseAddController());
+                    _controller.selectedAccountTo.value = newValue.toString();
                   }
                 },
           items: menuItems),

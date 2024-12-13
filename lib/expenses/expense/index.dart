@@ -4,6 +4,7 @@ import 'package:buzz/components/select_periode.dart';
 import 'package:buzz/components/shimmer_list.dart';
 import 'package:buzz/components/shimmer_text.dart';
 import 'package:buzz/components/spasi.dart';
+import 'package:buzz/expenses/expense/add/index.dart';
 import 'package:buzz/expenses/expense/expense_controller.dart';
 import 'package:buzz/utils/helper.dart';
 
@@ -102,8 +103,8 @@ class _ExpenseState extends State<Expense> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Get.to(() => BeliProdukAdd())?.then(
-                    //     (value) => _controller.getProductPurchaseList(""));
+                    Get.to(() => ExpenseAdd())
+                        ?.then((value) => _controller.getExpenseData(""));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(5),

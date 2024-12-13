@@ -135,7 +135,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 18)),
+                                                    fontSize: 16)),
                                             Jarak(tinggi: 5),
                                             Text(
                                               _productCategoryController

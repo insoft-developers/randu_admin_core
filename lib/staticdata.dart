@@ -13,6 +13,7 @@ import 'package:buzz/pembelian/beli_produk_jadi/index.dart';
 import 'package:buzz/pembelian/inter_purchase/index.dart';
 import 'package:buzz/pembelian/manufacture/index.dart';
 import 'package:buzz/pembelian/material_purchase/index.dart';
+import 'package:buzz/pengaturan/company_setting/index.dart';
 import 'package:get/get.dart';
 
 import 'Users/users_cards.dart';
@@ -84,7 +85,8 @@ class AppConst extends GetxController implements GetxService {
     const AdjustmentAddMaterial(),
     const AdjustmentCategory(),
     const ExpenseCategory(),
-    const Expense()
+    const Expense(),
+    const CompanySetting()
   ].obs;
 
   void changePage(int newIndex) {
