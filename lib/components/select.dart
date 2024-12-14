@@ -10,6 +10,8 @@ import 'package:buzz/pembelian/inter_purchase/add/inter_purchase_add_controller.
 import 'package:buzz/pembelian/manufacture/add/product_manufacture_add_controller.dart';
 import 'package:buzz/pembelian/material_purchase/add/material_purchase_add.dart';
 import 'package:buzz/pembelian/material_purchase/add/material_purchase_add_controller.dart';
+import 'package:buzz/pengaturan/company_setting/company_setting_controller.dart';
+import 'package:buzz/pengaturan/kas_kecil/kas_kecil_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -143,6 +145,18 @@ class SelectData extends StatelessWidget {
                     ExpenseAddController _controller =
                         Get.put(ExpenseAddController());
                     _controller.selectedAccountTo.value = newValue.toString();
+                  } else if (code == 'company-bank') {
+                    CompanySettingController _controller =
+                        Get.put(CompanySettingController());
+                    _controller.selectedBank.value = newValue.toString();
+                  } else if (code == 'company-category') {
+                    CompanySettingController _controller =
+                        Get.put(CompanySettingController());
+                    _controller.selectedCategory.value = newValue.toString();
+                  } else if (code == 'petty-cash-setting') {
+                    KasKecilController _controller =
+                        Get.put(KasKecilController());
+                    _controller.selected.value = newValue.toString();
                   }
                 },
           items: menuItems),

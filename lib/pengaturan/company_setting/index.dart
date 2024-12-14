@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:buzz/components/input_readonly.dart';
 import 'package:buzz/components/input_text.dart';
 import 'package:buzz/components/jarak.dart';
 import 'package:buzz/components/judul.dart';
@@ -11,6 +12,7 @@ import 'package:buzz/components/subtitle.dart';
 import 'package:buzz/components/text_area.dart';
 
 import 'package:buzz/pengaturan/company_setting/company_setting_controller.dart';
+import 'package:buzz/utils/contstant.dart';
 import 'package:buzz/utils/helper.dart';
 
 import 'package:buzz/widgets/comuntitle.dart';
@@ -47,6 +49,7 @@ class _CompanySettingState extends State<CompanySetting> {
     _controller.getCompanyData().then((value) {
       _initData();
     });
+    _controller.resetPicker();
     super.initState();
   }
 
@@ -80,6 +83,9 @@ class _CompanySettingState extends State<CompanySetting> {
           _controller.dataList['data']['bank_id'] == null
               ? ""
               : _controller.dataList['data']['bank_id'].toString();
+
+      _rekening.text = _controller.dataList['data']['no_rekening'].toString();
+      _atasnama.text = _controller.dataList['data']['rekening_name'].toString();
 
       _controller.selectedProvinceName.value =
           _controller.dataList['data']['province_id'] == null
@@ -115,8 +121,20 @@ class _CompanySettingState extends State<CompanySetting> {
     });
   }
 
-  _expenseStore() {
-    // _controller.expenseStore(_tanggal.text, _amount.text, _keterangan.text);
+  _companySettingUpdate() {
+    _controller.companySettingUpdate(
+        _controller.dataList['data']['id'].toString(),
+        _email.text,
+        _name.text,
+        _phone.text,
+        _address.text,
+        _npwp.text,
+        _rekening.text,
+        _atasnama.text,
+        _branchName.text,
+        _branchAddress.text,
+        _branchPhone.text,
+        _tax.text);
   }
 
   @override
@@ -138,80 +156,141 @@ class _CompanySettingState extends State<CompanySetting> {
             text: "Logo Perusahaan 500 x 500 pixel ukuran persegi",
           ),
           Jarak(tinggi: 5),
-          GetBuilder<CompanySettingController>(builder: (builderController) {
-            return builderController.pickedFile != null
-                ? GestureDetector(
-                    onTap: () {
-                      _controller.pickImage();
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: Colors.grey.shade300, width: 2.0)),
-                        height: 200,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.file(
-                            File(builderController.pickedFile!.path),
-                            fit: BoxFit.contain,
-                          ),
-                        )),
-                  )
-                : GestureDetector(
-                    onTap: () {
-                      _controller.pickImage();
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: Colors.grey.shade300, width: 2.0)),
-                        height: 200,
-                        child: Image.asset("assets/image_upload.png")),
-                  );
-          }),
+          Obx(
+            () => _controller.dataLoading.value
+                ? const SizedBox()
+                : GetBuilder<CompanySettingController>(
+                    builder: (builderController) {
+                    return builderController.pickedFile != null
+                        ? GestureDetector(
+                            onTap: () {
+                              builderController.pickImage();
+                            },
+                            child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Colors.grey.shade300,
+                                        width: 2.0)),
+                                height: 200,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    File(builderController.pickedFile!.path),
+                                    fit: BoxFit.contain,
+                                  ),
+                                )),
+                          )
+                        : _controller.dataList['data']['logo'] == null
+                            ? GestureDetector(
+                                onTap: () {
+                                  builderController.pickImage();
+                                },
+                                child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 2.0)),
+                                    height: 200,
+                                    child:
+                                        Image.asset("assets/image_upload.png")),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  builderController.pickImage();
+                                },
+                                child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 2.0)),
+                                    height: 200,
+                                    child: Image.network(Constant.LOGO_IMAGE +
+                                        _controller.dataList['data']['logo']
+                                            .toString())),
+                              );
+                  }),
+          ),
           Jarak(tinggi: 30),
           Judul(nama: "Email Perusahaan", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Contoh: marketing@randu.co.id",
-                textInputType: TextInputType.emailAddress,
-                textEditingController: _email,
-                obsecureText: false,
-                code: "company-email"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint: "Contoh: marketing@randu.co.id",
+                        textInputType: TextInputType.emailAddress,
+                        textEditingController: _email,
+                        obsecureText: false,
+                        code: "company-email"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Judul(nama: "Nama Perusahaan", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Contoh: PT. Randu Bertumbuh Digital",
-                textInputType: TextInputType.text,
-                textEditingController: _name,
-                obsecureText: false,
-                code: "company-name"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint: "Contoh: PT. Randu Bertumbuh Digital",
+                        textInputType: TextInputType.text,
+                        textEditingController: _name,
+                        obsecureText: false,
+                        code: "company-name"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Judul(
               nama: "Pajak Perusahaan (%)", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Isi dengan total pajak yang dibayar konsumen/client",
-                textInputType: TextInputType.number,
-                textEditingController: _tax,
-                obsecureText: false,
-                code: "company-tax"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint:
+                            "Isi dengan total pajak yang dibayar konsumen/client",
+                        textInputType: TextInputType.number,
+                        textEditingController: _tax,
+                        obsecureText: false,
+                        code: "company-tax"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Judul(nama: "Bidang usaha", pad: 20, ukuran: 16, mandatory: 1),
@@ -233,26 +312,46 @@ class _CompanySettingState extends State<CompanySetting> {
           Jarak(tinggi: 30),
           Judul(nama: "NPWP Perusahaan", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Nomor Pokok Wajib Pajak",
-                textInputType: TextInputType.number,
-                textEditingController: _npwp,
-                obsecureText: false,
-                code: "company-npwp"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint: "Nomor Pokok Wajib Pajak",
+                        textInputType: TextInputType.number,
+                        textEditingController: _npwp,
+                        obsecureText: false,
+                        code: "company-npwp"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Judul(nama: "Telepon Perusahaan", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Contoh: 03123345627",
-                textInputType: TextInputType.number,
-                textEditingController: _phone,
-                obsecureText: false,
-                code: "company-phone"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint: "Contoh: 03123345627",
+                        textInputType: TextInputType.number,
+                        textEditingController: _phone,
+                        obsecureText: false,
+                        code: "company-phone"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Container(
@@ -285,33 +384,53 @@ class _CompanySettingState extends State<CompanySetting> {
                 )
               : SelectData(
                   defValue: _controller.selectedBank.value,
-                  label: "",
+                  label: _controller.dataList['data']['bank_id'] == null
+                      ? ""
+                      : "readonly",
                   menuItems: _controller.bankDropdown,
                   code: 'company-bank',
                 )),
           Jarak(tinggi: 30),
           Judul(nama: "Nomor Rekening", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Masukkan nomor rekening",
-                textInputType: TextInputType.number,
-                textEditingController: _rekening,
-                obsecureText: false,
-                code: "company-bank-account"),
+          Obx(
+            () => Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: _controller.dataList['data']['no_rekening'] == null
+                  ? InputText(
+                      hint: "Masukkan nomor rekening",
+                      textInputType: TextInputType.number,
+                      textEditingController: _rekening,
+                      obsecureText: false,
+                      code: "company-bank-account")
+                  : InputReadonly(
+                      hint: "Masukkan nomor Rekening",
+                      textInputType: TextInputType.number,
+                      textEditingController: _rekening,
+                      obsecureText: false,
+                      code: "company-bank-account"),
+            ),
           ),
           Jarak(tinggi: 30),
           Judul(nama: "Atas Nama Rekening", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Masukkan atas nama rekening",
-                textInputType: TextInputType.text,
-                textEditingController: _atasnama,
-                obsecureText: false,
-                code: "company-bank-owner"),
+          Obx(
+            () => Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: _controller.dataList['data']['rekening_name'] == null
+                  ? InputText(
+                      hint: "Masukkan atas nama rekening",
+                      textInputType: TextInputType.text,
+                      textEditingController: _atasnama,
+                      obsecureText: false,
+                      code: "company-bank-owner")
+                  : InputReadonly(
+                      hint: "Masukkan atas nama rekening",
+                      textInputType: TextInputType.text,
+                      textEditingController: _atasnama,
+                      obsecureText: false,
+                      code: "company-bank-owner"),
+            ),
           ),
           Jarak(tinggi: 30),
           Judul(nama: "Provinsi", pad: 20, ukuran: 16, mandatory: 1),
@@ -364,12 +483,22 @@ class _CompanySettingState extends State<CompanySetting> {
           Jarak(tinggi: 30),
           Judul(nama: "Alamat Lengkap", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextArea(
-                hint: "Alamat Lengkap Perusahaan",
-                textEditingController: _address,
-                maxline: 5),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextArea(
+                        hint: "Alamat Lengkap Perusahaan",
+                        textEditingController: _address,
+                        maxline: 5),
+                  ),
           ),
           Jarak(tinggi: 30),
           Container(
@@ -387,37 +516,67 @@ class _CompanySettingState extends State<CompanySetting> {
           Jarak(tinggi: 20),
           Judul(nama: "Nama Cabang", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Nama cabang perusahaan",
-                textInputType: TextInputType.text,
-                textEditingController: _branchName,
-                obsecureText: false,
-                code: "branch-name"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint: "Nama cabang perusahaan",
+                        textInputType: TextInputType.text,
+                        textEditingController: _branchName,
+                        obsecureText: false,
+                        code: "branch-name"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Judul(
               nama: "Kontak Telepon Cabang", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: InputText(
-                hint: "Telepon Cabang Perusahaan",
-                textInputType: TextInputType.number,
-                textEditingController: _branchPhone,
-                obsecureText: false,
-                code: "branch-phone"),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: InputText(
+                        hint: "Telepon Cabang Perusahaan",
+                        textInputType: TextInputType.number,
+                        textEditingController: _branchPhone,
+                        obsecureText: false,
+                        code: "branch-phone"),
+                  ),
           ),
           Jarak(tinggi: 30),
           Judul(nama: "Alamat Cabang", pad: 20, ukuran: 16, mandatory: 1),
           Jarak(tinggi: 5),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextArea(
-                hint: "Alamat Lengkap Cabang Perusahaan",
-                textEditingController: _branchAddress,
-                maxline: 5),
+          Obx(
+            () => _controller.dataLoading.value
+                ? Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShimmerText(
+                      lebar: MediaQuery.of(context).size.width,
+                      tinggi: 50,
+                    ),
+                  )
+                : Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextArea(
+                        hint: "Alamat Lengkap Cabang Perusahaan",
+                        textEditingController: _branchAddress,
+                        maxline: 5),
+                  ),
           ),
           Jarak(tinggi: 50),
           Obx(
@@ -427,7 +586,7 @@ class _CompanySettingState extends State<CompanySetting> {
                 : Center(
                     child: InkWell(
                     onTap: () {
-                      _expenseStore();
+                      _companySettingUpdate();
                     },
                     splashColor: Colors.blue,
                     borderRadius: BorderRadius.circular(30),

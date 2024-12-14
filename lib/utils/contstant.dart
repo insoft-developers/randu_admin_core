@@ -12,6 +12,8 @@ class Constant {
   static String MATERIAAL_PURCHASE_IMAGE =
       ROOT_URL + "storage/app/public/images/material_purchase/";
 
+  static String LOGO_IMAGE = ROOT_URL + "storage/app/public/";
+
 // static String ROOT_URL = "https://app.randu.co.id/";
 
 // static String BASE_URL = ROOT_URL;
@@ -19,6 +21,9 @@ class Constant {
 // static String PRODUCT_CATEGORY_IMAGE = ROOT_URL + "storage/images/category/";
 
 // static String PRODUCT_IMAGE = ROOT_URL + "storage/images/product/";
+
+// static String LOGO_IMAGE =
+//       ROOT_URL + "storage/";
 
   static String UPLOAD_IMAGE_URL = BASE_URL + "api/v1";
 

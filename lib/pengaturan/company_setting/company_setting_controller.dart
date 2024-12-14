@@ -54,6 +54,7 @@ class CompanySettingController extends GetxController {
   }
 
   Future<bool> upload(String ids) async {
+    print("upload process");
     update();
     bool success = false;
     http.StreamedResponse response = await updateImage(_pickedFile, ids);
@@ -66,14 +67,16 @@ class CompanySettingController extends GetxController {
       print(message);
     } else {}
     update();
-    Get.back();
+    loading(false);
+
     return success;
   }
 
   Future<http.StreamedResponse> updateImage(
       PickedFile? data, String ids) async {
     http.MultipartRequest request = http.MultipartRequest('POST',
-        Uri.parse(Constant.UPLOAD_IMAGE_URL + '/core/product-category-upload'));
+        Uri.parse(Constant.UPLOAD_IMAGE_URL + '/core/company-setting-upload'));
+    print("upload http");
 
     if (GetPlatform.isMobile && data != null) {
       File _file = File(data.path);
@@ -142,23 +145,6 @@ class CompanySettingController extends GetxController {
     return menuItems;
   }
 
-  List<DropdownMenuItem<String>> get accounTotDropdown {
-    List<DropdownMenuItem<String>> menuItems = [];
-    menuItems.add(const DropdownMenuItem(child: Text("Pilih"), value: ""));
-
-    // for (var i = 0; i < accountToList.length; i++) {
-    //   menuItems.add(
-    //     DropdownMenuItem(
-    //         child: Text(accountToList[i]['name'].toString()),
-    //         value: accountToList[i]['id'].toString() +
-    //             '_' +
-    //             accountToList[i]['account_code_id'].toString()),
-    //   );
-    // }
-
-    return menuItems;
-  }
-
   List<String> get provinceDropdown {
     List<String> menuItems = [];
 
@@ -213,37 +199,73 @@ class CompanySettingController extends GetxController {
     }
   }
 
-  void expenseStore(
-      String transactionDate, String jumlah, String keterangan) async {
-    // loading(true);
-    // SharedPreferences localStorage = await SharedPreferences.getInstance();
-    // var user = jsonDecode(localStorage.getString('user')!);
-    // if (user != null) {
-    //   String userId = user['id'].toString();
-    //   var data = {
-    //     "userid": userId,
-    //     "date": transactionDate,
-    //     "expense_category_id": selectedCategory.value,
-    //     "dari": selectedAccount.value,
-    //     "untuk": selectedAccountTo.value,
-    //     "amount": jumlah,
-    //     "keterangan": keterangan
-    //   };
-    //   var res = await Network().post(data, '/core/expense-store');
-    //   var body = jsonDecode(res.body);
-    //   if (body['success']) {
-    //     loading(false);
-    //     Get.back();
-    //   } else {
-    //     loading(false);
-    //     showError(body['message'].toString());
-    //   }
-    // }
+  void companySettingUpdate(
+      String _id,
+      String _email,
+      String _name,
+      String _phone,
+      String _address,
+      String _npwp,
+      String _rekening,
+      String _atasnama,
+      String _branchName,
+      String _branchAddress,
+      String _branchPhone,
+      String _tax) async {
+    loading(true);
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user')!);
+    if (user != null) {
+      String userId = user['id'].toString();
+      var data = {
+        'id': _id,
+        'company_email': _email,
+        'company_name': _name,
+        'phone_number': _phone,
+        'address': _address,
+        'business_category': selectedCategory.value,
+        'npwp': _npwp,
+        'no_rekening': _rekening,
+        'rekening_name': _atasnama,
+        'bank_id': selectedBank.value,
+        'province_id': selectedProvince.value,
+        'city_id': selectedCity.value,
+        'district_id': selectedDistrict.value,
+        'userid': userId,
+        'branches_name': _branchName,
+        'branches_address': _branchAddress,
+        'branches_phone': _branchPhone,
+        'branches_district_id': selectedDistrict.value,
+        'tax': _tax
+      };
+      var res = await Network().post(data, '/core/company-setting-update');
+      var body = jsonDecode(res.body);
+      if (body['success']) {
+        if (_pickedFile != null) {
+          upload(_id.toString());
+          print("upload gambar_" + _id);
+        } else {
+          loading(false);
+          print("no-gambar");
+        }
+        showSuccess(body['message'].toString());
+      } else {
+        loading(false);
+        showError(body['message'].toString());
+      }
+    }
   }
 
   void showError(String n) {
     ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
       backgroundColor: Colors.red,
+      content: Text(n, style: TextStyle(color: Colors.white, fontSize: 16)),
+    ));
+  }
+
+  void showSuccess(String n) {
+    ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+      backgroundColor: Colors.green,
       content: Text(n, style: TextStyle(color: Colors.white, fontSize: 16)),
     ));
   }

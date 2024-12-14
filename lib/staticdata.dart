@@ -14,6 +14,8 @@ import 'package:buzz/pembelian/inter_purchase/index.dart';
 import 'package:buzz/pembelian/manufacture/index.dart';
 import 'package:buzz/pembelian/material_purchase/index.dart';
 import 'package:buzz/pengaturan/company_setting/index.dart';
+import 'package:buzz/pengaturan/kas_kecil/index.dart';
+import 'package:buzz/pengaturan/payment_setting/index.dart';
 import 'package:get/get.dart';
 
 import 'Users/users_cards.dart';
@@ -86,7 +88,9 @@ class AppConst extends GetxController implements GetxService {
     const AdjustmentCategory(),
     const ExpenseCategory(),
     const Expense(),
-    const CompanySetting()
+    const CompanySetting(),
+    const KasKecil(),
+    const PaymentSetting()
   ].obs;
 
   void changePage(int newIndex) {
