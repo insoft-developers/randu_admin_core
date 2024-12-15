@@ -25,14 +25,79 @@ class _PaymentSettingState extends State<PaymentSetting> {
   final PaymentSettingController _controller =
       Get.put(PaymentSettingController());
 
+  final List<TextEditingController> _banks = [TextEditingController()];
+  final List<TextEditingController> _owner = [TextEditingController()];
+  final List<TextEditingController> _rekening = [TextEditingController()];
+  final List<bool> _checkboxes = [false];
+
   @override
   void initState() {
-    _controller.getPaymentData();
+    _controller.getPaymentData().then((value) {
+      if (_controller.settingData.length > 0) {
+        setState(() {
+          _banks[0].text =
+              _controller.settingData[2]['banks'][0]['bank'].toString();
+          _owner[0].text = _controller.settingData[2]['banks'][0]
+                      ['bankOwner'] ==
+                  null
+              ? ""
+              : _controller.settingData[2]['banks'][0]['bankOwner'].toString();
+
+          _rekening[0].text = _controller.settingData[2]['banks'][0]
+                      ['bankAccountNumber'] ==
+                  null
+              ? ""
+              : _controller.settingData[2]['banks'][0]['bankAccountNumber']
+                  .toString();
+
+          _checkboxes[0] =
+              _controller.settingData[2]['banks'][0]['selected'] == "true"
+                  ? true
+                  : false;
+
+          for (var i = 1; i < _controller.settingData[2]['banks'].length; i++) {
+            _banks.add(TextEditingController(
+                text: _controller.settingData[2]['banks'][i]['bank'] == null
+                    ? ""
+                    : _controller.settingData[2]['banks'][i]['bank']
+                        .toString()));
+            _owner.add(TextEditingController(
+                text:
+                    _controller.settingData[2]['banks'][i]['bankOwner'] == null
+                        ? ""
+                        : _controller.settingData[2]['banks'][i]['bankOwner']
+                            .toString()));
+            _rekening.add(TextEditingController(
+                text: _controller.settingData[2]['banks'][i]
+                            ['bankAccountNumber'] ==
+                        null
+                    ? ""
+                    : _controller.settingData[2]['banks'][i]
+                            ['bankAccountNumber']
+                        .toString()));
+
+            _checkboxes.add(
+                _controller.settingData[2]['banks'][i]['selected'] == "true"
+                    ? true
+                    : false);
+          }
+        });
+      }
+    });
     super.initState();
   }
 
   _PaymentSettingUpdate() {
-    _controller.pettyCashUpdate();
+    List<String> sendBanks = [];
+    List<String> sendRekenings = [];
+    List<String> sendOwners = [];
+    for (var i = 0; i < _banks.length; i++) {
+      sendBanks.add(_banks[i] == null ? "" : _banks[i].text);
+      sendRekenings.add(_rekening[i] == null ? "" : _rekening[i].text);
+      sendOwners.add(_owner[i] == null ? "" : _owner[i].text);
+    }
+    _controller.paymentSettingUpdate(
+        sendBanks, sendRekenings, sendOwners, _checkboxes);
   }
 
   @override
@@ -66,7 +131,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedCash.value = index!;
                     },
                   ),
                 ),
@@ -101,7 +166,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedPaymentGateway.value = index!;
                     },
                   ),
                 ),
@@ -136,7 +201,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedTransfer.value = index!;
                     },
                   ),
                 ),
@@ -149,14 +214,188 @@ class _PaymentSettingState extends State<PaymentSetting> {
                       style: TextStyle(fontSize: 14)))
             ],
           ),
-          Jarak(tinggi: 5),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: const ScrollPhysics(),
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return Text("");
-              }),
+          Jarak(tinggi: 20),
+          Obx(
+            () => _controller.onLoading.value
+                ? const SizedBox()
+                : _controller.selectedTransfer.value == 1
+                    ? const SizedBox()
+                    : Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const ScrollPhysics(),
+                            itemCount:
+                                _controller.settingData[2]['banks'].length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                1 /
+                                                4,
+                                        child: CheckboxListTile(
+                                          value: _checkboxes[index],
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              _checkboxes[index] = newValue!;
+                                              print(_checkboxes);
+                                            });
+                                          },
+                                          controlAffinity:
+                                              ListTileControlAffinity.trailing,
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          SizedBox(
+                                              width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      3 /
+                                                      4 -
+                                                  40,
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                ),
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.grey.shade300,
+                                                      width: 2.0),
+                                                ),
+                                                child: TextField(
+                                                  readOnly:
+                                                      index == 4 ? false : true,
+                                                  controller: _banks[index],
+                                                  obscureText: false,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  textInputAction:
+                                                      TextInputAction.next,
+                                                  decoration: InputDecoration(
+                                                    hintText: "Nama Bank",
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.grey),
+                                                    enabledBorder:
+                                                        InputBorder.none,
+                                                    focusedBorder:
+                                                        InputBorder.none,
+                                                  ),
+                                                  onChanged: (value) {},
+                                                ),
+                                              )),
+                                          Jarak(tinggi: 5),
+                                          SizedBox(
+                                              width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      3 /
+                                                      4 -
+                                                  40,
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                ),
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.grey.shade300,
+                                                      width: 2.0),
+                                                ),
+                                                child: TextField(
+                                                  controller: _owner[index],
+                                                  obscureText: false,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  textInputAction:
+                                                      TextInputAction.next,
+                                                  decoration: InputDecoration(
+                                                    hintText:
+                                                        "Nama Pemilik Rekening",
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.grey),
+                                                    enabledBorder:
+                                                        InputBorder.none,
+                                                    focusedBorder:
+                                                        InputBorder.none,
+                                                  ),
+                                                  onChanged: (value) {},
+                                                ),
+                                              )),
+                                          Jarak(tinggi: 5),
+                                          SizedBox(
+                                              width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      3 /
+                                                      4 -
+                                                  40,
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                ),
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.grey.shade300,
+                                                      width: 2.0),
+                                                ),
+                                                child: TextField(
+                                                  controller: _rekening[index],
+                                                  obscureText: false,
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  textInputAction:
+                                                      TextInputAction.next,
+                                                  decoration: InputDecoration(
+                                                    hintText: "No Rekening",
+                                                    hintStyle: const TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.grey),
+                                                    enabledBorder:
+                                                        InputBorder.none,
+                                                    focusedBorder:
+                                                        InputBorder.none,
+                                                  ),
+                                                  onChanged: (value) {},
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.grey[400],
+                                  ),
+                                ],
+                              );
+                            }),
+                      ),
+          ),
           Jarak(tinggi: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,7 +419,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedCOD.value = index!;
                     },
                   ),
                 ),
@@ -215,7 +454,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedMarketplace.value = index!;
                     },
                   ),
                 ),
@@ -251,7 +490,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedPiutang.value = index!;
                     },
                   ),
                 ),
@@ -285,7 +524,7 @@ class _PaymentSettingState extends State<PaymentSetting> {
                     labels: ['Yes', 'No'],
                     radiusStyle: true,
                     onToggle: (index) {
-                      print('switched to: $index');
+                      _controller.selectedQRIS.value = index!;
                     },
                   ),
                 ),

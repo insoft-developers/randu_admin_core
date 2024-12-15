@@ -53,8 +53,8 @@ class _AppBarCodeState extends State<AppBarCode> {
                       height: 27,
                       width: 27,
                       child: Center(
-                          child: SvgPicture.asset(
-                        "assets/menu-left.svg",
+                          child: Image.asset(
+                        "assets/menu-home.png",
                         height: 25,
                         width: 25,
                         color: notifier.geticoncolor,
@@ -151,7 +151,7 @@ class _AppBarCodeState extends State<AppBarCode> {
                             leading: const CircleAvatar(
                                 radius: 18,
                                 backgroundImage:
-                                    AssetImage("assets/profile.png"),
+                                    AssetImage("assets/menu-home.png"),
                                 backgroundColor: Colors.transparent),
                             title: Text("Buzz",
                                 style: TextStyle(
@@ -178,7 +178,8 @@ class _AppBarCodeState extends State<AppBarCode> {
                         )
                       : const CircleAvatar(
                           radius: 18,
-                          backgroundImage: AssetImage("assets/profile.png"),
+                          backgroundImage:
+                              AssetImage("assets/randu_core_icon.png"),
                           backgroundColor: Colors.transparent),
                   itemBuilder: (ctx) => [
                     _buildPopupAdminMenuItem(),

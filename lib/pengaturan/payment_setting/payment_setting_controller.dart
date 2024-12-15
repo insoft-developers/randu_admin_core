@@ -12,13 +12,13 @@ class PaymentSettingController extends GetxController {
   var selected = "".obs;
   var settingData = List.empty().obs;
   var onLoading = false.obs;
-  var selectedCash = 0.obs;
-  var selectedPaymentGateway = 0.obs;
-  var selectedTransfer = 0.obs;
-  var selectedCOD = 0.obs;
-  var selectedMarketplace = 0.obs;
-  var selectedPiutang = 0.obs;
-  var selectedQRIS = 0.obs;
+  var selectedCash = 1.obs;
+  var selectedPaymentGateway = 1.obs;
+  var selectedTransfer = 1.obs;
+  var selectedCOD = 1.obs;
+  var selectedMarketplace = 1.obs;
+  var selectedPiutang = 1.obs;
+  var selectedQRIS = 1.obs;
 
   Future getPaymentData() async {
     onLoading(true);
@@ -31,31 +31,49 @@ class PaymentSettingController extends GetxController {
       var body = jsonDecode(res.body);
       if (body['success']) {
         onLoading(false);
-        settingData.value = body['data'];
-        selectedCash.value = settingData[0]['selected'] == "true" ? 0 : 1;
-        selectedPaymentGateway.value =
-            settingData[1]['selected'] == "true" ? 0 : 1;
-        selectedTransfer.value = settingData[2]['selected'] == "true" ? 0 : 1;
-        selectedCOD.value = settingData[3]['selected'] == "true" ? 0 : 1;
-        selectedMarketplace.value =
-            settingData[4]['selected'] == "true" ? 0 : 1;
-        selectedPiutang.value = settingData[5]['selected'] == "true" ? 0 : 1;
-        selectedQRIS.value = settingData[6]['selected'] == "true" ? 0 : 1;
+
+        if (body['data'] != null) {
+          settingData.value = body['data'];
+          selectedCash.value = settingData[0]['selected'] == "true" ? 0 : 1;
+          selectedPaymentGateway.value =
+              settingData[1]['selected'] == "true" ? 0 : 1;
+          selectedTransfer.value = settingData[2]['selected'] == "true" ? 0 : 1;
+          selectedCOD.value = settingData[3]['selected'] == "true" ? 0 : 1;
+          selectedMarketplace.value =
+              settingData[4]['selected'] == "true" ? 0 : 1;
+          selectedPiutang.value = settingData[5]['selected'] == "true" ? 0 : 1;
+          selectedQRIS.value = settingData[6]['selected'] == "true" ? 0 : 1;
+        }
       }
     }
   }
 
-  void pettyCashUpdate() async {
+  void paymentSettingUpdate(List<String> banks, List<String> rekenings,
+      List<String> owners, List<bool> bankSelecteds) async {
     loading(true);
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user')!);
     if (user != null) {
       String userId = user['id'].toString();
-      var data = {"userid": userId, "petty_cash": selected.value};
-      var res = await Network().post(data, '/core/petty-cash-update');
+      var data = {
+        "userid": userId,
+        "cash": selectedCash.value,
+        "pg": selectedPaymentGateway.value,
+        "transfer": selectedTransfer.value,
+        "cod": selectedCOD.value,
+        "marketplace": selectedMarketplace.value,
+        "piutang": selectedPiutang.value,
+        "qris": selectedQRIS.value,
+        "banks": banks,
+        "rekenings": rekenings,
+        "owners": owners,
+        "bank_selecteds": bankSelecteds
+      };
+      var res = await Network().post(data, '/core/payment-setting-update');
       var body = jsonDecode(res.body);
       if (body['success']) {
         loading(false);
+        // print(body['message'].toString());
         showSuccess(body['message'].toString());
       } else {
         loading(false);

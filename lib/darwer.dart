@@ -122,14 +122,14 @@ class _DarwerCodeState extends State<DarwerCode> {
                             SizedBox(
                               height: ispresent ? 10 : 8,
                             ),
-                            _buildSingletile(
-                                header: "Dashboards",
-                                iconpath: "assets/home.svg",
-                                index: 0,
-                                ontap: () {
-                                  controller.changePage(0);
-                                  Get.back();
-                                }),
+                            // _buildSingletile(
+                            //     header: "Dashboards",
+                            //     iconpath: "assets/menu-home.png",
+                            //     index: 0,
+                            //     ontap: () {
+                            //       controller.changePage(0);
+                            //       Get.back();
+                            //     }),
                             _buildexpansiontilt(
                                 index: 1,
                                 children: Row(
@@ -179,7 +179,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                   ],
                                 ),
                                 header: 'Manajemen Produk',
-                                iconpath: 'assets/box.svg'),
+                                iconpath: 'assets/menu-produk.png'),
                             _buildexpansiontilt(
                                 index: 1,
                                 children: Row(
@@ -230,7 +230,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                   ],
                                 ),
                                 header: 'COGS Manufaktur',
-                                iconpath: 'assets/truck.svg'),
+                                iconpath: 'assets/menu-cogs-manufaktur.png'),
                             _buildexpansiontilt(
                                 index: 1,
                                 children: Row(
@@ -311,7 +311,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                   ],
                                 ),
                                 header: 'Pembelian & Produksi',
-                                iconpath: 'assets/shopping-basket.svg'),
+                                iconpath: 'assets/menu-pembelian.png'),
                             _buildexpansiontilt(
                                 index: 1,
                                 children: Row(
@@ -406,7 +406,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                   ],
                                 ),
                                 header: 'Penyesuaian',
-                                iconpath: 'assets/sliders-horizontal-alt.svg'),
+                                iconpath: 'assets/menu-penyesuaian.png'),
                             _buildexpansiontilt(
                                 index: 1,
                                 children: Row(
@@ -457,7 +457,7 @@ class _DarwerCodeState extends State<DarwerCode> {
                                   ],
                                 ),
                                 header: 'Biaya (Expenses)',
-                                iconpath: 'assets/badge-discount.svg'),
+                                iconpath: 'assets/menu-biaya-biaya.png'),
                             _buildexpansiontilt(
                                 index: 1,
                                 children: Row(
@@ -539,7 +539,8 @@ class _DarwerCodeState extends State<DarwerCode> {
                                   ],
                                 ),
                                 header: 'Pengaturan Aplikasi',
-                                iconpath: 'assets/settings.svg'),
+                                iconpath: 'assets/menu-pengaturan.png'),
+                            Jarak(tinggi: 50)
                           ],
                         ),
                       ),
@@ -606,8 +607,7 @@ class _DarwerCodeState extends State<DarwerCode> {
           style: mediumBlackTextStyle.copyWith(
               fontSize: 14, color: notifire!.getMainText),
         ),
-        leading: SvgPicture.asset(iconpath,
-            height: 18, width: 18, color: notifire!.getMainText),
+        leading: Image.asset(iconpath, height: 38, width: 38),
         tilePadding:
             EdgeInsets.symmetric(vertical: ispresent ? 5 : 2, horizontal: 8),
         iconColor: appMainColor,
@@ -636,12 +636,11 @@ class _DarwerCodeState extends State<DarwerCode> {
                       ? appMainColor
                       : notifire!.getMainText),
             ),
-            leading: SvgPicture.asset(iconpath,
-                height: 18,
-                width: 18,
-                color: controller.pageselecter.value == index
-                    ? appMainColor
-                    : notifire!.getMainText),
+            leading: Image.asset(
+              iconpath,
+              height: 35,
+              width: 35,
+            ),
             trailing: const SizedBox(),
             contentPadding: EdgeInsets.symmetric(
                 vertical: ispresent ? 5 : 2, horizontal: 8),

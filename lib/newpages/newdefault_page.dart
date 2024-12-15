@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:buzz/Widgets/textfilde.dart';
+import 'package:buzz/menu/submenu.dart';
 import 'package:buzz/provider/proviercolors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -158,44 +160,49 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                 child: Column(
                   children: [
                     const ComunTitle(title: 'Dashboard', path: "Menu Utama"),
-                    _buildcompo1(
-                        title: "Manajemen Produk",
-                        iconpath: "assets/box.svg",
-                        price: "\$ 29,955",
-                        pr: "9.55%",
-                        maincolor: Colors.blueAccent,
-                        secondicon: "assets/arrow-up-small.svg"),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => SubMenu());
+                      },
+                      child: _buildcompo1(
+                          title: "Manajemen Produk",
+                          iconpath: "assets/menu-produk.png",
+                          price: "\$ 29,955",
+                          pr: "9.55%",
+                          maincolor: Colors.blueAccent,
+                          secondicon: "assets/arrow-up-small.svg"),
+                    ),
                     _buildcompo1(
                         title: "COGS Manufaktur",
-                        iconpath: "assets/truck.svg",
+                        iconpath: "assets/menu-cogs-manufaktur.png",
                         price: "\$ 19,235",
                         pr: "2.29%",
                         maincolor: Colors.pinkAccent,
                         secondicon: "assets/arrow-up-small.svg"),
                     _buildcompo1(
                         title: "Pembelian & Produksi",
-                        iconpath: "assets/shopping-basket.svg",
+                        iconpath: "assets/menu-pembelian.png",
                         price: "\$ 9,955",
                         pr: "3.23%",
                         maincolor: Colors.deepOrangeAccent,
                         secondicon: "assets/arrow-down-small.svg"),
                     _buildcompo1(
                         title: "Penyesuaian",
-                        iconpath: "assets/sliders-horizontal-alt.svg",
+                        iconpath: "assets/menu-penyesuaian.png",
                         price: "\$ 95,295",
                         pr: "5.33%",
                         maincolor: Colors.deepPurpleAccent,
                         secondicon: "assets/arrow-up-small.svg"),
                     _buildcompo1(
                         title: "Biaya (Expenses)",
-                        iconpath: "assets/badge-discount.svg",
+                        iconpath: "assets/menu-biaya-biaya.png",
                         price: "\$ 1,365",
                         pr: "3.53%",
                         maincolor: const Color(0xff0CAF60),
                         secondicon: "assets/arrow-down-small.svg"),
                     _buildcompo1(
                         title: "Pengaturan Aplikasi",
-                        iconpath: "assets/settings.svg",
+                        iconpath: "assets/menu-pengaturan.png",
                         price: "\$ 235",
                         pr: "1.77%",
                         maincolor: const Color(0xff0059E7),
@@ -216,7 +223,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Manajemen Produk",
-                              iconpath: "assets/box.svg",
+                              iconpath: "assets/menu-produk.png",
                               price: "\$ 29,955",
                               pr: "9.55%",
                               maincolor: Colors.blueAccent,
@@ -225,7 +232,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "COGS Manufaktur",
-                              iconpath: "assets/truck.svg",
+                              iconpath: "assets/menu-cogs-manufaktur.png",
                               price: "\$ 19,235",
                               pr: "2.29%",
                               maincolor: Colors.pinkAccent,
@@ -238,7 +245,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Pembelian & Produksi",
-                              iconpath: "assets/shopping-basket.svg",
+                              iconpath: "assets/menu-pembelian.png",
                               price: "\$ 9,955",
                               pr: "3.23%",
                               maincolor: Colors.deepOrangeAccent,
@@ -247,7 +254,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Penyesuaian",
-                              iconpath: "assets/sliders-horizontal-alt.svg",
+                              iconpath: "assets/menu-penyesuaian.png",
                               price: "\$ 95,295",
                               pr: "5.33%",
                               maincolor: Colors.deepPurpleAccent,
@@ -260,7 +267,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Biaya (Expenses)",
-                              iconpath: "assets/badge-discount.svg",
+                              iconpath: "assets/menu-biaya-biaya.png",
                               price: "\$ 1,365",
                               pr: "3.53%",
                               maincolor: const Color(0xff0CAF60),
@@ -269,7 +276,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Pengaturan Aplikasi",
-                              iconpath: "assets/user29.svg",
+                              iconpath: "assets/menu-pengaturan.png",
                               price: "\$ 235",
                               pr: "1.77%",
                               maincolor: const Color(0xff0059E7),
@@ -293,7 +300,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Manajemen Produk",
-                              iconpath: "assets/box-check33.svg",
+                              iconpath: "assets/menu-produk.png",
                               price: "\$ 29,955",
                               pr: "9.55%",
                               maincolor: Colors.blueAccent,
@@ -302,7 +309,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "COGS Manufaktur",
-                              iconpath: "assets/users33.svg",
+                              iconpath: "assets/menu-cogs-manufaktur.png",
                               price: "\$ 19,235",
                               pr: "2.29%",
                               maincolor: Colors.pinkAccent,
@@ -311,7 +318,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Pembelian & Produksi",
-                              iconpath: "assets/box-check33.svg",
+                              iconpath: "assets/menu-pembelian.png",
                               price: "\$ 9,955",
                               pr: "3.23%",
                               maincolor: Colors.deepOrangeAccent,
@@ -320,7 +327,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Penyesuaian",
-                              iconpath: "assets/wallet33.svg",
+                              iconpath: "assets/menu-penyesuian.png",
                               price: "\$ 95,295",
                               pr: "5.33%",
                               maincolor: Colors.deepPurpleAccent,
@@ -333,7 +340,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Biaya (Expenses)",
-                              iconpath: "assets/coins29.svg",
+                              iconpath: "assets/menu-biaya-biaya.png",
                               price: "\$ 1,365",
                               pr: "3.53%",
                               maincolor: const Color(0xff0CAF60),
@@ -342,7 +349,7 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                         Expanded(
                           child: _buildcompo1(
                               title: "Pengaturan Aplikasi",
-                              iconpath: "assets/user29.svg",
+                              iconpath: "assets/menu-pengaturan.png",
                               price: "\$ 235",
                               pr: "1.77%",
                               maincolor: const Color(0xff0059E7),
@@ -393,10 +400,10 @@ class _NewDefaultPage extends State<NewDefaultPage> {
                   color: maincolor.withOpacity(0.2),
                 ),
                 child: Center(
-                    child: SvgPicture.asset(
+                    child: Image.asset(
                   iconpath,
-                  height: 25,
-                  width: 25,
+                  height: 35,
+                  width: 35,
                 )),
               ),
               title: Text(

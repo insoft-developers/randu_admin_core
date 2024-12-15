@@ -125,7 +125,7 @@ class _NewAppBarState extends State<NewAppBar> {
                             leading: const CircleAvatar(
                                 radius: 18,
                                 backgroundImage:
-                                    AssetImage("assets/profile.png"),
+                                    AssetImage("assets/randu_core_icon.png"),
                                 backgroundColor: Colors.transparent),
                             title: Text("Buzz",
                                 style: TextStyle(
@@ -152,7 +152,8 @@ class _NewAppBarState extends State<NewAppBar> {
                         )
                       : const CircleAvatar(
                           radius: 18,
-                          backgroundImage: AssetImage("assets/profile.png"),
+                          backgroundImage:
+                              AssetImage("assets/randu_core_icon.png"),
                           backgroundColor: Colors.transparent),
                   itemBuilder: (ctx) => [
                     _buildPopupAdminMenuItem(),

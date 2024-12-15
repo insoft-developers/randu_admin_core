@@ -70,7 +70,7 @@ class AppConst extends GetxController implements GetxService {
   RxBool switchistrue = false.obs;
 
   var page = [
-    const NewDefaultPage(),
+    const ProductList(),
     const EcommercePage(),
     const GeneralPage(),
     const ProductCategory(),

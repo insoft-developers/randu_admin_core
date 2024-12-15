@@ -239,6 +239,13 @@ flutter:
     - assets/randu_core_icon.png
     - assets/product_placeholder.png
     - assets/image_upload.png
+    - assets/menu-produk.png
+    - assets/menu-pengaturan.png
+    - assets/menu-biaya-biaya.png
+    - assets/menu-cogs-manufaktur.png
+    - assets/menu-penyesuaian.png
+    - assets/menu-pembelian.png
+    - assets/menu-home.png
 
   fonts:
     - family: Gilroy
