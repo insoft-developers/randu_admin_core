@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:buzz/login/login_controllder.dart';
 import 'package:buzz/provider/proviercolors.dart';
 import 'package:buzz/staticdata.dart';
 import 'package:flutter/material.dart';
@@ -107,9 +108,7 @@ class _NewAppBarState extends State<NewAppBar> {
                     height: 20,
                     color: notifier.geticoncolor,
                   ),
-                  itemBuilder: (ctx) => [
-                    _buildPopupNotificationsMenuItem12(),
-                  ],
+                  itemBuilder: (ctx) => [],
                 ),
                 PopupMenuButton(
                   color: notifier.getcontiner,
@@ -423,6 +422,7 @@ class _NewAppBarState extends State<NewAppBar> {
   }
 
   PopupMenuItem _buildPopupAdminMenuItem() {
+    LoginController _controller = Get.put(LoginController());
     return PopupMenuItem(
       enabled: false,
       padding: const EdgeInsets.all(0),
@@ -430,86 +430,17 @@ class _NewAppBarState extends State<NewAppBar> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: 305,
+            height: 90,
             width: 155,
             child: Center(
-              child: Table(
-                columnWidths: const {
-                  0: FixedColumnWidth(20),
+              child: GestureDetector(
+                onTap: () {
+                  _controller.logout();
                 },
-                children: [
-                  row(title: 'Profile', icon: 'assets/user.svg', index: 13),
-                  row(title: 'Chat', icon: 'assets/chat-dots.svg', index: 12),
-                  row(title: 'Email', icon: 'assets/envelope.svg', index: 0),
-                  row(
-                      title: 'Todo',
-                      icon: 'assets/clipboard-check.svg',
-                      index: 0),
-                  row(title: 'Setting', icon: 'assets/settings.svg', index: 0),
-                  row(
-                      title: 'Price',
-                      icon: 'assets/credit-card.svg',
-                      index: 11),
-                  row(title: 'Faq', icon: 'assets/chat-info.svg', index: 26),
-                  TableRow(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: SvgPicture.asset(
-                        "assets/tool.svg",
-                        width: 18,
-                        height: 18,
-                        color: notifire!.geticoncolor,
-                      ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 5, left: 20, top: 12, right: 20),
-                          child: Text("RTL",
-                              style: mediumBlackTextStyle.copyWith(
-                                  color: notifire!.getMainText)),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Obx(() => Padding(
-                              padding: const EdgeInsets.only(top: 12),
-                              child: SizedBox(
-                                height: 20,
-                                width: 50,
-                                child: Transform.scale(
-                                  scale: 0.8,
-                                  child: Switch(
-                                    value: controller.switchistrue.value,
-                                    onChanged: (bool value) {
-                                      controller.switchistrue.value = value;
-                                      Future.delayed(
-                                        const Duration(milliseconds: 300),
-                                        () {
-                                          if (value == true) {
-                                            Get.updateLocale(
-                                                const Locale('ur', 'PK'));
-                                            Get.back();
-                                          } else {
-                                            Get.updateLocale(
-                                                const Locale('en', 'US'));
-                                            Get.back();
-                                          }
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            )),
-                      ],
-                    )
-                  ]),
-                  row(title: 'Logout', icon: 'assets/log-out.svg', index: 0),
-                ],
+                child: const Text(
+                  "Logout",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
