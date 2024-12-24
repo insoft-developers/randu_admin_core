@@ -14,25 +14,24 @@ class Constant {
 
   // static String LOGO_IMAGE = ROOT_URL + "storage/app/public/";
 
-static String ROOT_URL = "https://app.randu.co.id/";
+  static String ROOT_URL = "https://app.randu.co.id/";
 
-static String BASE_URL = ROOT_URL;
+  static String BASE_URL = ROOT_URL;
 
-static String PRODUCT_CATEGORY_IMAGE = ROOT_URL + "storage/images/category/";
+  static String PRODUCT_CATEGORY_IMAGE = ROOT_URL + "storage/images/category/";
 
-static String PRODUCT_IMAGE = ROOT_URL + "storage/images/product/";
+  static String PRODUCT_IMAGE = ROOT_URL + "storage/images/product/";
 
- static String PRODUCT_PURCHASE_IMAGE =
+  static String PRODUCT_PURCHASE_IMAGE =
       ROOT_URL + "storage/images/product_purchase/";
 
-static String MATERIAAL_PURCHASE_IMAGE =
+  static String MATERIAAL_PURCHASE_IMAGE =
       ROOT_URL + "storage/images/material_purchase/";
 
-static String LOGO_IMAGE =
-      ROOT_URL + "storage/";
+  static String LOGO_IMAGE = ROOT_URL + "storage/";
 
-  static String UPLOAD_IMAGE_URL = BASE_URL + "api/v1";
+  static String UPLOAD_IMAGE_URL = BASE_URL + "api/v2";
 
-  static String VERSION = "1.0.2";
-  static String RELEASE_DATE = "16 Desember 2024";
+  static String VERSION = "1.0.3";
+  static String RELEASE_DATE = "24 Desember 2024";
 }
